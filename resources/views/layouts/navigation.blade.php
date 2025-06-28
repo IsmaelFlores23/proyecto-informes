@@ -19,12 +19,12 @@
                     </x-nav-link>
 
                     {{-- Observación de Informe --}}
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                    <x-nav-link :href="route('observarInforme.index')" :active="request()->routeIs('observarInforme.index')" class="text-white">
                         {{ __('Observación de Informe') }}
                     </x-nav-link>
 
                     {{-- Subir Informe --}}
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                    <x-nav-link :href="route('subirInforme.create')" :active="request()->routeIs('subirInforme.create')" class="text-white">
                         {{ __('Subir Informe') }}
                     </x-nav-link>
 
