@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('fk_estudiante');
             $table->foreign('fk_estudiante')->references('id')->on('users');
 
-            $table->string('ruta_informe'); //archivo_informe
+            $table->string('ruta_informe')->nullable(); //archivo_informe
             $table->string('descripcion'); //descripcion_informe
             $table->timestamp('fecha_envio');
             $table->enum('estado', ['aprobado', 'pendiente', 'rechazado'])->default('pendiente');

@@ -22,7 +22,8 @@
                 <!-- Sección de Subir Archivo -->
                 <div>
                     <label class="block text-lg font-semibold text-gray-900 mb-4">Subir</label>
-                    <input type="file" 
+                    <input type="file"
+                           name="ruta_informe" 
                            id="file_input" 
                            accept=".pdf,.doc,.docx" 
                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
@@ -31,7 +32,8 @@
                 <!-- Sección de Descripción -->
                 <div>
                     <label class="block text-lg font-semibold text-gray-900 mb-4">Descripcion</label>
-                    <textarea rows="5" 
+                    <textarea name="descripcion"
+                              rows="5" 
                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                               placeholder="Ingrese una descripción del informe..."></textarea>
                 </div>
