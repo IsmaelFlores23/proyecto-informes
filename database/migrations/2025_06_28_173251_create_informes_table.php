@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('informes', function (Blueprint $table) {
             $table->id();
+            
+            $table->unsignedBigInteger('fk_estudiante');
+            $table->foreign('fk_estudiante')->references('id')->on('users');
+
+            $table->string('ruta_informe'); //archivo_informe
+            $table->string('descripcion'); //descripcion_informe
+            $table->timestamp('fecha_envio');
+            $table->enum('estado', ['aprobado', 'pendiente', 'rechazado'])->default('pendiente');
+
             $table->timestamps();
         });
     }

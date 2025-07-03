@@ -9,4 +9,14 @@ class Informe extends Model
 {
     /** @use HasFactory<\Database\Factories\InformeFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'fk_estudiante',
+        'ruta_informe',
+        'descripcion',
+        'fecha_informe',
+        'estado'
+
+    ];
+    
 }
