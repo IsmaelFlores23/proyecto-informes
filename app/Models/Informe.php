@@ -14,7 +14,7 @@ class Informe extends Model
         'fk_estudiante',
         'ruta_informe',
         'descripcion',
-        'fecha_informe',
+        'fecha_envio',
         'estado'
 
     ];

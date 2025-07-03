@@ -70,6 +70,7 @@ class InformeController extends Controller
         Informe::create([
             'fk_estudiante' => $user_id,
             'ruta_informe' => $ruta,
+            'fecha_envio' => now(),
             'descripcion' => $request->input('descripcion')
         ]);
 
