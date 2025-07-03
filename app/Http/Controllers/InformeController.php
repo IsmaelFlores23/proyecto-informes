@@ -34,7 +34,7 @@ class InformeController extends Controller
      */
     public function store(Request $request)
     {
-        //   // Validar entrada
+        // Validar los datos enviados por el formulario
         $request->validate([
             'ruta_informe' => 'required|file|mimes:pdf|max:50048', // Solo PDFs de hasta 2MB
             'descripcion' => 'required|string|max:1000',
@@ -47,13 +47,15 @@ class InformeController extends Controller
         //Obtener ID del usuario autenticado
         $user_id = Auth::id();
 
-        // Carpeta de destino
+        // Define Carpeta de destino para guardar el archivo
         $carpeta = 'private/informes';
 
-        // Buscar archivos ya existentes para esa cédula
+        // Buscar todos los archivos ya subidos en esa carpeta
         $archivos = Storage::files($carpeta);
+        //Inicializar número de versión del archivo
         $version = 1;
 
+        // Contar cuántos archivos anteriores ha subido este estudiante
         foreach ($archivos as $archivo) {
             if (str_starts_with(basename($archivo), $numero_cuenta . '_')) {
                 $version++;
@@ -63,7 +65,7 @@ class InformeController extends Controller
         // Construir nombre del archivo
         $nombreArchivo = $numero_cuenta . '_' . $version . '.pdf';
 
-        // Guardar archivo
+        // Guardar el archivo en la carpeta definida con el nombre generado
         $ruta = $request->file('ruta_informe')->storeAs($carpeta, $nombreArchivo);
 
         // Guardar en la base de datos
@@ -74,6 +76,7 @@ class InformeController extends Controller
             'descripcion' => $request->input('descripcion')
         ]);
 
+        // Redirigir al formulario con un mensaje de éxito
         return redirect()->route('subirInforme.create')->with('success', 'Informe subido correctamente.');
 
 
