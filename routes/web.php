@@ -8,35 +8,37 @@ use App\Http\Controllers\TernaController;
 use App\Http\Controllers\AdminInformesController;
 use App\Http\Controllers\GestionarUsuariosController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
+// Ruta principal redirige a login
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// Rutas para todos los usuarios autenticados
 Route::get('/dashboard', function () {
     return view('Alumno.inicio.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-//Inicio de admin---
-Route::get('/AdminIndex', function () {
-    return view('Administrador.Inicio.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Rutas para administradores
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::resource('AsignarTerna', TernaController::class);
+    Route::resource('AdminInformes', AdminInformesController::class);
+    Route::resource('GestionarUsuarios', GestionarUsuariosController::class);
+});
 
-//Admin empieza
-Route::resource('AsignarTerna', TernaController::class)->middleware(['auth','verified']);
-Route::resource('AdminInformes', AdminInformesController::class)->middleware(['auth','verified']);
-Route::resource('GestionarUsuarios', GestionarUsuariosController::class)->middleware(['auth','verified']);
-//Admin termina
+// Rutas para docentes
+Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
+    // Otras rutas específicas para docentes
+});
 
-Route::resource('subirInforme', InformeController::class)->middleware(['auth','verified']);
-Route::resource('observarInforme', RevisionController::class)->middleware(['auth','verified']);
+// Rutas para alumnos
+Route::middleware(['auth', 'verified', 'role:alumno'])->group(function () {
+    Route::resource('subirInforme', InformeController::class);
+    Route::resource('observarInforme', RevisionController::class);
+    // Otras rutas específicas para alumnos
+});
 
-
-
-Route::middleware('auth')->group(function () {
+// Rutas compartidas entre roles (si es necesario)
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

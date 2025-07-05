@@ -19,7 +19,17 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            @auth
+                @if(Auth::user()->isAdmin())
+                    @include('layouts.navigation-admin')
+                @elseif(Auth::user()->isDocente())
+                    @include('layouts.navigation-docente')
+                @else
+                    @include('layouts.navigation')
+                @endif
+            @else
+                @include('layouts.navigation')
+            @endauth
 
             <!-- Page Heading -->
             @isset($header)
@@ -35,9 +45,6 @@
                 {{ $slot }}
             </main>
         </div>
-
-
-        
 
         <!-- SweetAlert2 para mensajes flash -->
         @if (session('success'))
