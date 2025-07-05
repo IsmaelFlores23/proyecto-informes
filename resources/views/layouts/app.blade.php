@@ -64,7 +64,38 @@
         </script>
         @endif
 
+        <!--datatable  usuarios-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('#search-table').DataTable({
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: false,
+                language: {
+                    search: "Buscar:",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    },
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                    zeroRecords: "No se encontraron registros",
+                }
+            });
+        });
+    </script>
 
+ <!-- asignar terna -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     </body>
+    
+    <!-- form flotante-->
+    <script src="https://unpkg.com/flowbite@latest/dist/flowbite.js"></script>
+
+
 </html>
