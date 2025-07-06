@@ -62,6 +62,7 @@
         </div>
     </div>
 
+
     <script>
         // Variables para guardar las selecciones de docentes
         const selectedDocentes = {};
