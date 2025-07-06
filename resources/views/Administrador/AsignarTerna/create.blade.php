@@ -42,7 +42,7 @@
                                 @foreach ($docentes as $docente)
                                     <li>
                                         <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 docente-item" data-id="{{ $docente->id }}" data-name="{{ $docente->name }}" data-dropdown="{{ $i }}">
-                                            {{ $docente->name }}
+                                            {{ $docente->name }} - {{ $docente->numero_cuenta ?? 'No ID' }}
                                         </a>
                                     </li>
                                 @endforeach
@@ -112,7 +112,22 @@
             });
         }
 
-        // Para alumnos igual si quieres, pero no lo he incluido porque dijiste que no era necesario
+        // Guardar seleccion de alumno
+        document.querySelectorAll('#dropdownUsers a').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const name = this.getAttribute('data-name');
+                const button = document.getElementById('dropdownUsersButton');
+
+                button.innerHTML = name + ` <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>`;
+
+                // Ocultar el dropdown
+                document.getElementById('dropdownUsers').classList.add('hidden');
+            });
+        });
     </script>
 
 </x-app-layout>
