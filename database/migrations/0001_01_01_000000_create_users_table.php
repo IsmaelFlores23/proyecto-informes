@@ -23,6 +23,8 @@ return new class extends Migration
             $table->rememberToken();
 
             $table->enum('role', ['admin', 'docente', 'alumno'])->default('alumno');
+            /*$table->string('nombre_facultad');
+            $table->string('nombre_campus');*/
 
             $table->timestamps();
         });

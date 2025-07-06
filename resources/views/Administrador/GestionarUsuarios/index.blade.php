@@ -44,6 +44,26 @@
                         </td>
                     </tr>
                 </tbody>
+                
+                <tbody>
+                    @foreach ($usuarios as $usuario)
+                    <tr>
+                        <td class="px-6 py-4">{{ $usuario->numero_cuenta }}</td>
+                        <td class="px-6 py-4 font-medium">{{ $usuario->name }}</td>
+                        <td class="px-6 py-4">{{ $usuario->email }}</td>
+                        <td class="px-6 py-4">••••••••</td> 
+                        <td class="px-6 py-4">{{ $usuario->role }}</td>
+                        <td class="px-6 py-4">—</td> <!-- Facultad vacía por ahora -->
+                        <td class="px-6 py-4">—</td> <!-- Campus vacío por ahora -->
+                        <td class="px-6 py-4 flex space-x-2">
+                            <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
+                            <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
+                            <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver archivo">📄</a>
+                        </td>
+                    </tr>
+                    @endforeach
+             </tbody>
+
             </table>
         </div>
     </div>
@@ -65,38 +85,39 @@
 
                 <!-- Modal body -->
                 <div class="p-4">
-                    <form class="space-y-4">
+                    <form method="POST" action="{{ route('GestionarUsuarios.store') }}" class="space-y-4">
+                        @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">N° Identidad</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="numero_cuenta" placeholder="1807200400380(sin guiones)" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="name" placeholder="Ingrese Nombre Completo" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="email" placeholder="ejemplo@unicah.edu" type="email" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="password" placeholder="Minimo 8 Caracteres" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="role" placeholder="admin/docente/alumno" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="nombre_facultad" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
                             <div class="flex-1">
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="nombre_campus" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div class="flex space-x-3">
                                 <button type="button" data-modal-hide="add-user-modal"
