@@ -8,12 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class TernaController extends Controller
 {
      public function index()
     {
-                return view ('Administrador.AsignarTerna.create');
+        // $alumnos = User::where('role', 'alumno')->get();
+        // $docentes = User::where('role', 'docente')->get();
+        //         return view ('Administrador.AsignarTerna.create', compact('alumnos', 'docentes'));
     }
 
     /**
@@ -21,8 +24,13 @@ class TernaController extends Controller
      */
     public function create()
     {
-        //
-        return view ('Administrador.AsignarTerna.create');
+        //obtener usuarios con role 'alumno'
+        $alumnos = User::where('role', 'alumno')->get();
+
+        // Obtener solo usuarios con role 'docente'
+        $docentes = User::where('role', 'docente')->get();
+        // enviar datos a la vista
+        return view ('Administrador.AsignarTerna.create', compact('alumnos', 'docentes'));
     }
 
     /**

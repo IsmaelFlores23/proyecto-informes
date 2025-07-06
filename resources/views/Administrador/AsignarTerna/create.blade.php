@@ -16,85 +16,40 @@
 
                     <div id="dropdownUsers" class="z-10 hidden bg-gray-50 rounded-lg shadow-sm w-[500px]">
                         <ul class="h-[400px] py-2 overflow-y-auto text-gray-700">
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Nelson Martinez - 1807200500589</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">María Fernández - 1807200500590</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Carlos Méndez - 1807200500591</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Laura Martínez - 1807200500592</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">José Ramírez - 1807200500593</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Sofía González - 1807200500594</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Andrés López - 1807200500595</a></li>
+                            @foreach ($alumnos as $alumno)
+                                <li>
+                                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100" data-id="{{ $alumno->id }}" data-name="{{ $alumno->name }}">
+                                        {{ $alumno->name }} - {{ $alumno->numero_cuenta ?? 'No ID' }}
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
 
                 <!-- Docentes -->
-                <div class="relative text-center">
-                    <button id="dropdownDocente1Button" data-dropdown-toggle="dropdownDocente1" data-dropdown-placement="bottom"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" type="button">
-                        Selecciona el docente #1
-                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </button>
-                    <div id="dropdownDocente1" class="z-10 hidden bg-gray-50 rounded-lg shadow-sm w-[500px]">
-                        <ul class="h-[300px] py-2 overflow-y-auto text-gray-700">
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente A</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente B</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente C</a></li>
-                        </ul>
+                @for ($i = 1; $i <= 4; $i++)
+                    <div class="relative text-center">
+                        <button id="dropdownDocente{{ $i }}Button" data-dropdown-toggle="dropdownDocente{{ $i }}" data-dropdown-placement="bottom"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" type="button">
+                            Selecciona el docente #{{ $i }}{{ $i == 4 ? ' (opcional)' : '' }}
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                        <div id="dropdownDocente{{ $i }}" class="z-10 hidden bg-gray-50 rounded-lg shadow-sm w-[500px]">
+                            <ul class="h-[300px] py-2 overflow-y-auto text-gray-700 docente-list" data-dropdown="{{ $i }}">
+                                @foreach ($docentes as $docente)
+                                    <li>
+                                        <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 docente-item" data-id="{{ $docente->id }}" data-name="{{ $docente->name }}" data-dropdown="{{ $i }}">
+                                            {{ $docente->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
-                </div>
-
-                <div class="relative text-center">
-                    <button id="dropdownDocente2Button" data-dropdown-toggle="dropdownDocente2" data-dropdown-placement="bottom"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" type="button">
-                        Selecciona el docente #2
-                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </button>
-                    <div id="dropdownDocente2" class="z-10 hidden bg-gray-50 rounded-lg shadow-sm w-[500px]">
-                        <ul class="h-[300px] py-2 overflow-y-auto text-gray-700">
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente A</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente B</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente C</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="relative text-center">
-                    <button id="dropdownDocente3Button" data-dropdown-toggle="dropdownDocente3" data-dropdown-placement="bottom"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" type="button">
-                        Selecciona el docente #3
-                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </button>
-                    <div id="dropdownDocente3" class="z-10 hidden bg-gray-50 rounded-lg shadow-sm w-[500px]">
-                        <ul class="h-[300px] py-2 overflow-y-auto text-gray-700">
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente A</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente B</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente C</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="relative text-center">
-                    <button id="dropdownDocente4Button" data-dropdown-toggle="dropdownDocente4" data-dropdown-placement="bottom"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" type="button">
-                        Selecciona el docente #4 (opcional)
-                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </button>
-                    <div id="dropdownDocente4" class="z-10 hidden bg-gray-50 rounded-lg shadow-sm w-[500px]">
-                        <ul class="h-[300px] py-2 overflow-y-auto text-gray-700">
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente A</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente B</a></li>
-                            <li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100">Docente C</a></li>
-                        </ul>
-                    </div>
-                </div>
+                @endfor
 
                 <!-- Botón Asignar -->
                 <div class="mt-6">
@@ -107,5 +62,57 @@
         </div>
     </div>
 
-    
+    <script>
+        // Variables para guardar las selecciones de docentes
+        const selectedDocentes = {};
+
+        document.querySelectorAll('.docente-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const dropdownNum = this.getAttribute('data-dropdown');
+
+                // Guardar la selección
+                selectedDocentes[dropdownNum] = {id, name};
+
+                // Actualizar texto del botón
+                const button = document.getElementById('dropdownDocente' + dropdownNum + 'Button');
+                button.innerHTML = name + ` <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>`;
+
+                // Ocultar dropdown
+                const dropdown = document.getElementById('dropdownDocente' + dropdownNum);
+                dropdown.classList.add('hidden');
+
+                // Actualizar listas para quitar docentes ya seleccionados
+                updateDocentesLists();
+            });
+        });
+
+        function updateDocentesLists() {
+            // Obtener IDs de docentes ya seleccionados
+            const selectedIds = Object.values(selectedDocentes).map(d => d.id);
+
+            document.querySelectorAll('.docente-list').forEach(list => {
+                const dropdownNum = list.getAttribute('data-dropdown');
+
+                list.querySelectorAll('.docente-item').forEach(item => {
+                    const id = item.getAttribute('data-id');
+
+                    // Mostrar solo si no está seleccionado y no es el seleccionado actual
+                    if (!selectedIds.includes(id) || selectedDocentes[dropdownNum]?.id === id) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Para alumnos igual si quieres, pero no lo he incluido porque dijiste que no era necesario
+    </script>
+
 </x-app-layout>

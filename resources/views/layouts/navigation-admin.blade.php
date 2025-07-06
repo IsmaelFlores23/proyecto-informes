@@ -24,7 +24,7 @@
                     </x-nav-link>
 
                     {{-- Asignar Terna --}}
-                    <x-nav-link :href="route('AsignarTerna.index')" :active="request()->routeIs('AsignarTerna.index')" class="text-white">
+                    <x-nav-link :href="route('AsignarTerna.create')" :active="request()->routeIs('AsignarTerna.create')" class="text-white">
                         {{ __('Asignar Terna') }}
                     </x-nav-link>
 
