@@ -7,6 +7,7 @@ use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\TernaController;
 use App\Http\Controllers\AdminInformesController;
 use App\Http\Controllers\GestionarUsuariosController;
+use App\Http\Controllers\InformacionController;
 
 // Ruta principal redirige a login
 Route::get('/', function () {
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:alumno'])->group(function () {
     Route::resource('subirInforme', InformeController::class);
     Route::resource('observarInforme', RevisionController::class);
+    Route::resource('informacionTerna', InformacionController::class);
     // Otras rutas específicas para alumnos
 });
 

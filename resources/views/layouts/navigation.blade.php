@@ -29,7 +29,7 @@
                     </x-nav-link>
 
                     {{-- Información Terna --}}
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                    <x-nav-link :href="route('informacionTerna.index')" :active="request()->routeIs('informacionTerna.index')" class="text-white">
                         {{ __('Información Terna') }}
                     </x-nav-link>
                 </div>
