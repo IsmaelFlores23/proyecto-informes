@@ -11,8 +11,7 @@ use Illuminate\View\View;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Facultad;
-use App\Models\Campus;
+
 
 class GestionarUsuariosController extends Controller
 {
@@ -46,21 +45,31 @@ class GestionarUsuariosController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
             'role' => ['required', 'string', 'max:12'],
-            /*'nombre_facultad' => 'required|string|max:50',
-            'nombre_campus' => 'required|string|max:50',*/
+            'facultad' => ['required', 'string', 'max:50'],
+            'campus' => ['required', 'string', 'max:50'],
+
+        
         ]);
 
         //Ingresando datos en las respectivas Tablas
 
         //TABLA USERS
-        $user = User::create([
+        User::create([
             'numero_cuenta' => $request->numero_cuenta,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            /*'nombre_facultad' => $request->nombre_facultad,
-            'nombre_campus' => $request->nombre_campus,*/
+            'facultad' => $request->facultad,
+            'campus' => $request->campus,
+
         ]);
+
+        // return view('Administrador.GestionarUsuarios.index');
+        return redirect()->route('GestionarUsuarios.index')->with('success', 'Usuario creado correctamente.');
+
     }
+
+
+
 }

@@ -1,68 +1,55 @@
 <x-app-layout>
-   <div class="py-8 px-6">
-        <div class="container mx-auto">
-            <div class="row">
-                {{-- Columna de Observaciones --}}
-                <div class="col-md-6 mb-4">
-                    {{-- Ejemplo de obserbaciones --}}
-                    <div class="bg-white shadow rounded-lg p-4">
-                        <h5 class="bg-yellow-500 text-white font-bold inline-block px-4 py-2 rounded mb-3">Observaciones</h5>
-                        <p><strong>Fecha:</strong> 7 / 3 / 2025</p>
-                        <p><strong>Docente:</strong> Ing. Abraham</p>
-                        <p><strong>Observación:</strong> Aplicar Normas APA en la sección 2.</p>
-                        <p><strong>Archivo adjunto:</strong> observacion1.pdf</p>
-                         
-                        ______________________________________________________________________________________
+    <div class="py-8 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+            {{-- Observaciones --}}
+            <div class="bg-white shadow rounded-lg p-6">
+                <h2 class="text-yellow-500 font-bold text-xl mb-4">Observaciones</h2>
 
-                        <p><strong>Fecha:</strong> 7 / 3 / 2025</p>
-                        <p><strong>Docente:</strong> Ing. Abraham</p>
-                        <p><strong>Observación:</strong> Aplicar Normas APA en la sección 2.</p>
-                        <p><strong>Archivo adjunto:</strong> observacion1.pdf</p>
+                {{-- Aquí pones tus observaciones dinámicas o estáticas --}}
+                <p><strong>Fecha:</strong> 7 / 3 / 2025</p>
+                <p><strong>Docente:</strong> Ing. Abraham</p>
+                <p><strong>Observación:</strong> Aplicar Normas APA en la sección 2.</p>
+                <p><strong>Archivo adjunto:</strong> observacion1.pdf</p>
 
-                        ______________________________________________________________________________________
+                <hr class="my-4">
 
-
-                        <p><strong>Fecha:</strong> 7 / 3 / 2025</p>
-                        <p><strong>Docente:</strong> Ing. Abraham</p>
-                        <p><strong>Observación:</strong> Aplicar Normas APA en la sección 2.</p>
-                        <p><strong>Archivo adjunto:</strong> observacion1.pdf</p>
-
-                        ______________________________________________________________________________________
-
-                           <p><strong>Fecha:</strong> 7 / 3 / 2025</p>
-                        <p><strong>Docente:</strong> Ing. Abraham</p>
-                        <p><strong>Observación:</strong> Aplicar Normas APA en la sección 2.</p>
-                        <p><strong>Archivo adjunto:</strong> observacion1.pdf</p>
-
-                        ______________________________________________________________________________________
-
-                    </div>
-                    
-                    {{-- Boton que redirige a la pantalla /subirInforme/Create --}}
-                    <div class="mt-4">
-                        <a href="/subirInforme/create" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-full">
-                          Subir versión corregida
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Columna de Visualizador PDF --}}
-                <div class="col-md-6 mb-4">
-                    <div class="bg-white shadow rounded-lg p-4 text-center">
-                        <h5 class="text-xl font-semibold mb-2">Visualizador web</h5>
-                        <img src="{{ asset('storage/images/pdf-icon.png') }}" alt="PDF" class="mx-auto" style="width: 80px;">
-                    </div>
-
-                    {{-- Etiquetas de Estado --}}
-                    <div class="text-center mt-6 space-x-3">
-                       <span class="bg-red-500 text-white font-semibold px-3 py-1 rounded">Pendiente</span>
-                       <span class="bg-yellow-400 text-white font-semibold px-3 py-1 rounded">En Proceso</span>
-                       <span class="bg-green-500 text-white font-semibold px-3 py-1 rounded">Finalizado</span>
-                    </div>
-                </div>
+                {{-- Puedes repetir o hacer un foreach para observaciones reales --}}
             </div>
 
+            {{-- Visualizador PDF --}}
+            <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center">
+
+                <h2 class="text-xl font-semibold mb-4">Visualizador PDF</h2>
+
+                @if ($ultimoPdf && $pdfNombre)
+                    <iframe
+                        src="{{ route('observarInforme.pdf', ['nombreArchivo' => $pdfNombre]) }}"
+                        class="w-full h-[600px] rounded border border-gray-300"
+                        frameborder="0"
+                        scrolling="auto"
+                        allowfullscreen>
+                    </iframe>
+                @else
+                    <div class="text-center text-gray-500">
+                        <p>No se encontró ningún informe para mostrar.</p>
+                        <img src="{{ asset('storage/images/pdf-icon.png') }}" alt="PDF" class="mx-auto mt-4" style="width: 80px;">
+                    </div>
+                @endif
+
+                {{-- Estado etiquetas --}}
+                <div class="mt-6 space-x-3">
+                    <span class="bg-red-500 text-white font-semibold px-3 py-1 rounded">Pendiente</span>
+                    <span class="bg-yellow-400 text-white font-semibold px-3 py-1 rounded">En Proceso</span>
+                    <span class="bg-green-500 text-white font-semibold px-3 py-1 rounded">Finalizado</span>
+                </div>
+
+                {{-- Botón para subir versión corregida --}}
+                <a href="{{ route('subirInforme.create') }}"
+                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-full">
+                    Subir versión corregida
+                </a>
+            </div>
         </div>
     </div>
 </x-app-layout>

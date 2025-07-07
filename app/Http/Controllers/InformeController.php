@@ -48,7 +48,7 @@ class InformeController extends Controller
         $user_id = Auth::id();
 
         // Define Carpeta de destino para guardar el archivo
-        $carpeta = 'private/informes';
+        $carpeta = 'informes';
 
         // Buscar todos los archivos ya subidos en esa carpeta
         $archivos = Storage::files($carpeta);
