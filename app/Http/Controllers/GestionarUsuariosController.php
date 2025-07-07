@@ -11,8 +11,7 @@ use Illuminate\View\View;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Facultad;
-use App\Models\Campus;
+
 
 class GestionarUsuariosController extends Controller
 {
@@ -55,7 +54,7 @@ class GestionarUsuariosController extends Controller
         //Ingresando datos en las respectivas Tablas
 
         //TABLA USERS
-        $user = User::create([
+        User::create([
             'numero_cuenta' => $request->numero_cuenta,
             'name' => $request->name,
             'email' => $request->email,
@@ -63,8 +62,7 @@ class GestionarUsuariosController extends Controller
             'role' => $request->role,
             'facultad' => $request->facultad,
             'campus' => $request->campus,
-            /*'nombre_facultad' => $request->nombre_facultad,
-            'nombre_campus' => $request->nombre_campus,*/
+
         ]);
 
         // return view('Administrador.GestionarUsuarios.index');

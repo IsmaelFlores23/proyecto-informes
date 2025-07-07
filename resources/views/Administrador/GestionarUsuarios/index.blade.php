@@ -58,7 +58,10 @@
                         <td class="px-6 py-4 flex space-x-2">
                             <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
                             <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
-                            <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver archivo">📄</a>
+                            <a href="{{ route('verInformes.alumno', ['numero_cuenta' => $usuario->numero_cuenta]) }}"
+                            class="text-yellow-600 hover:text-yellow-800" title="Ver archivo">
+                            📄
+                            </a>
                         </td>
                     </tr>
                     @endforeach

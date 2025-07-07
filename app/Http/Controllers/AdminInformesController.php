@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class AdminInformesController extends Controller
 {
@@ -34,6 +35,26 @@ class AdminInformesController extends Controller
        
     }
 
+
+        public function verTodosLosInformes($numero_cuenta)
+    {
+        $carpeta = 'informes';
+
+        // Obtener todos los archivos que empiezan con el número de cuenta
+        $archivos = collect(Storage::disk('local')->files($carpeta))
+            ->filter(fn($archivo) => str_starts_with(basename($archivo), $numero_cuenta . '_'))
+            ->sortBy(function($archivo) {
+                $nombre = basename($archivo, '.pdf');
+                $partes = explode('_', $nombre);
+                return isset($partes[1]) ? (int)$partes[1] : 0;
+            })
+            ->values();
+
+        return view('Administrador/VerInformes.index', [
+            'numero_cuenta' => $numero_cuenta,
+            'archivos' => $archivos,
+        ]);
+    }
     /**
      * Display the specified resource.
      */
