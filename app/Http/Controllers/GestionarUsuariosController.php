@@ -46,8 +46,10 @@ class GestionarUsuariosController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
             'role' => ['required', 'string', 'max:12'],
-            /*'nombre_facultad' => 'required|string|max:50',
-            'nombre_campus' => 'required|string|max:50',*/
+            'facultad' => ['required', 'string', 'max:50'],
+            'campus' => ['required', 'string', 'max:50'],
+
+        
         ]);
 
         //Ingresando datos en las respectivas Tablas
@@ -59,8 +61,17 @@ class GestionarUsuariosController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'facultad' => $request->facultad,
+            'campus' => $request->campus,
             /*'nombre_facultad' => $request->nombre_facultad,
             'nombre_campus' => $request->nombre_campus,*/
         ]);
+
+        // return view('Administrador.GestionarUsuarios.index');
+        return redirect()->route('GestionarUsuarios.index')->with('success', 'Usuario creado correctamente.');
+
     }
+
+
+
 }

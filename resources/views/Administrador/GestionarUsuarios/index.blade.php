@@ -18,7 +18,7 @@
             <table id="search-table" class="min-w-full text-gray-800 bg-gray-200">
                 <thead style="background-color: #004CBE;" class="text-xs uppercase text-white">
                     <tr>
-                        <th class="px-6 py-3">N° Identidad</th>
+                        <th class="px-6 py-3">N° Cuenta</th>
                         <th class="px-6 py-3">Nombre</th>
                         <th class="px-6 py-3">Email</th>
                         <th class="px-6 py-3">Contraseña</th>
@@ -53,8 +53,8 @@
                         <td class="px-6 py-4">{{ $usuario->email }}</td>
                         <td class="px-6 py-4">••••••••</td> 
                         <td class="px-6 py-4">{{ $usuario->role }}</td>
-                        <td class="px-6 py-4">—</td> <!-- Facultad vacía por ahora -->
-                        <td class="px-6 py-4">—</td> <!-- Campus vacío por ahora -->
+                        <td class="px-6 py-4">{{$usuario->facultad}}</td> <!-- Facultad vacía por ahora -->
+                        <td class="px-6 py-4">{{$usuario->campus}}</td> <!-- Campus vacío por ahora -->
                         <td class="px-6 py-4 flex space-x-2">
                             <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
                             <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
@@ -110,14 +110,14 @@
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
-                                <input name="nombre_facultad" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="facultad" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
                             <div class="flex-1">
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <input name="nombre_campus" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <input name="campus" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
                             <div class="flex space-x-3">
                                 <button type="button" data-modal-hide="add-user-modal"
