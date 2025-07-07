@@ -37,6 +37,10 @@ Route::middleware(['auth', 'verified', 'role:alumno'])->group(function () {
     Route::resource('observarInforme', RevisionController::class);
     Route::resource('informacionTerna', InformacionController::class);
     // Otras rutas específicas para alumnos
+
+        // Ruta para mostrar el PDF protegido dentro del iframe
+    Route::get('/observarInforme/pdf/{nombreArchivo}', [RevisionController::class, 'verPdf'])
+        ->name('observarInforme.pdf');
 });
 
 // Rutas compartidas entre roles (si es necesario)

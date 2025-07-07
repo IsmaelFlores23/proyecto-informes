@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Revision;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RevisionController extends Controller
 {
@@ -14,9 +16,48 @@ class RevisionController extends Controller
     public function index()
     {
         //
-        return view('Alumno.observar_informe.index');
+            $numero_cuenta = Auth::user()->numero_cuenta;
+            $carpeta = 'informes'; // según tu storage
+
+            $archivosUsuario = collect(Storage::files($carpeta))
+                ->filter(fn($file) => str_starts_with(basename($file), $numero_cuenta . '_'))
+                ->sortByDesc(function($file) {
+                    $nombre = basename($file, '.pdf');
+                    $partes = explode('_', $nombre);
+                    return isset($partes[1]) ? (int)$partes[1] : 0;
+                })
+                ->values();
+
+            $ultimoPdf = $archivosUsuario->first();
+
+            return view('Alumno.observar_informe.index', [
+                'ultimoPdf' => $ultimoPdf ? Storage::url($ultimoPdf) : null,
+                'pdfNombre' => $ultimoPdf ? basename($ultimoPdf) : null,
+            ]);
+        // return view('Alumno.observar_informe.index');
     }
 
+
+    public function verPdf($nombreArchivo)
+    {
+        $numero_cuenta = Auth::user()->numero_cuenta;
+
+        // Validar que el archivo realmente pertenece al usuario
+        if (!str_starts_with($nombreArchivo, $numero_cuenta . '_')) {
+            abort(403, 'No autorizado');
+        }
+
+        // Ruta correcta al archivo (ya no hay doble 'private')
+        $path = storage_path('app/private/informes/' . $nombreArchivo);
+
+        // Verificar que el archivo exista
+        if (!file_exists($path)) {
+            abort(404, 'Archivo no encontrado');
+        }
+
+        // Retornar el archivo para mostrarlo en el navegador
+        return response()->file($path);
+    }
     /**
      * Show the form for creating a new resource.
      */
