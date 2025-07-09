@@ -5,11 +5,11 @@
             <!-- Datos del estudiante -->
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <h4 class="bg-yellow-500 text-white font-bold inline-block px-4 py-2 rounded mb-3">Datos del estudiante</h4>
-                <p>Nombre completo: <strong>Marthin</strong></p>
-                <p>Número de empleado / ID institucional: ____________</p>
-                <p>Correo institucional: ____________</p>
-                <p>Teléfono: ____________</p>
-                <p>Campus asignado: ____________</p>
+                <p>Nombre completo: <strong> {{ Auth::user()->name }}</strong></p>
+                <p>Número de cuenta:<strong> {{ Auth::user()->numero_cuenta }}</strong></p>
+                <p>Correo institucional:<strong> {{ Auth::user()->email }} </strong></p>
+                <p>Teléfono:<strong> ____________</strong></p>
+                <p>Campus asignado:<strong> ____________</strong></p>
             </div>
 
             <!-- Terna evaluadora -->
