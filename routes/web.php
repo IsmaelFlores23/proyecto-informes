@@ -8,6 +8,10 @@ use App\Http\Controllers\TernaController;
 use App\Http\Controllers\AdminInformesController;
 use App\Http\Controllers\GestionarUsuariosController;
 use App\Http\Controllers\InformacionController;
+use App\Http\Controllers\DocenteUserController;
+use App\Http\Controllers\AlumnoUserController;
+use App\Http\Controllers\CampusController;
+use App\Http\Controllers\FacultadController;
 
 // Ruta principal redirige a login
 Route::get('/', function () {
@@ -24,6 +28,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::resource('AsignarTerna', TernaController::class);
     Route::resource('AdminInformes', AdminInformesController::class);
     Route::resource('GestionarUsuarios', GestionarUsuariosController::class);
+
+    //Agregadas
+        Route::resource('UserDocente', DocenteUserController::class);
+        Route::resource('UserAlumno', AlumnoUserController::class);
+        Route::resource('Campus', CampusController::class);
+        Route::resource('Facultades', FacultadController::class);        
 
     Route::get('/ver-informes/{numero_cuenta}', [AdminInformesController::class, 'verTodosLosInformes'])
     ->name('verInformes.alumno');
