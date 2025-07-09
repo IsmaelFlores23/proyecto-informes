@@ -28,22 +28,6 @@
                         <th class="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-6 py-4">0801199001234</td>
-                        <td class="px-6 py-4 font-medium">Juan Pérez</td>
-                        <td class="px-6 py-4">juan@example.com</td>
-                        <td class="px-6 py-4">contraseña123</td>
-                        <td class="px-6 py-4">Administrador</td>
-                        <td class="px-6 py-4">Ingeniería</td>
-                        <td class="px-6 py-4">Tegucigalpa</td>
-                        <td class="px-6 py-4 flex space-x-2">
-                            <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
-                            <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
-                            <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver archivo">📄</a>
-                        </td>
-                    </tr>
-                </tbody>
                 
                 <tbody>
                     @foreach ($usuarios as $usuario)
@@ -56,12 +40,12 @@
                         <td class="px-6 py-4">{{$usuario->facultad}}</td> <!-- Facultad vacía por ahora -->
                         <td class="px-6 py-4">{{$usuario->campus}}</td> <!-- Campus vacío por ahora -->
                         <td class="px-6 py-4 flex space-x-2">
+                            <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
                             <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
                             <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
-                            <a href="{{ route('verInformes.alumno', ['numero_cuenta' => $usuario->numero_cuenta]) }}"
-                            class="text-yellow-600 hover:text-yellow-800" title="Ver archivo">
-                            📄
-                            </a>
+                            {{-- <a href="{{ route('verInformes.alumno', ['numero_cuenta' => $usuario->numero_cuenta]) }}"
+                            class="text-yellow-600 hover:text-yellow-800" title="Ver archivo"> 
+                            </a> --}}
                         </td>
                     </tr>
                     @endforeach
@@ -107,20 +91,57 @@
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
                                 <input name="password" placeholder="Minimo 8 Caracteres" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                             </div>
-                            <div>
+                           <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                                <input name="role" placeholder="admin/docente/alumno" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <select name="role" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                    <option value="">Seleccione un rol</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="docente">Docente</option>
+                                    <option value="alumno">Alumno</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
-                                <input name="facultad" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <select name="facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                    <option value="">Seleccione una Facultad</option>
+                                    <option value="arquitectura">Arquitectura</option>
+                                    <option value="ciencias de la comunicacion">Ciencias de la Comunicación</option>
+                                    <option value="cirugia dental">Cirugía Dental</option>
+                                    <option value="derecho">Derecho</option>
+                                    <option value="enfermeria">Enfermería</option>
+                                    <option value="finanzas">Finanzas</option>
+                                    <option value="gestion estrategica de empresas">Gestión Estratégica de Empresas</option>
+                                    <option value="ingeniera civil">Ingeniería Civil</option>
+                                    <option value="ingenieria en ciencias de la computacion">Ingeniería en Ciencias de la Computación</option>
+                                    <option value="ingenieria industrial">Ingeniería Industrial</option>
+                                    <option value="ingenieria ambiental">Ingeniería Ambiental</option>
+                                    <option value="medicina y cirugia">Medicina y Cirugía</option>
+                                    <option value="mercadotecnia">Mercadotecnia</option>
+                                    <option value="nutricion">Nutrición</option>
+                                    <option value="psicologia">Psicología</option>
+                                    <option value="relaciones internacionales">Relaciones Internacionales</option>
+                                    <option value="teologia">Teología</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
-                            <div class="flex-1">
+                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <input name="campus" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                    <option value="">Seleccione un Campus</option>
+                                    <option value="sagrado corazon de jesus">Sagrado Corazón de Jesús</option>
+                                    <option value="san pedro y san pablo">San pedro y San Pablo</option>
+                                    <option value="jesus sacramentado">Jesús Sacramentado</option>
+                                    <option value="san jorge">San Jorge</option>
+                                    <option value="san isidro">San Isidro</option>
+                                    <option value="santa rosa de lima">Santa Rosa de Lima</option>
+                                    <option value="santa clara">Santa Clara</option>
+                                    <option value="espiritual el tabor">Espiritual El Tabor</option>
+                                    <option value="santiago apostol">Santiago Apostol</option>
+                                    <option value="san juan bautista">San Juan Bautista</option>
+                                    <option value="dios espiritu santo">Dios Espirítu Santo</option>
+                                </select>
                             </div>
                             <div class="flex space-x-3">
                                 <button type="button" data-modal-hide="add-user-modal"
