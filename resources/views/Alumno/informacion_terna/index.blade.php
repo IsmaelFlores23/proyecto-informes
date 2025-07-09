@@ -30,21 +30,21 @@
                             <tr class="border-t">
                                 <td class="px-4 py-2">Dra. Ana López</td>
                                 <td class="px-4 py-2">ana.lopez@uni.edu</td>
-                                <td class="px-4 py-2">En revisión</td>
+                                <td class="px-4 py-2">Sin correcciones pendientes</td>
                                 <td class="px-4 py-2">12/06/2025</td>
                                 <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
                             </tr>
                             <tr class="border-t">
                                 <td class="px-4 py-2">Mtro. Juan Pérez</td>
                                 <td class="px-4 py-2">juan.perez@uni.edu</td>
-                                <td class="px-4 py-2">Aprobado</td>
+                                <td class="px-4 py-2">Sin correcciones pendientes</td>
                                 <td class="px-4 py-2">10/06/2025</td>
                                 <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
                             </tr>
                             <tr class="border-t">
                                 <td class="px-4 py-2">Ing. Karla Díaz</td>
                                 <td class="px-4 py-2">karla.diaz@uni.edu</td>
-                                <td class="px-4 py-2">Pendiente</td>
+                                <td class="px-4 py-2">Correcciones pendientes</td>
                                 <td class="px-4 py-2">—</td>
                                 <td class="px-4 py-2">—</td>
                             </tr>
