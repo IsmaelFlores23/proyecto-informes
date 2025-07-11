@@ -28,7 +28,8 @@ class CampusController extends Controller
     {
        
     }
-     public function show(Request $request)
+    
+    public function show(Request $request)
     {
                
     }

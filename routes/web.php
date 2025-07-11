@@ -24,20 +24,24 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Rutas para administradores
+// En la sección de rutas para admin
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::resource('AsignarTerna', TernaController::class);
     Route::resource('AdminInformes', AdminInformesController::class);
     Route::resource('GestionarUsuarios', GestionarUsuariosController::class);
 
-    //Agregadas
-        Route::resource('UserDocente', DocenteUserController::class);
-        Route::resource('UserAlumno', AlumnoUserController::class);
-        Route::resource('Campus', CampusController::class);
-        Route::resource('Facultades', FacultadController::class);        
+    //Estas dos rutas serian eliminadas luego de implementar rutas /alumnos/{id} y /docentes/{id}
+    // Route::resource('UserDocente', DocenteUserController::class);
+    // Route::resource('UserAlumno', AlumnoUserController::class);
+    Route::resource('Campus', CampusController::class);
+    Route::resource('Facultades', FacultadController::class);        
 
     Route::get('/ver-informes/{numero_cuenta}', [AdminInformesController::class, 'verTodosLosInformes'])
     ->name('verInformes.alumno');
 
+    // Rutas para mostrar perfil de usuario
+    Route::get('/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
+    Route::get('/docentes/{id}', [DocenteUserController::class, 'show'])->name('docentes.show');
 });
 
 // Rutas para docentes

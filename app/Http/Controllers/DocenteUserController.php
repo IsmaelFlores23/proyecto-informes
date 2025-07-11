@@ -8,12 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class DocenteUserController extends Controller
 {
      public function index()
     {
-                     return view ('Administrador.VerDocentes.show');
+        // return view ('Administrador.VerDocentes.show');
 
     }
 
@@ -31,7 +32,11 @@ class DocenteUserController extends Controller
     {
        
     }
-     public function show(Request $request)
+    
+     public function show($id)
     {
+        $docente = User::where('role', 'docente')->findOrFail($id);
+        // Aquí agregar lógica para obtener ternas asignadas
+        return view('Administrador.VerDocentes.show', compact('docente'));
     }
 }
