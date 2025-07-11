@@ -5,14 +5,15 @@
             <div class="border border-gray-300 rounded-lg p-6 mb-6 bg-white">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <p class="text-sm"><strong>Nombre:</strong> Nelson Emilio Martinez Rodriguez</p>
-                        <p class="text-sm"><strong>Numero de cuenta:</strong> 1807200500589</p>
-                        <p class="text-sm"><strong>Facultad:</strong> Ingenieria en ciencias de la computacion</p>
+                        {{-- {{$alumno->name}} la variable $alumno viene de la funucion Show del controlador Almnouser. Se manda a llamar los datos como estan los campos en la BD --}}
+                        <p class="text-sm"><strong>Nombre:</strong> {{$alumno->name}}</p>
+                        <p class="text-sm"><strong>Numero de cuenta:</strong> {{$alumno->numero_cuenta}}</p>
+                        <p class="text-sm"><strong>Facultad:</strong> {{$alumno->facultad}}</p>
                     </div>
                     <div>
-                        <p class="text-sm"><strong>Correo electronico:</strong> Nemartinez2003@gmail.com</p>
-                        <p class="text-sm"><strong>Rol:</strong> Estudiante</p>
-                        <p class="text-sm"><strong>Campus:</strong> San Isidro</p>
+                        <p class="text-sm"><strong>Correo electronico:</strong> {{$alumno->email}}</p>
+                        <p class="text-sm"><strong>Rol:</strong> {{$alumno->role}}</p>
+                        <p class="text-sm"><strong>Campus:</strong> {{$alumno->campus}}</p>
                     </div>
                 </div>
             </div>
