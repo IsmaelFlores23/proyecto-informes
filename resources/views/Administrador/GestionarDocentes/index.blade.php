@@ -84,7 +84,7 @@
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">N° Identidad</label>
+                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">N° Cuenta</label>
                                 <input name="numero_cuenta" placeholder="1807200400380 (sin guiones)" type="text" 
                                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                               dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
