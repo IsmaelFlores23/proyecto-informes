@@ -19,20 +19,22 @@
                     <tr>
                         <th class="px-6 py-3">Código</th>
                         <th class="px-6 py-3">Nombre</th>
-                        <th class="px-6 py-3">Ubicación</th>
                         <th class="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="px-6 py-4">CAMP001</td>
-                        <td class="px-6 py-4 font-medium">San Isidro</td>
-                        <td class="px-6 py-4">Tegucigalpa</td>
-                        <td class="px-6 py-4 flex space-x-2">
-                            <a href="#" class="text-blue-600 hover:text-blue-800">✏️</a>
-                            <a href="#" class="text-red-600 hover:text-red-800">🗑️</a>
-                        </td>
-                    </tr>
+                     @foreach ($campuses as $campus)
+                            <tr>
+                                <td class="px-6 py-4">{{ $campus->codigo_campus }}</td>
+                                <td class="px-6 py-4 font-medium">{{ $campus->nombre }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center space-x-2">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800 editar" data-id="{{ $campus->id }}">✏️</a>
+                                        <a href="#" class="text-red-600 hover:text-red-800 borrar" data-id="{{ $campus->id }}">🗑️</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                 </tbody>
             </table>
         </div>
@@ -55,22 +57,23 @@
                 </div>
                 <!-- Body -->
                 <div class="p-4">
-                    <form class="space-y-4">
+                    <form class="space-y-4" action="{{ route('campus.store') }}" method="POST">
+                        @csrf
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Código</label>
-                            <input type="text" placeholder="CAMP001"
+                            <input type="text" placeholder="CAMP001" name="codigo_campus"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                            <input type="text" placeholder="San Isidro"
+                            <input type="text" placeholder="San Isidro" name="nombre"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
-                        <div>
+                        {{-- <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Ubicación</label>
                             <input type="text" placeholder="Tegucigalpa"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                        </div>
+                        </div> --}}
                         <div class="flex justify-end space-x-2 pt-2">
                             <button type="button" data-modal-hide="add-campus-modal"
                                 class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">Cancelar</button>

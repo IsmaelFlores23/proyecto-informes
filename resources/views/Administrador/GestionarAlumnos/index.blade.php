@@ -38,7 +38,7 @@
                         <td class="px-6 py-4">alumno</td>
                         <td class="px-6 py-4">Ingeniería Civil</td>
                         <td class="px-6 py-4">San Jorge</td>
-                        <td class="px-6 py-4 flex space-x-2">
+                        <td class="px-6 py-4 text-center">
                             <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
                             <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
                             <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>

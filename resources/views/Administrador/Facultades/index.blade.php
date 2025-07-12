@@ -23,14 +23,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="px-6 py-4">FAC001</td>
-                        <td class="px-6 py-4 font-medium">Ingeniería en Computación</td>
-                        <td class="px-6 py-4 flex space-x-2">
-                            <a href="#" class="text-blue-600 hover:text-blue-800">✏️</a>
-                            <a href="#" class="text-red-600 hover:text-red-800">🗑️</a>
-                        </td>
-                    </tr>
+                      @foreach ($facultades as $facultad)
+                            <tr>
+                                <td class="px-6 py-4">{{ $facultad->codigo_facultad }}</td>
+                                <td class="px-6 py-4 font-medium">{{ $facultad->nombre }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center space-x-2">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800 editar" data-id="{{ $facultad->id }}">✏️</a>
+                                        <a href="#" class="text-red-600 hover:text-red-800 borrar" data-id="{{ $facultad->id }}">🗑️</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                 </tbody>
             </table>
         </div>
@@ -53,15 +57,16 @@
                 </div>
                 <!-- Body -->
                 <div class="p-4">
-                    <form class="space-y-4">
+                    <form class="space-y-4" action="{{ route('facultad.store') }}" method="POST">
+                        @csrf
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Código</label>
-                            <input type="text" placeholder="FAC001"
+                            <input type="text" placeholder="FAC001" name="codigo_facultad"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                            <input type="text" placeholder="Ingeniería"
+                            <input type="text" placeholder="Ingeniería" name="nombre"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
                         <div class="flex justify-end space-x-2 pt-2">
