@@ -8,32 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
-class GestionarAlumnosController extends Controller
+class AdminUserController extends Controller
 {
-     public function index()
+    public function index()
     {
-        return view ('Administrador.GestionarAlumnos.index');
-
+        // return view ('Administrador.VerAdmins.show');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-       
-       
+        //
     }
 
-  
     public function store(Request $request)
     {
-       
+        //
     }
 
-     public function show(Request $request)
+    public function show($id)
     {
-        
+        $admin = User::where('role', 'admin')->findOrFail($id);
+        return view('Administrador.VerAdmins.show', compact('admin'));
     }
 }

@@ -10,11 +10,13 @@ use App\Http\Controllers\GestionarUsuariosController;
 use App\Http\Controllers\InformacionController;
 use App\Http\Controllers\DocenteUserController;
 use App\Http\Controllers\AlumnoUserController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FacultadController;
 use App\Http\Controllers\GestionarAlumnosController;
 use App\Http\Controllers\GestionarDocentesController;
 use App\Http\Controllers\GestionarAdminsController;
+
 
 // Ruta principal redirige a login
 Route::get('/', function () {
@@ -49,6 +51,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // Rutas para mostrar perfil de usuario
     Route::get('/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
     Route::get('/docentes/{id}', [DocenteUserController::class, 'show'])->name('docentes.show');
+    Route::get('/admins/{id}', [AdminUserController::class,'show'])->name('admins.show');
 });
 
 // Rutas para docentes
