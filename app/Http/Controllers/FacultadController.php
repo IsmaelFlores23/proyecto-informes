@@ -25,6 +25,23 @@ class FacultadController extends Controller
        
     }
 
+    public function edit(Facultad $facultad)
+    {
+      $facultades = Facultad::all();
+      return view('Administrador.Facultades.index', compact('facultades'))->with('editando', $facultad);
+    }
+
+    public function update(Request $request, Facultad $facultad)
+    {
+      $validated = $request->validate([
+        'codigo_facultad' => ['required', 'string', 'max:8'],
+        'nombre' => ['required', 'string', 'max:100'],
+    ]);
+
+    $facultad->update($validated);
+
+    return redirect()->route('facultad.index')->with('success', 'Facultad actualizada correctamente');
+    }
   
     public function store(Request $request)
     {
