@@ -1,6 +1,5 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto mt-10">
-
         <!-- Botón Agregar Facultad -->
         <div class="flex justify-center mb-6">
             <button
@@ -23,58 +22,64 @@
                     </tr>
                 </thead>
                 <tbody>
-                      @foreach ($facultades as $facultad)
-                            <tr>
-                                <td class="px-6 py-4">{{ $facultad->codigo_facultad }}</td>
-                                <td class="px-6 py-4 font-medium">{{ $facultad->nombre }}</td>
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex justify-center space-x-2">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 editar" data-id="{{ $facultad->id }}">✏️</a>
-                                        <a href="#" class="text-red-600 hover:text-red-800 borrar" data-id="{{ $facultad->id }}">🗑️</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
+                    @foreach ($facultades as $facultad)
+                        <tr>
+                            <td class="px-6 py-4">{{ $facultad->codigo_facultad }}</td>
+                            <td class="px-6 py-4 font-medium">{{ $facultad->nombre }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex justify-center space-x-2">
+                                    <a href="{{ route('facultad.edit', $facultad->id) }}" class="text-blue-600 hover:text-blue-800">✏️</a>
+                                    <a href="#" class="text-red-600 hover:text-red-800 borrar" data-id="{{ $facultad->id }}">🗑️</a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- MODAL Agregar Facultad -->
+    <!-- MODAL Agregar/Editar Facultad -->
     <div id="add-facultad-modal" tabindex="-1" aria-hidden="true"
-        class="hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full overflow-y-auto h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 {{ isset($editando) ? '' : 'hidden' }}">
+        <div class="relative w-full max-w-md">
+            <div class="bg-white rounded-lg shadow-lg">
                 <!-- Header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600 rounded-t">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                        Agregar Facultad
+                <div class="flex items-center justify-between p-4 border-b border-gray-300 rounded-t">
+                    <h3 class="text-xl font-semibold text-gray-900">
+                        {{ isset($editando) ? 'Editar Facultad' : 'Agregar Facultad' }}
                     </h3>
-                    <button type="button" class="text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
-                        data-modal-hide="add-facultad-modal">
-                        ✖️
-                    </button>
+                    <a href="{{ route('facultad.index') }}" class="text-gray-500 hover:text-gray-800">✖️</a>
                 </div>
+
                 <!-- Body -->
                 <div class="p-4">
-                    <form class="space-y-4" action="{{ route('facultad.store') }}" method="POST">
+                    <form class="space-y-4" action="{{ isset($editando) ? route('facultad.update', $editando->id) : route('facultad.store') }}" method="POST">
                         @csrf
+                        @if(isset($editando))
+                            @method('PUT')
+                        @endif
                         <div>
-                            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Código</label>
+                            <label class="block mb-1 text-sm font-medium text-gray-900">Código</label>
                             <input type="text" placeholder="FAC001" name="codigo_facultad"
-                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                value="{{ old('codigo_facultad', $editando->codigo_facultad ?? '') }}"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5">
                         </div>
                         <div>
-                            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                            <label class="block mb-1 text-sm font-medium text-gray-900">Nombre</label>
                             <input type="text" placeholder="Ingeniería" name="nombre"
-                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                value="{{ old('nombre', $editando->nombre ?? '') }}"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5">
                         </div>
-                        <div class="flex justify-end space-x-2 pt-2">
-                            <button type="button" data-modal-hide="add-facultad-modal"
-                                class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">Cancelar</button>
+                        <!-- Botones -->
+                        <div class="flex justify-end space-x-2 pt-4">
+                            <a href="{{ route('facultad.index') }}"
+                               class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">Cancelar</a>
                             <button type="submit"
                                 class="px-4 py-2 rounded text-gray-900 shadow-md"
-                                style="background-color: #FFC436;">Guardar</button>
+                                style="background-color: #FFC436;">
+                                {{ isset($editando) ? 'Actualizar' : 'Guardar' }}
+                            </button>
                         </div>
                     </form>
                 </div>
