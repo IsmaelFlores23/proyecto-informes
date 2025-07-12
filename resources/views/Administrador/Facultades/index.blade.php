@@ -29,7 +29,13 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center space-x-2">
                                     <a href="{{ route('facultad.edit', $facultad->id) }}" class="text-blue-600 hover:text-blue-800">✏️</a>
-                                    <a href="#" class="text-red-600 hover:text-red-800 borrar" data-id="{{ $facultad->id }}">🗑️</a>
+                                    
+                                    <form action="{{ route('facultad.destroy', $facultad->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta facultad?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800">🗑️</button>
+                                    </form>
+
                                 </div>
                             </td>
                         </tr>

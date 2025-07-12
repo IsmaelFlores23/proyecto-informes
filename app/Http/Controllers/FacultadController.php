@@ -59,4 +59,11 @@ class FacultadController extends Controller
     {
                
     }
+
+     public function destroy(Facultad $facultad)
+    {
+        $facultad->delete();
+        return redirect()->route('facultad.index')->with('success', 'Facultad eliminada correctamente');
+    }
+
 }
