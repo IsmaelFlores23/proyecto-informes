@@ -13,50 +13,76 @@
             <div class="flex items-center justify-center flex-1">
                 {{-- Mobile Menu Button --}}
                 <div class="hidden space-x-8 sm:flex">
-    {{-- Inicio --}}
-    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
-        {{ __('Inicio') }}
-    </x-nav-link>
+                    {{-- Inicio --}}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white">
+                        {{ __('Inicio') }}
+                    </x-nav-link>
 
-    {{-- Asignar Terna --}}
-    <x-nav-link :href="route('AsignarTerna.create')" :active="request()->routeIs('AsignarTerna.create')" class="text-white">
-        {{ __('Asignar Terna') }}
-    </x-nav-link>
+                    {{-- Asignar Terna --}}
+                    
 
-    {{-- Dropdown Administrar --}}
-    <div class="relative">
-        <button id="dropdownAdministrarButton" data-dropdown-toggle="dropdownAdministrar" class="text-white inline-flex items-center px-3 py-2 hover:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="button">
-            {{ __('Administrar') }}
-            <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
+                    {{-- Dropdown Gestionar Usuarios --}}
+                    <div class="relative">
+                        <button id="dropdownGestionarUsuariosButton" data-dropdown-toggle="dropdownGestionarUsuarios" class="text-white inline-flex items-center px-3 py-2 hover:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="button">
+                            {{ __('Gestionar Usuarios') }}
+                            <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
 
-        <!-- Dropdown menu -->
-        <div id="dropdownAdministrar" class="hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
-            <ul class="py-1 text-gray-700" aria-labelledby="dropdownAdministrarButton">
-                <li>
-                    <a href="{{ route('Campus.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                        {{ __('Administrar Campus') }}
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('Facultades.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                        {{ __('Administrar Facultades') }}
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('GestionarUsuarios.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                        {{ __('Gestionar Usuarios') }}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+                        <div id="dropdownGestionarUsuarios" class="hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
+                            <ul class="py-1 text-gray-700" aria-labelledby="dropdownGestionarUsuariosButton">
+                                <li>
+                                    <a href="{{ route('GestionarAlumnos.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                        {{ __('Alumnos') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('GestionarDocentes.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                        {{ __('Docentes') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('GestionarAdmins.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                        {{ __('Administradores') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
+                    {{-- Dropdown Administrar --}}
+                    <div class="relative">
+                        <button id="dropdownAdministrarButton" data-dropdown-toggle="dropdownAdministrar" class="text-white inline-flex items-center px-3 py-2 hover:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="button">
+                            {{ __('Administrar') }}
+                            <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown menu -->
+                        <div id="dropdownAdministrar" class="hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
+                            <ul class="py-1 text-gray-700" aria-labelledby="dropdownAdministrarButton">
+                                <li>
+                                    <a href="{{ route('Campus.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                        {{ __('Campus') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('Facultades.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                        {{ __('Facultades') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('AsignarTerna.create') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                        {{ __('Ternas') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
