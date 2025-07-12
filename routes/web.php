@@ -36,8 +36,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     //Estas dos rutas serian eliminadas luego de implementar rutas /alumnos/{id} y /docentes/{id}
     // Route::resource('UserDocente', DocenteUserController::class);
     // Route::resource('UserAlumno', AlumnoUserController::class);
-    Route::resource('Campus', CampusController::class);
-    Route::resource('Facultades', FacultadController::class);        
+    Route::resource('campus', CampusController::class);
+    Route::resource('facultad', FacultadController::class);        
 
     Route::resource('GestionarAlumnos', GestionarAlumnosController::class);
     Route::resource('GestionarDocentes', GestionarDocentesController::class);
@@ -67,6 +67,7 @@ Route::middleware(['auth', 'verified', 'role:alumno'])->group(function () {
     Route::get('/observarInforme/pdf/{nombreArchivo}', [RevisionController::class, 'verPdf'])
         ->name('observarInforme.pdf');
 });
+
 
 // Rutas compartidas entre roles (si es necesario)
 Route::middleware(['auth', 'verified'])->group(function () {

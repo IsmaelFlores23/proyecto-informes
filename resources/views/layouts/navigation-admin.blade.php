@@ -64,12 +64,12 @@
                         <div id="dropdownAdministrar" class="hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
                             <ul class="py-1 text-gray-700" aria-labelledby="dropdownAdministrarButton">
                                 <li>
-                                    <a href="{{ route('Campus.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                    <a href="{{ route('campus.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                                         {{ __('Campus') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('Facultades.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                    <a href="{{ route('facultad.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                                         {{ __('Facultades') }}
                                     </a>
                                 </li>
