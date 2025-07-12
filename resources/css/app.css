@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fix para botones de SweetAlert2 con Tailwind CSS */
+.swal2-confirm{
+    display: inline-block !important;
+    padding: 0.625rem 1.25rem !important;
+    margin: 0.3125rem !important;
+    border: none !important;
+    border-radius: 0.25rem !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+.swal2-confirm {
+    background-color: #3085d6 !important;
+    color: white !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #2574c7 !important;
+}
+
+.swal2-cancel {
+    background-color: #6c757d !important;
+    color: white !important;
+}
+
+.swal2-cancel:hover {
+    background-color: #5a6268 !important;
+}
+
+.swal2-deny {
+    background-color: #d33 !important;
+    color: white !important;
+}
+
+.swal2-deny:hover {
+    background-color: #c02d2d !important;
+}
+
+/* Asegurar que el contenedor de botones sea visible */
+.swal2-actions {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    margin-top: 1.25rem !important;
+}
