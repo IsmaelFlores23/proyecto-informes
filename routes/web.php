@@ -12,6 +12,9 @@ use App\Http\Controllers\DocenteUserController;
 use App\Http\Controllers\AlumnoUserController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\FacultadController;
+use App\Http\Controllers\GestionarAlumnosController;
+use App\Http\Controllers\GestionarDocentesController;
+use App\Http\Controllers\GestionarAdminsController;
 
 // Ruta principal redirige a login
 Route::get('/', function () {
@@ -35,6 +38,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // Route::resource('UserAlumno', AlumnoUserController::class);
     Route::resource('Campus', CampusController::class);
     Route::resource('Facultades', FacultadController::class);        
+
+    Route::resource('GestionarAlumnos', GestionarAlumnosController::class);
+    Route::resource('GestionarDocentes', GestionarDocentesController::class);
+    Route::resource('GestionarAdmins', GestionarAdminsController::class);
 
     Route::get('/ver-informes/{numero_cuenta}', [AdminInformesController::class, 'verTodosLosInformes'])
     ->name('verInformes.alumno');
