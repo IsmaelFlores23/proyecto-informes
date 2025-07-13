@@ -61,4 +61,16 @@ class GestionarDocentesController extends Controller
      public function show(Request $request)
     {
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $gestionarDocente = User::findOrFail($id);
+        $gestionarDocente->delete();
+        return redirect()->route('GestionarDocentes.index')->with('success', 'Docente eliminado correctamente');
+    }
+
+
 }
