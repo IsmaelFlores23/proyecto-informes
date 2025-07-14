@@ -19,7 +19,7 @@ class GestionarDocentesController extends Controller
         $docentes = User::where('role', 'docente')->get();
         // Devuelve la vista con los datos de los docentes
         return view ('Administrador.GestionarDocentes.index', compact('docentes'));
-
+        
     }
 
     /**
