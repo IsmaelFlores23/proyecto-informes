@@ -5,14 +5,14 @@
             <div class="border border-gray-300 rounded-lg p-6 mb-6 bg-white">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <p class="text-sm"><strong>Nombre:</strong> Nelson Emilio Martinez Rodriguez</p>
-                        <p class="text-sm"><strong>Numero de cuenta:</strong> 1807200500589</p>
-                        <p class="text-sm"><strong>Facultad:</strong> Ingenieria en ciencias de la computacion</p>
+                        <p class="text-sm"><strong>Nombre:</strong> {{ $docente->name }}</p>
+                        <p class="text-sm"><strong>Numero de cuenta:</strong> {{ $docente->numero_cuenta }}</p>
+                        <p class="text-sm"><strong>Facultad:</strong> {{ $docente->facultad }}</p>
                     </div>
                     <div>
-                        <p class="text-sm"><strong>Correo electronico:</strong> Nemartinez2003@gmail.com</p>
+                        <p class="text-sm"><strong>Correo electronico:</strong> {{ $docente->email }}</p>
                         <p class="text-sm"><strong>Rol:</strong> Docente</p>
-                        <p class="text-sm"><strong>Campus:</strong> San Isidro</p>
+                        <p class="text-sm"><strong>Campus:</strong> {{ $docente->campus }}</p>
                     </div>
                 </div>
             </div>
