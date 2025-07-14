@@ -25,6 +25,24 @@ class CampusController extends Controller
        
     }
 
+    public function edit(Campus $campus)
+    {
+      $campuses = Campus::all();
+      return view('Administrador.Campus.index', compact('campuses'))->with('editando', $campus);
+    }
+
+    public function update(Request $request, Campus $campus)
+    {
+      $validated = $request->validate([
+        'codigo_campus' => ['required', 'string', 'max:8'],
+        'nombre' => ['required', 'string', 'max:100'],
+    ]);
+
+    $campus->update($validated);
+
+    return redirect()->route('campus.index')->with('success', 'Campus actualizado correctamente');
+    }
+
   
     public function store(Request $request)
     {
@@ -41,5 +59,11 @@ class CampusController extends Controller
     public function show(Request $request)
     {
                
+    }
+
+    public function destroy(Campus $campus)
+    {
+        $campus->delete();
+        return redirect()->route('campus.index')->with('success', 'Campus eliminado correctamente');
     }
 }

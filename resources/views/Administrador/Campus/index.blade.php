@@ -29,8 +29,13 @@
                                 <td class="px-6 py-4 font-medium">{{ $campus->nombre }}</td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 editar" data-id="{{ $campus->id }}">✏️</a>
-                                        <a href="#" class="text-red-600 hover:text-red-800 borrar" data-id="{{ $campus->id }}">🗑️</a>
+                                        <a href="{{ route('campus.edit', $campus->id) }}" class="text-blue-600 hover:text-blue-800">✏️</a>
+
+                                        <form id="delete-form-{{ $campus->id }}" action="{{ route('campus.destroy', $campus->id) }}" method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        <button onclick="confirmDelete({{ $campus->id }}, '{{ $campus->nombre }}')" class="text-red-600 hover:text-red-800">🗑️</button>
                                     </div>
                                 </td>
                             </tr>
@@ -40,33 +45,56 @@
         </div>
     </div>
 
+    <script>
+        function confirmDelete(campusId, campusNombre) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `¿Deseas eliminar el campus "${campusNombre}"? Esta acción no se puede deshacer.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${campusId}`).submit();
+                }
+            });
+        }
+    </script>
+
+
     <!-- MODAL Agregar Campus -->
     <div id="add-campus-modal" tabindex="-1" aria-hidden="true"
-        class="hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full overflow-y-auto h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 {{ isset($editando) ? '' : 'hidden' }}">
+            <div class="relative w-full max-w-md">
+                <div class="bg-white rounded-lg shadow-lg">
                 <!-- Header -->
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600 rounded-t">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                        Agregar Campus
+                        {{ isset($editando) ? 'Editar Campus' : 'Agregar Campus' }}
                     </h3>
-                    <button type="button" class="text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
-                        data-modal-hide="add-campus-modal">
-                        ✖️
-                    </button>
+                    <a href="{{ route('campus.index') }}" class="text-gray-500 hover:text-gray-800">✖️</a>
                 </div>
                 <!-- Body -->
                 <div class="p-4">
-                    <form class="space-y-4" action="{{ route('campus.store') }}" method="POST">
+                     <form class="space-y-4" action="{{ isset($editando) ? route('campus.update', $editando->id) : route('campus.store') }}" method="POST">
                         @csrf
+                        @if(isset($editando))
+                            @method('PUT')
+                        @endif
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Código</label>
                             <input type="text" placeholder="CAMP001" name="codigo_campus"
+                                value="{{ old('codigo_campus', $editando->codigo_campus ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
                             <input type="text" placeholder="San Isidro" name="nombre"
+                                value="{{ old('nombre', $editando->nombre ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
                         {{-- <div>
@@ -74,12 +102,16 @@
                             <input type="text" placeholder="Tegucigalpa"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div> --}}
+
+                        <!-- Botones -->
                         <div class="flex justify-end space-x-2 pt-2">
-                            <button type="button" data-modal-hide="add-campus-modal"
-                                class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">Cancelar</button>
+                             <a href="{{ route('campus.index') }}"
+                               class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">Cancelar</a>
                             <button type="submit"
                                 class="px-4 py-2 rounded text-gray-900 shadow-md"
-                                style="background-color: #FFC436;">Guardar</button>
+                                style="background-color: #FFC436;">
+                                {{ isset($editando) ? 'Actualizar' : 'Guardar' }}
+                            </button>
                         </div>
                     </form>
                 </div>
