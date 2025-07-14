@@ -137,10 +137,7 @@
                                     <option>Teología</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
-                            <div>
+                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
                                 <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                                dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
@@ -158,6 +155,27 @@
                                     <option>Dios Espíritu Santo</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
+                            {{-- <div>
+                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
+                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
+                                               dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    <option value="">Seleccione un Campus</option>
+                                    <option>Sagrado Corazón de Jesús</option>
+                                    <option>San Pedro y San Pablo</option>
+                                    <option>Jesús Sacramentado</option>
+                                    <option>San Jorge</option>
+                                    <option>San Isidro</option>
+                                    <option>Santa Rosa de Lima</option>
+                                    <option>Santa Clara</option>
+                                    <option>Espiritual El Tabor</option>
+                                    <option>Santiago Apostol</option>
+                                    <option>San Juan Bautista</option>
+                                    <option>Dios Espíritu Santo</option>
+                                </select>
+                            </div> --}}
                             <div class="flex space-x-3">
                                 <button type="button" data-modal-hide="add-user-modal"
                                         class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">

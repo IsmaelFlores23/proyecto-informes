@@ -42,7 +42,12 @@
                             <td class="px-6 py-4 flex space-x-2">
                                 <a href="{{ route('admins.show', $admin->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
                                 <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
-                                <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
+                                {{-- <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a> --}}
+                                 <form id="delete-form-{{ $admin->id }}" action="{{ route('GestionarAdmins.destroy', $admin->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                <button onclick="confirmDelete({{ $admin->id }}, '{{ $admin->name }}')" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</button>
                             </td>
                         </tr>
                     @empty
@@ -177,5 +182,26 @@
             margin-bottom: 1rem; 
         }
     </style>
+
+
+     <script>
+    function confirmDelete(adminId, adminNombre) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¿Deseas eliminar el Administrador "${adminNombre}"? Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-form-${adminId}`).submit();
+            }
+        });
+    }
+    </script>
 
 </x-app-layout>

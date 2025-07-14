@@ -62,5 +62,11 @@ class GestionarAdminsController extends Controller
 
     }
 
+    public function destroy($id)
+    {
+        $gestionarAdmin = User::findOrFail($id);
+        $gestionarAdmin->delete();
+        return redirect()->route('GestionarAdmins.index')->with('success', 'Administrador eliminado correctamente');
+    }
 
 }
