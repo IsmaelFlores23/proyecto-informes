@@ -76,71 +76,79 @@
                                     class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Estudiante</label>
                                 <select id="estudiante" name="estudiante"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                           dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="" disabled selected>Selecciona un estudiante</option>
-                                    <option value="1807200400">Juan Pérez - 1807200400</option>
-                                    <option value="1807200401">María López - 1807200401</option>
-                                    <option value="1807200402">Carlos Gómez - 1807200402</option>
+                                    @foreach($alumnos as $estudiante)
+                                        <option value="{{ $estudiante->id }}">
+                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
+
 
                             <!-- Docente #1 -->
                             <div>
-                                <label for="docente1"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente
-                                    #1</label>
-                                <select id="docente1" name="docente1"
+                                <label for="estudiante"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
+                                <select id="estudiante" name="estudiante"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                           dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                    <option value="" disabled selected>Selecciona el docente #1</option>
-                                    <option value="prof_a">Profesor A</option>
-                                    <option value="prof_b">Profesor B</option>
-                                    <option value="prof_c">Profesor C</option>
+                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    <option value="" disabled selected>Selecciona un Docente</option>
+                                    @foreach($docentes as $estudiante)
+                                        <option value="{{ $estudiante->id }}">
+                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
+
                             <!-- Docente #2 -->
-                            <div>
-                                <label for="docente2"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente
-                                    #2</label>
-                                <select id="docente2" name="docente2"
+                             <div>
+                                <label for="estudiante"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
+                                <select id="estudiante" name="estudiante"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                           dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                    <option value="" disabled selected>Selecciona el docente #2</option>
-                                    <option value="prof_a">Profesor A</option>
-                                    <option value="prof_b">Profesor B</option>
-                                    <option value="prof_c">Profesor C</option>
+                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    <option value="" disabled selected>Selecciona un Docente</option>
+                                    @foreach($docentes as $estudiante)
+                                        <option value="{{ $estudiante->id }}">
+                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <!-- Docente #3 -->
-                            <div>
-                                <label for="docente3"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente
-                                    #3</label>
-                                <select id="docente3" name="docente3"
+                             <div>
+                                <label for="estudiante"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
+                                <select id="estudiante" name="estudiante"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                           dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                    <option value="" disabled selected>Selecciona el docente #3</option>
-                                    <option value="prof_a">Profesor A</option>
-                                    <option value="prof_b">Profesor B</option>
-                                    <option value="prof_c">Profesor C</option>
+                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    <option value="" disabled selected>Selecciona un Docente</option>
+                                    @foreach($docentes as $estudiante)
+                                        <option value="{{ $estudiante->id }}">
+                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <!-- Docente #4 (opcional) -->
-                            <div>
-                                <label for="docente4"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #4
-                                    (opcional)</label>
-                                <select id="docente4" name="docente4"
+                             <div>
+                                <label for="estudiante"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
+                                <select id="estudiante" name="estudiante"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                           dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                    <option value="" selected>Selecciona el docente #4 (opcional)</option>
-                                    <option value="prof_a">Profesor A</option>
-                                    <option value="prof_b">Profesor B</option>
-                                    <option value="prof_c">Profesor C</option>
+                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    <option value="" disabled selected>Selecciona un Docente</option>
+                                    @foreach($docentes as $estudiante)
+                                        <option value="{{ $estudiante->id }}">
+                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
