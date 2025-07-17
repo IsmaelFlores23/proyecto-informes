@@ -20,7 +20,7 @@ class Informe extends Model
 
     public function terna()
     {
-        return $this->belongsTo(User::class, 'id_terna');
+        return $this->belongsTo(Terna::class, 'id_terna');
     }
     
 }
