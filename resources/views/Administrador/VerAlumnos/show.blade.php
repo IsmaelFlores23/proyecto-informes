@@ -26,29 +26,38 @@
                 </button>
             </div>
 
+            <!-- Sección: Terna -->
             <div class="border border-gray-300 rounded-lg p-6 bg-white mb-10">
                 <p class="text-sm font-medium mb-4" style="color:#004CBE;">Terna:</p>
                 <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
-                    {{-- <p class="text-sm font-semibold mb-2" style="color:#004CBE;">Terna #1</p> --}}
-                    {{-- <p class="text-sm mb-4">Alumno: Juan Orlando Hernandez</p> --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #1:</p>
-                            <p class="text-sm">Nelson Martinez</p>
+                    @if($terna)
+                        <p class="text-sm font-semibold mb-2" style="color:#004CBE;">Estado: {{ $terna->estado_terna }}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            @forelse($docentes as $index => $docente)
+                                <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
+                                    <p class="text-sm font-semibold">Docente #{{ $index + 1 }}:</p>
+                                    <p class="text-sm">{{ $docente->name }}</p>
+                                </div>
+                            @empty
+                                <div class="col-span-4 text-center">
+                                    <p class="text-sm text-gray-500">No hay docentes asignados a esta terna</p>
+                                </div>
+                            @endforelse
+                            
+                            @if(count($docentes) > 0 && count($docentes) < 4)
+                                @for($i = count($docentes); $i < 4; $i++)
+                                    <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
+                                        <p class="text-sm font-semibold">Docente #{{ $i + 1 }}:</p>
+                                        <p class="text-sm text-gray-400">No asignado</p>
+                                    </div>
+                                @endfor
+                            @endif
                         </div>
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #2:</p>
-                            <p class="text-sm">Emilio Rodriguez</p>
+                    @else
+                        <div class="text-center py-4">
+                            <p class="text-sm text-gray-500">Este alumno no tiene una terna asignada</p>
                         </div>
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #3:</p>
-                            <p class="text-sm">Juan Hernandez</p>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #4:</p>
-                            <p class="text-sm">Martha Perez</p>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
 

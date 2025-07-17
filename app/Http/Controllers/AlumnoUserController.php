@@ -36,8 +36,18 @@ class AlumnoUserController extends Controller
             $query->where('nombre_role', 'alumno');
         })->findOrFail($id);
         
-        // Aquí agregar lógica para obtener terna, informes, etc.
-        return view('Administrador.VerAlumnos.show', compact('alumno'));
+        // Obtener la terna del alumno
+        $terna = $alumno->ternas()->first();
+        
+        // Obtener los docentes asociados a la terna si existe
+        $docentes = [];
+        if ($terna) {
+            $docentes = $terna->users()->whereHas('role', function($query) {
+                $query->where('nombre_role', 'docente');
+            })->get();
+        }
+        
+        return view('Administrador.VerAlumnos.show', compact('alumno', 'terna', 'docentes'));
     }
 
 
