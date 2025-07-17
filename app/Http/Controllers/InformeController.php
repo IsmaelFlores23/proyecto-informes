@@ -36,51 +36,78 @@ class InformeController extends Controller
     {
         // Validar los datos enviados por el formulario
         $request->validate([
-            'ruta_informe' => 'required|file|mimes:pdf|max:50048', // Solo PDFs de hasta 2MB
+            'ruta_informe' => 'required|file|mimes:pdf|max:50048', // Solo PDFs de hasta 50MB
             'descripcion' => 'required|string|max:1000',
         ]);
 
         // Obtener numero de cuenta del usuario autenticado
-        // $numero_cuenta = Auth()->User()->numero_cuenta;
         $numero_cuenta = Auth::user()->numero_cuenta;
-
-        //Obtener ID del usuario autenticado
-        $user_id = Auth::id();
-
+    
+        // Obtener la terna del usuario actual (alumno)
+        $terna = Auth::user()->ternas()->first();
+    
+        if (!$terna) {
+            return redirect()->route('subirInforme.create')
+                ->with('error', 'No tienes una terna asignada. Contacta al administrador.');
+        }
+        
         // Define Carpeta de destino para guardar el archivo
         $carpeta = 'informes';
-
+        
         // Buscar todos los archivos ya subidos en esa carpeta
         $archivos = Storage::files($carpeta);
-        //Inicializar número de versión del archivo
+        
+        // Inicializar número de versión del archivo
         $version = 1;
-
+        $archivoAnterior = null;
+        
         // Contar cuántos archivos anteriores ha subido este estudiante
         foreach ($archivos as $archivo) {
             if (str_starts_with(basename($archivo), $numero_cuenta . '_')) {
-                $version++;
+                // Guardar el archivo anterior para eliminarlo después
+                $archivoAnterior = $archivo;
+                
+                // Extraer la versión del nombre del archivo
+                $nombreActual = basename($archivo, '.pdf');
+                $partesNombre = explode('_', $nombreActual);
+                if (isset($partesNombre[1])) {
+                    $version = (int)$partesNombre[1] + 1;
+                }
             }
         }
-
+        
         // Construir nombre del archivo
         $nombreArchivo = $numero_cuenta . '_' . $version . '.pdf';
-
+        
+        // Si existe un archivo anterior, eliminarlo
+        if ($archivoAnterior) {
+            Storage::delete($archivoAnterior);
+        }
+        
         // Guardar el archivo en la carpeta definida con el nombre generado
         $ruta = $request->file('ruta_informe')->storeAs($carpeta, $nombreArchivo);
-
-        // Guardar en la base de datos
-        Informe::create([
-            'fk_estudiante' => $user_id,
-            'ruta_informe' => $ruta,
-            'fecha_envio' => now(),
-            'descripcion' => $request->input('descripcion')
-        ]);
-
+        
+        // Buscar si ya existe un informe para esta terna
+        $informeExistente = Informe::where('id_terna', $terna->id)->first();
+        
+        if ($informeExistente) {
+            // Actualizar el informe existente
+            $informeExistente->update([
+                'nombre_archivo' => $nombreArchivo,
+                'descripcion' => $request->input('descripcion')
+            ]);
+        } else {
+            // Crear un nuevo informe
+            Informe::create([
+                'id_terna' => $terna->id,
+                'nombre_archivo' => $nombreArchivo,
+                'descripcion' => $request->input('descripcion')
+            ]);
+        }
+        
         // Redirigir al formulario con un mensaje de éxito
-        return redirect()->route('subirInforme.create')->with('success', 'Informe subido correctamente.');
-
-
-
+        return redirect()->route('subirInforme.create')
+            ->with('success', 'Informe subido correctamente (Versión ' . $version . ').');
     }
 
     /**

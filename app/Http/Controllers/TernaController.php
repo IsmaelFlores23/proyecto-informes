@@ -25,19 +25,20 @@ class TernaController extends Controller
     public function create()
     {
         //obtener usuarios con role 'alumno'
-        // $alumnos = User::where('role', 'alumno')->get();
         $alumnos = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'alumno');
         })->get();
-
+    
         // Obtener solo usuarios con role 'docente'
-        // $docentes = User::where('role', 'docente')->get();
         $docentes = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'docente');
         })->get();
-
+    
+        // Obtener todas las ternas existentes con sus usuarios
+        $ternas = \App\Models\Terna::all();
+    
         // enviar datos a la vista
-        return view ('Administrador.AsignarTerna.create', compact('alumnos', 'docentes'));
+        return view ('Administrador.AsignarTerna.create', compact('alumnos', 'docentes', 'ternas'));
     }
 
     /**
@@ -46,8 +47,67 @@ class TernaController extends Controller
     public function store(Request $request)
     {
         // Validar los datos enviados por el formulario
-       
+        $request->validate([
+            'estudiante' => 'required|exists:users,id',
+            'docente1' => 'required|exists:users,id',
+            'docente2' => 'required|exists:users,id',
+            'docente3' => 'required|exists:users,id',
+            'docente4' => 'nullable|exists:users,id',
+        ]);
+        
+        // Crear una nueva terna
+        $terna = \App\Models\Terna::create([
+            'estado_terna' => 'Pendiente'
+        ]);
+        
+        // Asignar el estudiante a la terna
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->estudiante,
+            'id_terna' => $terna->id
+        ]);
+        
+        // Asignar los docentes a la terna
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->docente1,
+            'id_terna' => $terna->id
+        ]);
+        
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->docente2,
+            'id_terna' => $terna->id
+        ]);
+        
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->docente3,
+            'id_terna' => $terna->id
+        ]);
+        
+        // Asignar el docente opcional si se proporcionó
+        if ($request->docente4) {
+            \App\Models\UserTernaTransitiva::create([
+                'id_user' => $request->docente4,
+                'id_terna' => $terna->id
+            ]);
+        }
+        
+        return redirect()->route('AsignarTerna.create')
+            ->with('success', 'Terna asignada correctamente.');
     }
 
-   
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $terna = \App\Models\Terna::findOrFail($id);
+        
+        // Eliminar las relaciones en la tabla pivote
+        \App\Models\UserTernaTransitiva::where('id_terna', $id)->delete();
+        
+        // Eliminar la terna
+        $terna->delete();
+        
+        return redirect()->route('AsignarTerna.create')
+            ->with('success', 'Terna eliminada correctamente.');
+    }
 }

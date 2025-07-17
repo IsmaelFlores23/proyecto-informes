@@ -22,21 +22,74 @@
                         <th class="px-6 py-3">Docente #2</th>
                         <th class="px-6 py-3">Docente #3</th>
                         <th class="px-6 py-3">Docente #4 (opcional)</th>
+                        <th class="px-6 py-3">Estado</th>
                         <th class="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="bg-white">
-                        <td class="px-6 py-4 font-medium">Juan Pérez - 1807200400</td>
-                        <td class="px-6 py-4">Profesor A</td>
-                        <td class="px-6 py-4">Profesor B</td>
-                        <td class="px-6 py-4">Profesor C</td>
-                        <td class="px-6 py-4">Profesor D</td>
-                        <td class="px-6 py-4 flex space-x-2">
-                            <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
-                            <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a>
-                        </td>
-                    </tr>
+                    @forelse($ternas as $terna)
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            @php
+                                // Obtener el estudiante de esta terna
+                                $estudiante = $terna->users()->whereHas('role', function($query) {
+                                    $query->where('nombre_role', 'alumno');
+                                })->first();
+                                
+                                // Obtener los docentes de esta terna
+                                $docentes = $terna->users()->whereHas('role', function($query) {
+                                    $query->where('nombre_role', 'docente');
+                                })->get();
+                            @endphp
+                            
+                            <!-- Estudiante -->
+                            <td class="px-6 py-4 font-medium">
+                                @if($estudiante)
+                                    {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                @else
+                                    <span class="text-gray-400">No asignado</span>
+                                @endif
+                            </td>
+                            
+                            <!-- Docentes -->
+                            @for($i = 0; $i < 4; $i++)
+                                <td class="px-6 py-4">
+                                    @if(isset($docentes[$i]))
+                                        {{ $docentes[$i]->name }}
+                                    @else
+                                        <span class="text-gray-400">-</span>
+                                    @endif
+                                </td>
+                            @endfor
+                            
+                            <!-- Estado -->
+                            <td class="px-6 py-4">
+                                @if($terna->estado_terna == 'Pendiente')
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Pendiente</span>
+                                @elseif($terna->estado_terna == 'En Progreso')
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">En Progreso</span>
+                                @elseif($terna->estado_terna == 'Aprobado')
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Aprobado</span>
+                                @endif
+                            </td>
+                            
+                            <!-- Acciones -->
+                            <td class="px-6 py-4 flex space-x-2">
+                                <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
+                                <form action="{{ route('AsignarTerna.destroy', $terna->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800" title="Eliminar"
+                                            onclick="return confirm('¿Estás seguro de eliminar esta terna?')">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr class="bg-white border-b">
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                No hay ternas asignadas todavía
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -67,8 +120,8 @@
 
                 <!-- Modal body -->
                 <div class="p-4">
-                    <form class="space-y-4">
-
+                    <form class="space-y-4" action="{{ route('AsignarTerna.store') }}" method="POST">
+                        @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Estudiante -->
                             <div>
@@ -86,67 +139,65 @@
                                 </select>
                             </div>
 
-
                             <!-- Docente #1 -->
                             <div>
-                                <label for="estudiante"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
-                                <select id="estudiante" name="estudiante"
+                                <label for="docente1"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #1</label>
+                                <select id="docente1" name="docente1"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                         dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $estudiante)
-                                        <option value="{{ $estudiante->id }}">
-                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                    @foreach($docentes as $docente)
+                                        <option value="{{ $docente->id }}">
+                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
 
-
                             <!-- Docente #2 -->
-                             <div>
-                                <label for="estudiante"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
-                                <select id="estudiante" name="estudiante"
+                            <div>
+                                <label for="docente2"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #2</label>
+                                <select id="docente2" name="docente2"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                         dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $estudiante)
-                                        <option value="{{ $estudiante->id }}">
-                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                    @foreach($docentes as $docente)
+                                        <option value="{{ $docente->id }}">
+                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <!-- Docente #3 -->
-                             <div>
-                                <label for="estudiante"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
-                                <select id="estudiante" name="estudiante"
+                            <div>
+                                <label for="docente3"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #3</label>
+                                <select id="docente3" name="docente3"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                         dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $estudiante)
-                                        <option value="{{ $estudiante->id }}">
-                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                    @foreach($docentes as $docente)
+                                        <option value="{{ $docente->id }}">
+                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <!-- Docente #4 (opcional) -->
-                             <div>
-                                <label for="estudiante"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente</label>
-                                <select id="estudiante" name="estudiante"
+                            <div>
+                                <label for="docente4"
+                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #4 (Opcional)</label>
+                                <select id="docente4" name="docente4"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
-                                    <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $estudiante)
-                                        <option value="{{ $estudiante->id }}">
-                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                    <option value="" selected>Selecciona un Docente (Opcional)</option>
+                                    @foreach($docentes as $docente)
+                                        <option value="{{ $docente->id }}">
+                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
                                 </select>
