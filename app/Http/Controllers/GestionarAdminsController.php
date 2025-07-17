@@ -15,23 +15,19 @@ class GestionarAdminsController extends Controller
 {
      public function index()
     {
-        // Obtiene admins de BD y los manda a la vista con compact
-        $admins = User::where('role', 'admin')->get();
+        // Cambiamos la consulta para usar la relación con roles
+        $admins = User::whereHas('role', function($query) {
+            $query->where('nombre_role', 'admin');
+        })->get();
         return view ('Administrador.GestionarAdmins.index', compact('admins'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-       
-       
     }
 
     public function edit(User $GestionarAdmin)
     {
-        $admins = User::where('role', 'admin')->get();
+        // Cambiamos la consulta para usar la relación con roles
+        $admins = User::whereHas('role', function($query) {
+            $query->where('nombre_role', 'admin');
+        })->get();
         return view('Administrador.GestionarAdmins.index', compact('admins'))->with('editando', $GestionarAdmin);
     }
 

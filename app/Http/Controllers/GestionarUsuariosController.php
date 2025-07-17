@@ -47,11 +47,14 @@ class GestionarUsuariosController extends Controller
             'role' => ['required', 'string', 'max:12'],
             'facultad' => ['required', 'string', 'max:50'],
             'campus' => ['required', 'string', 'max:50'],
-
-        
         ]);
 
-        //Ingresando datos en las respectivas Tablas
+        // Buscar el ID del rol seleccionado
+        $role = \App\Models\Role::where('nombre_role', $request->role)->first();
+        
+        if (!$role) {
+            return redirect()->back()->with('error', 'El rol seleccionado no existe.');
+        }
 
         //TABLA USERS
         User::create([
@@ -59,15 +62,12 @@ class GestionarUsuariosController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'facultad' => $request->facultad,
-            'campus' => $request->campus,
-
+            'id_role' => $role->id,
+            'id_campus' => $request->campus,
+            'id_facultad' => $request->facultad,
         ]);
 
-        // return view('Administrador.GestionarUsuarios.index');
         return redirect()->route('GestionarUsuarios.index')->with('success', 'Usuario creado correctamente.');
-
     }
 
 

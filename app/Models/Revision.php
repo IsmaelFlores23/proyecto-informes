@@ -9,4 +9,19 @@ class Revision extends Model
 {
     /** @use HasFactory<\Database\Factories\RevisionFactory> */
     use HasFactory;
+
+    protected $table = 'revisiones';
+    protected $fillable = [
+        'id_user',
+        'comentario',
+        'numero_pagina',
+        'estado_revision'
+
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
 }

@@ -10,16 +10,25 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Campus;
+use App\Models\Facultad;
 
 class GestionarDocentesController extends Controller
 {
      public function index()
     {
-        // Consulta para obtener todos los usuarios con el rol "docente"
-        $docentes = User::where('role', 'docente')->get();
-        // Devuelve la vista con los datos de los docentes
-        return view ('Administrador.GestionarDocentes.index', compact('docentes'));
+        // Cambiamos la consulta para usar la relación con roles
+        $docentes = User::whereHas('role', function($query) {
+            $query->where('nombre_role', 'docente');
+        })->get();
         
+        // Cargamos los campus y facultades para los selectores
+        $campus = Campus::all();
+        $facultades = Facultad::all();
+        
+        // Devuelve la vista con los datos de los docentes, campus y facultades
+        return view ('Administrador.GestionarDocentes.index', compact('docentes', 'campus', 'facultades'));
     }
 
     /**
@@ -39,18 +48,25 @@ class GestionarDocentesController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6'],
-            'facultad' => ['required', 'string', 'max:50'],
-            'campus' => ['required', 'string', 'max:50'],
+            'id_facultad' => ['required', 'exists:facultad,id'],
+            'id_campus' => ['required', 'exists:campus,id'],
         ]);
+
+        // Buscar el ID del rol docente
+        $role = Role::where('nombre_role', 'docente')->first();
+        
+        if (!$role) {
+            return redirect()->back()->with('error', 'El rol de docente no existe en el sistema.');
+        }
 
         User::create([
             'numero_cuenta' => $request->numero_cuenta,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'docente', // Forzamos el role a 'docente'
-            'facultad' => $request->facultad,
-            'campus' => $request->campus,
+            'id_role' => $role->id,
+            'id_facultad' => $request->id_facultad,
+            'id_campus' => $request->id_campus,
         ]);
 
         return redirect()->route('GestionarDocentes.index')->with('success', 'Docente creado exitosamente.');

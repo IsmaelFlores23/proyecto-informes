@@ -22,9 +22,9 @@ class User extends Authenticatable
         'numero_cuenta',
         'email',
         'password',
-        'role',
-        'facultad',
-        'campus',
+        'id_role',
+        'id_campus',
+        'id_facultad',
         /*'nombre_facultad',
         'nombre_campus',*/
     ];
@@ -55,16 +55,58 @@ class User extends Authenticatable
     // Métodos helper para verificar roles
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->role()->first()->nombre_role === 'admin';
     }
 
     public function isDocente()
     {
-        return $this->role === 'docente';
+        return $this->role()->first()->nombre_role === 'docente';
     }
 
     public function isAlumno()
     {
-        return $this->role === 'alumno';
+        return $this->role()->first()->nombre_role === 'alumno';
+    }
+    
+    // Relaciones con otros modelos
+    
+    /**
+     * Obtiene el rol del usuario.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'id_role');
+    }
+    
+    /**
+     * Obtiene el campus del usuario.
+     */
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class, 'id_campus');
+    }
+    
+    /**
+     * Obtiene la facultad del usuario.
+     */
+    public function facultad()
+    {
+        return $this->belongsTo(Facultad::class, 'id_facultad');
+    }
+    
+    /**
+     * Obtiene las revisiones realizadas por el usuario.
+     */
+    public function revisiones()
+    {
+        return $this->hasMany(Revision::class, 'id_user');
+    }
+    
+    /**
+     * Obtiene las ternas a las que pertenece el usuario.
+     */
+    public function ternas()
+    {
+        return $this->belongsToMany(Terna::class, 'user_terna_transitiva', 'id_user', 'id_terna');
     }
 }

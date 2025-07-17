@@ -29,7 +29,11 @@ class AdminUserController extends Controller
 
     public function show($id)
     {
-        $admin = User::where('role', 'admin')->findOrFail($id);
+        // Cambiamos la consulta para usar la relación con roles
+        $admin = User::whereHas('role', function($query) {
+            $query->where('nombre_role', 'admin');
+        })->findOrFail($id);
+        
         return view('Administrador.VerAdmins.show', compact('admin'));
     }
 }

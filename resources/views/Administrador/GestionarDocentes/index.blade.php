@@ -36,9 +36,9 @@
                             <td class="px-6 py-4 font-medium">{{ $docente->name }}</td>
                             <td class="px-6 py-4">{{ $docente->email }}</td>
                             <td class="px-6 py-4">••••••••</td> 
-                            <td class="px-6 py-4">{{ $docente->role }}</td>
-                            <td class="px-6 py-4">{{ $docente->facultad }}</td>
-                            <td class="px-6 py-4">{{ $docente->campus }}</td>
+                            <td class="px-6 py-4">{{ $docente->role()->first()->nombre_role ?? 'Sin rol' }}</td>
+                            <td class="px-6 py-4">{{ $docente->facultad()->first()->nombre ?? 'Sin facultad' }}</td>
+                            <td class="px-6 py-4">{{ $docente->campus()->first()->nombre ?? 'Sin campus' }}</td>
                             <td class="px-6 py-4 flex space-x-2">
                                 <a href="{{ route('docentes.show', $docente->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
                                 <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
@@ -113,69 +113,32 @@
                                               dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                             </div>
                             <!-- Removí el campo role porque se asigna automáticamente como 'docente' -->
+                            <!-- Sección del formulario donde están los selectores -->
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
-                                <select name="facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
+                                <select name="id_facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                                dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="">Seleccione una Facultad</option>
-                                    <option>Arquitectura</option>
-                                    <option>Ciencias de la Comunicación</option>
-                                    <option>Cirugía Dental</option>
-                                    <option>Derecho</option>
-                                    <option>Enfermería</option>
-                                    <option>Finanzas</option>
-                                    <option>Gestión Estratégica de Empresas</option>
-                                    <option>Ingeniería Civil</option>
-                                    <option>Ingeniería en Ciencias de la Computación</option>
-                                    <option>Ingeniería Industrial</option>
-                                    <option>Ingeniería Ambiental</option>
-                                    <option>Medicina y Cirugía</option>
-                                    <option>Mercadotecnia</option>
-                                    <option>Nutrición</option>
-                                    <option>Psicología</option>
-                                    <option>Relaciones Internacionales</option>
-                                    <option>Teología</option>
+                                    @foreach($facultades as $facultad)
+                                        <option value="{{ $facultad->id }}">{{ $facultad->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                             <div>
+                            
+                            <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
+                                <select name="id_campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                                dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="">Seleccione un Campus</option>
-                                    <option>Sagrado Corazón de Jesús</option>
-                                    <option>San Pedro y San Pablo</option>
-                                    <option>Jesús Sacramentado</option>
-                                    <option>San Jorge</option>
-                                    <option>San Isidro</option>
-                                    <option>Santa Rosa de Lima</option>
-                                    <option>Santa Clara</option>
-                                    <option>Espiritual El Tabor</option>
-                                    <option>Santiago Apostol</option>
-                                    <option>San Juan Bautista</option>
-                                    <option>Dios Espíritu Santo</option>
+                                    @foreach($campus as $camp)
+                                        <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
-                            {{-- <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                               dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
-                                    <option value="">Seleccione un Campus</option>
-                                    <option>Sagrado Corazón de Jesús</option>
-                                    <option>San Pedro y San Pablo</option>
-                                    <option>Jesús Sacramentado</option>
-                                    <option>San Jorge</option>
-                                    <option>San Isidro</option>
-                                    <option>Santa Rosa de Lima</option>
-                                    <option>Santa Clara</option>
-                                    <option>Espiritual El Tabor</option>
-                                    <option>Santiago Apostol</option>
-                                    <option>San Juan Bautista</option>
-                                    <option>Dios Espíritu Santo</option>
-                                </select>
-                            </div> --}}
+                            <!-- Botones de Acción -->
                             <div class="flex space-x-3">
                                 <button type="button" data-modal-hide="add-user-modal"
                                         class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">

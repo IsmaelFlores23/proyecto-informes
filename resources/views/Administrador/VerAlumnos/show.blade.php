@@ -8,12 +8,12 @@
                         {{-- {{$alumno->name}} la variable $alumno viene de la funucion Show del controlador Almnouser. Se manda a llamar los datos como estan los campos en la BD --}}
                         <p class="text-sm"><strong>Nombre:</strong> {{$alumno->name}}</p>
                         <p class="text-sm"><strong>Numero de cuenta:</strong> {{$alumno->numero_cuenta}}</p>
-                        <p class="text-sm"><strong>Facultad:</strong> {{$alumno->facultad}}</p>
+                        <p class="text-sm"><strong>Facultad:</strong> {{$alumno->facultad()->first()->nombre ?? 'Sin facultad'}}</p>
                     </div>
                     <div>
                         <p class="text-sm"><strong>Correo electronico:</strong> {{$alumno->email}}</p>
-                        <p class="text-sm"><strong>Rol:</strong> {{$alumno->role}}</p>
-                        <p class="text-sm"><strong>Campus:</strong> {{$alumno->campus}}</p>
+                        <p class="text-sm"><strong>Rol:</strong> Alumno</p>
+                        <p class="text-sm"><strong>Campus:</strong> {{$alumno->campus()->first()->nombre ?? 'Sin campus'}}</p>
                     </div>
                 </div>
             </div>

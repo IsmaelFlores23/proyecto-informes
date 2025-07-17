@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Campus extends Model
+class Terna extends Model
 {
-    protected $table = 'campus';
+    //
+    protected $table = 'terna';
     protected $fillable = [
-    // 'codigo_campus',
-    'nombre'
-   ];
+        'estado_terna'
+    ];
 }

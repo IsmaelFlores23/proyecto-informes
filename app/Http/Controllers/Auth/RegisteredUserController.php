@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,17 +35,22 @@ class RegisteredUserController extends Controller
             'numero_cuenta' => ['required','string','max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            /*'nombre_facultad' => 'required|string|max:50',
-            'nombre_campus' => 'required|string|max:50',*/
+            'role' => ['required', 'string', 'exists:roles,nombre_role'],
         ]);
+
+        // Buscar el ID del rol seleccionado
+        $role = Role::where('nombre_role', $request->role)->first();
+        
+        if (!$role) {
+            return redirect()->back()->with('error', 'El rol seleccionado no existe.');
+        }
 
         $user = User::create([
             'name' => $request->name,
             'numero_cuenta' => $request->numero_cuenta,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            /*'nombre_facultad' => $request->nombre_facultad,
-            'nombre_campus' => $request->nombre_campus,*/
+            'id_role' => $role->id,
         ]);
 
         event(new Registered($user));

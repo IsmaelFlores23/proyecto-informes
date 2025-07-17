@@ -35,7 +35,11 @@ class DocenteUserController extends Controller
     
      public function show($id)
     {
-        $docente = User::where('role', 'docente')->findOrFail($id);
+        // Cambiamos la consulta para usar la relación con roles
+        $docente = User::whereHas('role', function($query) {
+            $query->where('nombre_role', 'docente');
+        })->findOrFail($id);
+        
         // Aquí agregar lógica para obtener ternas asignadas
         return view('Administrador.VerDocentes.show', compact('docente'));
     }

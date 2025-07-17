@@ -7,12 +7,12 @@
                     <div>
                         <p class="text-sm"><strong>Nombre:</strong> {{ $docente->name }}</p>
                         <p class="text-sm"><strong>Numero de cuenta:</strong> {{ $docente->numero_cuenta }}</p>
-                        <p class="text-sm"><strong>Facultad:</strong> {{ $docente->facultad }}</p>
+                        <p class="text-sm"><strong>Facultad:</strong> {{ $docente->facultad()->first()->nombre ?? 'Sin facultad' }}</p>
                     </div>
                     <div>
                         <p class="text-sm"><strong>Correo electronico:</strong> {{ $docente->email }}</p>
                         <p class="text-sm"><strong>Rol:</strong> Docente</p>
-                        <p class="text-sm"><strong>Campus:</strong> {{ $docente->campus }}</p>
+                        <p class="text-sm"><strong>Campus:</strong> {{ $docente->campus()->first()->nombre ?? 'Sin campus' }}</p>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,11 @@ class AlumnoUserController extends Controller
 
     public function show($id)
     {
-        $alumno = User::where('role', 'alumno')->findOrFail($id);
+        // Cambiamos la consulta para usar la relación con roles
+        $alumno = User::whereHas('role', function($query) {
+            $query->where('nombre_role', 'alumno');
+        })->findOrFail($id);
+        
         // Aquí agregar lógica para obtener terna, informes, etc.
         return view('Administrador.VerAlumnos.show', compact('alumno'));
     }

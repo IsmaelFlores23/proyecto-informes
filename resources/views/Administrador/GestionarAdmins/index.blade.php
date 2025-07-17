@@ -36,9 +36,9 @@
                             <td class="px-6 py-4 font-medium">{{ $admin->name }}</td>
                             <td class="px-6 py-4">{{ $admin->email }}</td>
                             <td class="px-6 py-4">••••••••</td> 
-                            <td class="px-6 py-4">{{ $admin->role }}</td>
-                            <td class="px-6 py-4">{{ $admin->facultad }}</td>
-                            <td class="px-6 py-4">{{ $admin->campus }}</td>
+                            <td class="px-6 py-4">{{ $admin->role()->first()->nombre_role ?? 'Sin rol' }}</td>
+                            <td class="px-6 py-4">{{ $admin->facultad()->first()->nombre ?? 'Sin facultad' }}</td>
+                            <td class="px-6 py-4">{{ $admin->campus()->first()->nombre ?? 'Sin campus' }}</td>
                             <td class="px-6 py-4 flex space-x-2">
                                 <a href="{{ route('admins.show', $admin->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
                                 <a href="{{ route('GestionarAdmins.edit', $admin->id) }}" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>

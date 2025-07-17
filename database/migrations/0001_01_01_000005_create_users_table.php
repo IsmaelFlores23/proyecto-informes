@@ -14,20 +14,24 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            
             $table->string('numero_cuenta');
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+
             $table->string('password');
             $table->rememberToken();
 
-            $table->enum('role', ['admin', 'docente', 'alumno'])->default('alumno');
-            $table->string('facultad')->nullable();
-            $table->string('campus')->nullable();
-            /*$table->string('nombre_facultad');
-            $table->string('nombre_campus');*/
+            $table->unsignedBigInteger('id_role')->nullable();
+            $table->foreign('id_role')->references('id')->on('roles');
 
+            $table->unsignedBigInteger('id_campus')->nullable();
+            $table->foreign('id_campus')->references('id')->on('campus');
+
+            $table->unsignedBigInteger('id_facultad')->nullable();
+            $table->foreign('id_facultad')->references('id')->on('facultad');
+
+            $table->datetime('delete_at')->nullable();
             $table->timestamps();
         });
 

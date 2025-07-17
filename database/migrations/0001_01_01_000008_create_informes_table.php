@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('campus', function (Blueprint $table) {
+        Schema::create('informes', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_campus');
-            $table->string('nombre');
+            
+            $table->unsignedBigInteger('id_terna');
+            $table->foreign('id_terna')->references('id')->on('terna');
+
+            $table->string('nombre_archivo'); 
+            $table->string('descripcion'); 
+
             $table->timestamps();
         });
     }
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('campus');
+        Schema::dropIfExists('informes');
     }
 };

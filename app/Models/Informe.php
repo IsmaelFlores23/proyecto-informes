@@ -10,18 +10,17 @@ class Informe extends Model
     /** @use HasFactory<\Database\Factories\InformeFactory> */
     use HasFactory;
 
+    protected $table = 'informes';
     protected $fillable = [
-        'fk_estudiante',
-        'ruta_informe',
+        'id_terna',
+        'nombre_archivo',
         'descripcion',
-        'fecha_envio',
-        'estado'
 
     ];
 
-    public function user()
+    public function terna()
     {
-        return $this->belongsTo(User::class, 'fk_estudiante');
+        return $this->belongsTo(User::class, 'id_terna');
     }
     
 }

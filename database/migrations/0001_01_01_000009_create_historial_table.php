@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('facultad', function (Blueprint $table) {
+        Schema::create('historial', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_facultad');
-            $table->string('nombre');
+            $table->datetime('fecha_actualizada');
+            
+            $table->unsignedBigInteger('id_informe')->nullable();
+            $table->foreign('id_informe')->references('id')->on('informes');
+
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('facultad');
+        Schema::dropIfExists('historial');
     }
 };

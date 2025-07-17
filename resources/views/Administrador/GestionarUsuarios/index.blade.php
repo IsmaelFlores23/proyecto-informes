@@ -36,7 +36,19 @@
                         <td class="px-6 py-4 font-medium">{{ $usuario->name }}</td>
                         <td class="px-6 py-4">{{ $usuario->email }}</td>
                         <td class="px-6 py-4">••••••••</td> 
-                        <td class="px-6 py-4">{{ $usuario->role }}</td>
+                        <!-- En la tabla -->
+                        <td class="px-6 py-4">{{ $usuario->role()->first()->nombre_role ?? 'Sin rol' }}</td>
+                        
+                        <!-- En el formulario de agregar usuario -->
+                        <div>
+                            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
+                            <select name="role" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <option value="">Seleccione un rol</option>
+                                @foreach(\App\Models\Role::all() as $role)
+                                    <option value="{{ $role->nombre_role }}">{{ $role->nombre_role }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <td class="px-6 py-4">{{$usuario->facultad}}</td> <!-- Facultad vacía por ahora -->
                         <td class="px-6 py-4">{{$usuario->campus}}</td> <!-- Campus vacío por ahora -->
                         <td class="px-6 py-4 flex space-x-2">

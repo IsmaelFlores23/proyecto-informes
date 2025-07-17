@@ -34,7 +34,6 @@ class CampusController extends Controller
     public function update(Request $request, Campus $campus)
     {
       $validated = $request->validate([
-        'codigo_campus' => ['required', 'string', 'max:8'],
         'nombre' => ['required', 'string', 'max:100'],
     ]);
 
@@ -47,8 +46,7 @@ class CampusController extends Controller
     public function store(Request $request)
     {
        $validated = $request->validate([
-        'codigo_campus'=> ['string', 'max:8'],
-        'nombre'=> ['string', 'max:100'],
+        'nombre'=> ['required', 'string', 'max:100'],
        ]);
 
        Campus::create($validated);

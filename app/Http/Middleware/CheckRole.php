@@ -22,7 +22,9 @@ class CheckRole
         }
         
         // Verificar si el usuario tiene alguno de los roles requeridos
-        if (!in_array(Auth::user()->role, $roles)) {
+        $userRole = Auth::user()->role()->first()->nombre_role ?? null;
+        
+        if (!in_array($userRole, $roles)) {
             // Redirigir a una página de acceso denegado o al dashboard
             return redirect('dashboard')->with('error', 'No tienes permiso para acceder a esta página.');
         }

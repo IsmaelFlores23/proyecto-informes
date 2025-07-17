@@ -17,7 +17,6 @@
             <table id="campus-table" class="min-w-full text-gray-800 bg-gray-200">
                 <thead class="text-xs uppercase text-white" style="background-color: #004CBE;">
                     <tr>
-                        <th class="px-6 py-3">Código</th>
                         <th class="px-6 py-3">Nombre</th>
                         <th class="px-6 py-3">Acciones</th>
                     </tr>
@@ -25,7 +24,6 @@
                 <tbody>
                      @foreach ($campuses as $campus)
                             <tr>
-                                <td class="px-6 py-4">{{ $campus->codigo_campus }}</td>
                                 <td class="px-6 py-4 font-medium">{{ $campus->nombre }}</td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex justify-center space-x-2">
@@ -86,22 +84,11 @@
                             @method('PUT')
                         @endif
                         <div>
-                            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Código</label>
-                            <input type="text" placeholder="CAMP001" name="codigo_campus"
-                                value="{{ old('codigo_campus', $editando->codigo_campus ?? '') }}"
-                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                        </div>
-                        <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
                             <input type="text" placeholder="San Isidro" name="nombre"
                                 value="{{ old('nombre', $editando->nombre ?? '') }}"
-                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                         </div>
-                        {{-- <div>
-                            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Ubicación</label>
-                            <input type="text" placeholder="Tegucigalpa"
-                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                        </div> --}}
 
                         <!-- Botones -->
                         <div class="flex justify-end space-x-2 pt-2">
