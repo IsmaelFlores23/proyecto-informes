@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Campus;
+use App\Models\Facultad;
 
 class GestionarAdminsController extends Controller
 {
@@ -19,7 +22,12 @@ class GestionarAdminsController extends Controller
         $admins = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'admin');
         })->get();
-        return view ('Administrador.GestionarAdmins.index', compact('admins'));
+
+        // Cargamos los campus y facultades para los selectores
+        $campus = Campus::all();
+        $facultades = Facultad::all();
+
+        return view ('Administrador.GestionarAdmins.index', compact('admins', 'campus', 'facultades'));
     }
 
     public function edit(User $GestionarAdmin)
@@ -85,9 +93,16 @@ class GestionarAdminsController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6'],
-            'facultad' => ['required', 'string', 'max:50'],
-            'campus' => ['required', 'string', 'max:50'],
+            'id_facultad' => ['required', 'exists:facultad,id'],
+            'id_campus' => ['required', 'exists:campus,id'],
         ]);
+
+        // Buscar el ID del rol docente
+        $role = Role::where('nombre_role', 'admin')->first();
+        
+        if (!$role) {
+            return redirect()->back()->with('error', 'El rol de admin no existe en el sistema.');
+        }
 
         // Creación del nuevo admin
         User::create([
@@ -95,9 +110,9 @@ class GestionarAdminsController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'admin', // Forzamos el role a 'admin'
-            'facultad' => $request->facultad,
-            'campus' => $request->campus,
+            'id_role' => $role->id,
+            'id_facultad' => $request->id_facultad,
+            'id_campus' => $request->id_campus,
         ]);
 
         return redirect()->route('GestionarAdmins.index')->with('success', 'Admin creado exitosamente.');

@@ -119,49 +119,28 @@
                             <!-- Removí el campo role porque se asigna automáticamente como 'admin' -->
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
-                                <select name="facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
+                                <select name="id_facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
                                                dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
                                     <option value="">Seleccione una Facultad</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Arquitectura') ? 'selected' : '' }}>Arquitectura</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Ciencias de la Comunicación') ? 'selected' : '' }}>Ciencias de la Comunicación</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Cirugía Dental') ? 'selected' : '' }}>Cirugía Dental</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Derecho') ? 'selected' : '' }}>Derecho</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Enfermería') ? 'selected' : '' }}>Enfermería</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Finanzas') ? 'selected' : '' }}>Finanzas</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Gestión Estratégica de Empresas') ? 'selected' : '' }}>Gestión Estratégica de Empresas</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Ingeniería Civil') ? 'selected' : '' }}>Ingeniería Civil</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Ingeniería en Ciencias de la Computación') ? 'selected' : '' }}>Ingeniería en Ciencias de la Computación</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Ingeniería Industrial') ? 'selected' : '' }}>Ingeniería Industrial</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Ingeniería Ambiental') ? 'selected' : '' }}>Ingeniería Ambiental</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Medicina y Cirugía') ? 'selected' : '' }}>Medicina y Cirugía</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Mercadotecnia') ? 'selected' : '' }}>Mercadotecnia</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Nutrición') ? 'selected' : '' }}>Nutrición</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Psicología') ? 'selected' : '' }}>Psicología</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Relaciones Internacionales') ? 'selected' : '' }}>Relaciones Internacionales</option>
-                                    <option {{ (isset($editando) && $editando->facultad == 'Teología') ? 'selected' : '' }}>Teología</option>
+                                    @foreach($facultades as $facultad)
+                                        <option value="{{ $facultad->id }}">{{ $facultad->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
+                                <select name="id_campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
+                                               dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    <option value="">Seleccione un Campus</option>
+                                    @foreach($campus as $camp)
+                                        <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
-                            <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                               dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
-                                    <option value="">Seleccione un Campus</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Sagrado Corazón de Jesús') ? 'selected' : '' }}>Sagrado Corazón de Jesús</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'San Pedro y San Pablo') ? 'selected' : '' }}>San Pedro y San Pablo</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Jesús Sacramentado') ? 'selected' : '' }}>Jesús Sacramentado</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'San Jorge') ? 'selected' : '' }}>San Jorge</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'San Isidro') ? 'selected' : '' }}>San Isidro</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Santa Rosa de Lima') ? 'selected' : '' }}>Santa Rosa de Lima</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Santa Clara') ? 'selected' : '' }}>Santa Clara</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Espiritual El Tabor') ? 'selected' : '' }}>Espiritual El Tabor</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Santiago Apostol') ? 'selected' : '' }}>Santiago Apostol</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'San Juan Bautista') ? 'selected' : '' }}>San Juan Bautista</option>
-                                    <option {{ (isset($editando) && $editando->campus == 'Dios Espíritu Santo') ? 'selected' : '' }}>Dios Espíritu Santo</option>
-                                </select>
-                            </div>
                             <div class="flex space-x-3">
                                 <a href="{{ route('GestionarAdmins.index') }}"
                                    class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">
