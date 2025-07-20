@@ -70,8 +70,8 @@
             <div class="relative w-full max-w-md">
                 <div class="bg-white rounded-lg shadow-lg">
                 <!-- Header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600 rounded-t">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                <div class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t">
+                    <h3 class="text-xl font-semibold text-gray-900">
                         {{ isset($editando) ? 'Editar Campus' : 'Agregar Campus' }}
                     </h3>
                     <a href="{{ route('campus.index') }}" class="text-gray-500 hover:text-gray-800">✖️</a>
@@ -84,10 +84,10 @@
                             @method('PUT')
                         @endif
                         <div>
-                            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                            <label class="block mb-1 text-sm font-medium text-gray-900">Nombre</label>
                             <input type="text" placeholder="San Isidro" name="nombre"
                                 value="{{ old('nombre', $editando->nombre ?? '') }}"
-                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5" required>
                         </div>
 
                         <!-- Botones -->
