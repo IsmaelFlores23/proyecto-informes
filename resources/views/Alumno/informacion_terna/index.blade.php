@@ -8,8 +8,8 @@
                 <p>Nombre completo: <strong> {{ Auth::user()->name }}</strong></p>
                 <p>Número de cuenta:<strong> {{ Auth::user()->numero_cuenta }}</strong></p>
                 <p>Correo institucional:<strong> {{ Auth::user()->email }} </strong></p>
-                <p>Teléfono:<strong> ____________</strong></p>
-                <p>Campus asignado:<strong> ____________</strong></p>
+                <p>Teléfono:<strong>+504 ...</strong></p>
+                <p>Campus asignado:<strong>{{ Auth::user()->campus->nombre}}</strong></p>
             </div>
 
             <!-- Terna evaluadora -->
@@ -27,27 +27,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-t">
-                                <td class="px-4 py-2">Dra. Ana López</td>
-                                <td class="px-4 py-2">ana.lopez@uni.edu</td>
-                                <td class="px-4 py-2">Sin correcciones pendientes</td>
-                                <td class="px-4 py-2">12/06/2025</td>
-                                <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
-                            </tr>
-                            <tr class="border-t">
-                                <td class="px-4 py-2">Mtro. Juan Pérez</td>
-                                <td class="px-4 py-2">juan.perez@uni.edu</td>
-                                <td class="px-4 py-2">Sin correcciones pendientes</td>
-                                <td class="px-4 py-2">10/06/2025</td>
-                                <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
-                            </tr>
-                            <tr class="border-t">
-                                <td class="px-4 py-2">Ing. Karla Díaz</td>
-                                <td class="px-4 py-2">karla.diaz@uni.edu</td>
-                                <td class="px-4 py-2">Correcciones pendientes</td>
-                                <td class="px-4 py-2">—</td>
-                                <td class="px-4 py-2">—</td>
-                            </tr>
+                            @forelse($docentes as $docente)
+                                <tr class="border-t">
+                                    <td class="px-4 py-2">{{ $docente->name }}</td>
+                                    <td class="px-4 py-2">{{ $docente->email }}</td>
+                                    <td class="px-4 py-2">Sin correcciones pendientes</td> <!-- Esto hay que hacerlo dinamico tambien, asi que esto queda faltante -->
+                                    <td class="px-4 py-2">20/07/2025</td> <!-- Hagamos la fecha dinamica, pero esto aun esta por definir -->
+                                    <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
+                                </tr>
+                            @empty
+                                <tr class="border-t">
+                                    <td colspan="5" class="px-4 py-2 text-center text-gray-500">No se han asignado docentes a tu terna</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
