@@ -16,79 +16,21 @@ use App\Models\Facultad;
 
 class GestionarAdminsController extends Controller
 {
-     public function index()
+    public function index()
     {
-        // Cambiamos la consulta para usar la relación con roles
         $admins = User::whereHas('role', function($query) {
-            $query->where('nombre_role', 'admin');
+            $query->where('nombre_role', 'admin'); // O el nombre correcto de tu rol
         })->get();
 
-        // Cargamos los campus y facultades para los selectores
-        $campus = Campus::all();
         $facultades = Facultad::all();
+        $campus = Campus::all();
 
-        return view ('Administrador.GestionarAdmins.index', compact('admins', 'campus', 'facultades'));
+        return view('Administrador.GestionarAdmins.index', compact('admins', 'facultades', 'campus'));
     }
 
-    public function edit(User $GestionarAdmin)
-    {
-        // Cambiamos la consulta para usar la relación con roles
-        $admins = User::whereHas('role', function($query) {
-            $query->where('nombre_role', 'admin');
-        })->get();
-        return view('Administrador.GestionarAdmins.index', compact('admins'))->with('editando', $GestionarAdmin);
-    }
-
-    public function update(Request $request, User $GestionarAdmin)
-    {
-        // Validación de datos
-        $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'facultad' => ['required', 'string', 'max:50'],
-            'campus' => ['required', 'string', 'max:50'],
-        ];
-
-        // Solo validamos email y numero_cuenta si cambiaron
-        if ($GestionarAdmin->email != $request->email) {
-            $rules['email'] = ['required', 'email', 'unique:users,email'];
-        }
-
-        if ($GestionarAdmin->numero_cuenta != $request->numero_cuenta) {
-            $rules['numero_cuenta'] = ['required', 'string', 'max:13', 'unique:users,numero_cuenta'];
-        }
-
-        // Solo validamos password si se proporcionó uno nuevo
-        if ($request->filled('password')) {
-            $rules['password'] = ['string', 'min:6'];
-        }
-
-        $validated = $request->validate($rules);
-
-        // Preparamos los datos a actualizar
-        $dataToUpdate = [
-            'numero_cuenta' => $request->numero_cuenta,
-            'name' => $request->name,
-            'email' => $request->email,
-            'facultad' => $request->facultad,
-            'campus' => $request->campus,
-        ];
-
-        // Solo actualizamos la contraseña si se proporcionó una nueva
-        if ($request->filled('password')) {
-            $dataToUpdate['password'] = Hash::make($request->password);
-        }
-
-        $GestionarAdmin->update($dataToUpdate);
-
-        return redirect()->route('GestionarAdmins.index')->with('success', 'Administrador actualizado correctamente');
-    }
-  
-
-    
     public function store(Request $request)
     {
-        // Validación de datos
-       $request->validate([
+        $request->validate([
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
@@ -97,14 +39,12 @@ class GestionarAdminsController extends Controller
             'id_campus' => ['required', 'exists:campus,id'],
         ]);
 
-        // Buscar el ID del rol docente
         $role = Role::where('nombre_role', 'admin')->first();
-        
+
         if (!$role) {
-            return redirect()->back()->with('error', 'El rol de admin no existe en el sistema.');
+            return redirect()->back()->with('error', 'El rol de administrador no existe.');
         }
 
-        // Creación del nuevo admin
         User::create([
             'numero_cuenta' => $request->numero_cuenta,
             'name' => $request->name,
@@ -115,8 +55,50 @@ class GestionarAdminsController extends Controller
             'id_campus' => $request->id_campus,
         ]);
 
-        return redirect()->route('GestionarAdmins.index')->with('success', 'Admin creado exitosamente.');
+        return redirect()->route('GestionarAdmins.index')->with('success', 'Administrador creado correctamente.');
     }
+
+    public function edit($id)
+    {
+        $editando = User::findOrFail($id);
+        $admins = User::whereHas('role', function ($query){
+            $query->where('nombre_role', 'admin');
+        })->get();
+
+        $facultades = Facultad::all();
+        $campus = Campus::all();
+        $abrirModalEdicion = true;
+
+        return view('Administrador.GestionarAdmins.index', compact('editando', 'admins', 'facultades', 'campus', 'abrirModalEdicion'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $admin = User::findOrFail($id);
+
+        $request->validate([
+            'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta,' . $id],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email,' . $id],
+            'id_facultad' => ['required', 'exists:facultad,id'],
+            'id_campus' => ['required', 'exists:campus,id'],
+        ]);
+
+        $admin->numero_cuenta = $request->numero_cuenta;
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+
+        if ($request->filled('password')) {
+            $admin->password = Hash::make($request->password);
+        }
+
+        $admin->id_facultad = $request->id_facultad;
+        $admin->id_campus = $request->id_campus;
+        $admin->save();
+
+        return redirect()->route('GestionarAdmins.index')->with('success', 'Administrador actualizado correctamente.');
+    }
+
 
 
      public function show(Request $request)

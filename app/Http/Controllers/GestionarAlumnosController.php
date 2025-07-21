@@ -72,6 +72,49 @@ class GestionarAlumnosController extends Controller
         return redirect()->route('GestionarAlumnos.index')->with('success', 'Alumno creado exitosamente.');
     }
 
+    public function edit($id)
+    {
+        $editando = User::findOrFail($id);
+        $alumnos = User::whereHas('role', function ($query){
+            $query->where('nombre_role', 'alumno');
+        })->get();
+
+        $facultades = Facultad::all();
+        $campus = Campus::all();
+        $abrirModalEdicion = true;
+
+        return view('Administrador.GestionarAlumnos.index', compact('editando', 'alumnos', 'facultades','campus', 'abrirModalEdicion'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $alumno = User::findOrFail($id);
+
+        $request->validate([
+            'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta,' . $id],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email,' . $id],
+            'id_facultad' => ['required', 'exists:facultad,id'],
+            'id_campus' => ['required', 'exists:campus,id'],
+        ]);
+
+        $alumno->numero_cuenta = $request->numero_cuenta;
+        $alumno->name = $request->name;
+        $alumno->email = $request->email;
+
+        // Actualiza la contraseña solo si se llenó el campo
+    if ($request->filled('password')) {
+        $alumno->password = Hash::make($request->password);
+    }
+
+    $alumno->id_facultad = $request->id_facultad;
+    $alumno->id_campus = $request->id_campus;
+    $alumno->save();
+
+    return redirect()->route('GestionarAlumnos.index')->with('success', 'Alumno actualizado exitosamente.');
+    }
+
      public function show(Request $request)
     {
         

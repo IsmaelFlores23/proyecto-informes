@@ -42,6 +42,7 @@
                             <td class="px-6 py-4 flex space-x-2">
                                 <a href="{{ route('admins.show', $admin->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
                                 <a href="{{ route('GestionarAdmins.edit', $admin->id) }}" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
+
                                 {{-- <a href="#" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</a> --}}
                                  <form id="delete-form-{{ $admin->id }}" action="{{ route('GestionarAdmins.destroy', $admin->id) }}" method="POST" style="display: none;">
                                     @csrf
@@ -72,12 +73,13 @@
                     <h3 class="text-xl font-semibold text-gray-900">
                         {{ isset($editando) ? 'Editar Administrador' : 'Agregar Administrador' }}
                     </h3>
-                    <a href="{{ route('GestionarAdmins.index') }}" 
+                    <button type="button" 
                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 
-                          rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                          rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                        data-modal-hide="add-user-modal">
                         ✖️
                         <span class="sr-only">Cerrar modal</span>
-                    </a>
+                    </button>
                 </div>
 
                 <!-- Modal body -->
@@ -117,7 +119,7 @@
                                 <select name="id_facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="">Seleccione una Facultad</option>
                                     @foreach($facultades as $facultad)
-                                        <option value="{{ $facultad->id }}">{{ $facultad->nombre }}</option>
+                                        <option value="{{ $facultad->id }}"{{ (isset($editando) && $editando->id_facultad == $facultad->id) ? 'selected' : '' }}>{{ $facultad->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -127,7 +129,7 @@
                                 <select name="id_campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="">Seleccione un Campus</option>
                                     @foreach($campus as $camp)
-                                        <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+                                        <option value="{{ $camp->id }}"{{ (isset($editando) && $editando->id_campus == $camp->id) ? 'selected' : '' }}>{{ $camp->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -135,10 +137,10 @@
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
                             <div class="flex space-x-3">
-                                <a href="{{ route('GestionarAdmins.index') }}"
+                                <button type="button" data-modal-hide="add-user-modal"
                                    class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">
                                     Cancelar
-                                </a>
+                                 </button>
                                 <button type="submit"
                                         class="px-4 py-2 rounded text-gray-900 shadow-md"
                                         style="background-color: #FFC436;">
@@ -179,5 +181,19 @@
         });
     }
     </script>
+
+    @if(isset($abrirModalEdicion) && $abrirModalEdicion)
+        <script>
+            window.addEventListener('load', function () {
+                const modal = document.getElementById('add-user-modal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                }
+            });
+        </script>
+    @endif
+
+
 
 </x-app-layout>
