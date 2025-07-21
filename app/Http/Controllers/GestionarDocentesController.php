@@ -40,6 +40,7 @@ class GestionarDocentesController extends Controller
        
     }
 
+
   
     public function store(Request $request)
     {
@@ -72,6 +73,45 @@ class GestionarDocentesController extends Controller
         return redirect()->route('GestionarDocentes.index')->with('success', 'Docente creado exitosamente.');
     }
 
+public function edit($id)
+    {
+        $editando = User::findOrFail($id);
+        $docentes = User::whereHas('role', function ($query) {
+            $query->where('nombre_role', 'docente');
+        })->get();
+
+        $facultades = Facultad::all();
+        $campus = Campus::all();
+
+        return view('Administrador.GestionarDocentes.index', compact('editando', 'docentes', 'facultades', 'campus'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $docente = User::findOrFail($id);
+
+        $request->validate([
+            'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta,' . $id],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email,' . $id],
+            'id_facultad' => ['required', 'exists:facultad,id'],
+            'id_campus' => ['required', 'exists:campus,id'],
+        ]);
+
+        $docente->numero_cuenta = $request->numero_cuenta;
+        $docente->name = $request->name;
+        $docente->email = $request->email;
+
+        if ($request->filled('password')) {
+            $docente->password = Hash::make($request->password);
+        }
+
+        $docente->id_facultad = $request->id_facultad;
+        $docente->id_campus = $request->id_campus;
+        $docente->save();
+
+        return redirect()->route('GestionarDocentes.index')->with('success', 'Docente actualizado exitosamente.');
+    }
 
 
      public function show(Request $request)

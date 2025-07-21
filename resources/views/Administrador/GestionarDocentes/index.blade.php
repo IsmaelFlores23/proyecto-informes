@@ -41,7 +41,8 @@
                             {{-- <td class="px-6 py-4">{{ $docente->campus()->first()->nombre ?? 'Sin campus' }}</td> --}}
                             <td class="px-6 py-4 flex space-x-2">
                                 <a href="{{ route('docentes.show', $docente->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver usuario">👁️</a>
-                                <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
+                                <a href="{{ route('GestionarDocentes.edit', $docente->id) }}" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
+
                                 
                                 <form id="delete-form-{{ $docente->id }}" action="{{ route('GestionarDocentes.destroy', $docente->id) }}" method="POST" style="display: none;">
                                     @csrf
@@ -71,7 +72,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 border-b rounded-t border-gray-200">
                     <h3 class="text-xl font-semibold text-gray-900">
-                        Agregar Docente
+                        {{ isset($editando) ? 'Editar Docente' : 'Agregar Docente' }}
                     </h3>
                     <button type="button" 
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 
@@ -84,28 +85,35 @@
 
                 <!-- Modal body -->
                 <div class="p-4">
-                    <form class="space-y-4" action="{{ route('GestionarDocentes.store') }}" method="POST">
+                    <form class="space-y-4" action="{{ isset($editando) ? route('GestionarDocentes.update', $editando->id) : route('GestionarDocentes.store') }}" method="POST">
                         @csrf
+                        @if(isset($editando))
+                            @method('PUT')
+                        @endif
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">N° Cuenta</label>
                                 <input name="numero_cuenta" placeholder="1807200400380 (sin guiones)" type="text" 
-                                       class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                     value="{{ old('numero_cuenta', $editando->numero_cuenta?? '') }}"
+                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Nombre</label>
                                 <input name="name" placeholder="Ingrese Nombre Completo" type="text" 
-                                       class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                     value="{{ old('name', $editando->name ?? '') }}"
+                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Email</label>
                                 <input name="email" placeholder="ejemplo@unicah.edu" type="email" 
-                                       class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                     value="{{ old('email', $editando->email ?? '') }}"
+                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Contraseña</label>
                                 <input name="password" placeholder="Mínimo 6 Caracteres" type="password" 
-                                       class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                     value="{{ old('password', $editando->password ?? '') }}"
+                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                             </div>
                             <!-- Removí el campo role porque se asigna automáticamente como 'docente' -->
                             <!-- Sección del formulario donde están los selectores -->
@@ -114,7 +122,7 @@
                                 <select name="id_facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="">Seleccione una Facultad</option>
                                     @foreach($facultades as $facultad)
-                                        <option value="{{ $facultad->id }}">{{ $facultad->nombre }}</option>
+                                        <option value="{{ $facultad->id }}"{{ (isset($editando) && $editando->id_facultad == $facultad->id) ? 'selected' : '' }}>{{ $facultad->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -124,7 +132,7 @@
                                 <select name="id_campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="">Seleccione un Campus</option>
                                     @foreach($campus as $camp)
-                                        <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+                                        <option value="{{ $camp->id }}"{{ (isset($editando) && $editando->id_campus == $camp->id) ? 'selected' : '' }}>{{ $camp->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -137,10 +145,8 @@
                                         class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">
                                     Cancelar
                                 </button>
-                                <button type="submit"
-                                        class="px-4 py-2 rounded text-gray-900 shadow-md"
-                                        style="background-color: #FFC436;">
-                                    Guardar
+                                <button type="submit" class="px-4 py-2 rounded text-gray-900 shadow-md" style="background-color: #FFC436;">
+                                     {{ isset($editando) ? 'Actualizar' : 'Guardar' }}
                                 </button>
                             </div>
                         </div>
@@ -177,6 +183,19 @@
         });
     }
     </script>
+    @if(isset($editando) && request()->is('GestionarDocentes/*/edit'))
+        <script>
+            window.addEventListener('load', function () {
+                const modal = document.getElementById('add-user-modal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                }
+            });
+        </script>
+    @endif
+
+
     
 
 </x-app-layout>
