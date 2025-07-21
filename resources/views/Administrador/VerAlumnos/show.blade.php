@@ -65,13 +65,27 @@
             <div class="border border-gray-300 rounded-lg p-6 bg-white">
                 <p class="text-sm font-medium mb-4" style="color:#004CBE;">Ultimo informe subido:</p>
                 <div class="flex justify-center">
-                    <div class="border border-gray-300 rounded-lg p-6 flex flex-col items-center bg-gray-50">
-                        <p class="text-lg font-semibold mb-2" style="color:#004CBE;">Visualizador web</p>
-                        <svg class="w-16 h-16" fill="none" stroke="#004CBE" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        <span class="mt-2 text-gray-600">PDF</span>
-                    </div>
+                    @if(isset($ultimoInforme))
+                        <div class="border border-gray-300 rounded-lg p-6 flex flex-col items-center bg-gray-50 w-full">
+                            <p class="text-lg font-semibold mb-2" style="color:#004CBE;">Visualizador web</p>
+                            <p class="text-gray-600 mb-2">{{ basename($ultimoInforme) }}</p>
+                            <iframe
+                                src="{{ route('admin.observarInforme.pdf', ['nombreArchivo' => basename($ultimoInforme)]) }}"
+                                class="w-full h-[600px] rounded border border-gray-300"
+                                frameborder="0"
+                                scrolling="auto"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    @else
+                        <div class="border border-gray-300 rounded-lg p-6 flex flex-col items-center bg-gray-50">
+                            <p class="text-lg font-semibold mb-2" style="color:#004CBE;">Sin informes</p>
+                            <svg class="w-16 h-16" fill="none" stroke="#004CBE" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span class="mt-2 text-gray-600">El alumno no ha subido ningún informe</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
