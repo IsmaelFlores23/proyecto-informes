@@ -100,18 +100,16 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50
                justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-lg max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow">
                 <!-- Modal header -->
                 <div
-                    class="flex items-center justify-between p-4 border-b rounded-t
-                           dark:border-gray-600 border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    class="flex items-center justify-between p-4 border-b rounded-t border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900">
                         Agregar Terna
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900
-                               rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center
-                               dark:hover:bg-gray-600 dark:hover:text-white"
+                           rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
                         data-modal-hide="add-terna-modal">
                         ✖️
                         <span class="sr-only">Cerrar modal</span>
@@ -126,10 +124,9 @@
                             <!-- Estudiante -->
                             <div>
                                 <label for="estudiante"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Estudiante</label>
+                                    class="block mb-1 text-sm font-medium text-gray-900">Estudiante</label>
                                 <select id="estudiante" name="estudiante"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un estudiante</option>
                                     @foreach($alumnos as $estudiante)
                                         <option value="{{ $estudiante->id }}">
@@ -142,10 +139,9 @@
                             <!-- Docente #1 -->
                             <div>
                                 <label for="docente1"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #1</label>
+                                    class="block mb-1 text-sm font-medium text-gray-900">Docente #1</label>
                                 <select id="docente1" name="docente1"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
                                         <option value="{{ $docente->id }}">
@@ -158,10 +154,9 @@
                             <!-- Docente #2 -->
                             <div>
                                 <label for="docente2"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #2</label>
+                                    class="block mb-1 text-sm font-medium text-gray-900">Docente #2</label>
                                 <select id="docente2" name="docente2"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
                                         <option value="{{ $docente->id }}">
@@ -174,10 +169,9 @@
                             <!-- Docente #3 -->
                             <div>
                                 <label for="docente3"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #3</label>
+                                    class="block mb-1 text-sm font-medium text-gray-900">Docente #3</label>
                                 <select id="docente3" name="docente3"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white" required>
+                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
                                         <option value="{{ $docente->id }}">
@@ -190,10 +184,9 @@
                             <!-- Docente #4 (opcional) -->
                             <div>
                                 <label for="docente4"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Docente #4 (Opcional)</label>
+                                    class="block mb-1 text-sm font-medium text-gray-900">Docente #4 (Opcional)</label>
                                 <select id="docente4" name="docente4"
-                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5
-                                        dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                                     <option value="" selected>Selecciona un Docente (Opcional)</option>
                                     @foreach($docentes as $docente)
                                         <option value="{{ $docente->id }}">
