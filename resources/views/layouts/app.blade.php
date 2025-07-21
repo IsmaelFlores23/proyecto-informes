@@ -87,6 +87,7 @@
                 searching: true,
                 info: true,
                 lengthChange: false,
+                pageLength: 10,
                 language: {
                     search: "Buscar:",
                     paginate: {

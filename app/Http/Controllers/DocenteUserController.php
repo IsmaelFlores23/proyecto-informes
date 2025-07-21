@@ -40,7 +40,12 @@ class DocenteUserController extends Controller
             $query->where('nombre_role', 'docente');
         })->findOrFail($id);
         
-        // Aquí agregar lógica para obtener ternas asignadas
-        return view('Administrador.VerDocentes.show', compact('docente'));
+        // Obtener todas las ternas a las que pertenece el docente
+        $ternas = $docente->ternas()->with(['users' => function($query) {
+            // Cargar los usuarios con sus roles para poder filtrarlos después
+            $query->with('role');
+        }])->get();
+        
+        return view('Administrador.VerDocentes.show', compact('docente', 'ternas'));
     }
 }

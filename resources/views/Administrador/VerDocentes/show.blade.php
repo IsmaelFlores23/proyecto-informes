@@ -28,28 +28,53 @@
             <!-- Sección inferior: Ternas -->
             <div class="border border-gray-300 rounded-lg p-6 bg-white">
                 <p class="text-sm font-medium mb-4" style="color:#004CBE;">Ternas a las que pertenece:</p>
-                <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
-                    <p class="text-sm font-semibold mb-2" style="color:#004CBE;">Terna #1</p>
-                    <p class="text-sm mb-4">Alumno: Juan Orlando Hernandez</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #1:</p>
-                            <p class="text-sm">Nelson Martinez</p>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #2:</p>
-                            <p class="text-sm">Emilio Rodriguez</p>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #3:</p>
-                            <p class="text-sm">Juan Hernandez</p>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
-                            <p class="text-sm font-semibold">Docente #4:</p>
-                            <p class="text-sm">Martha Perez</p>
-                        </div>
+                
+                @if($ternas->count() > 0)
+                    <div class="max-h-96 overflow-y-auto pr-2"> <!-- Contenedor con scroll -->
+                        @foreach($ternas as $index => $terna)
+                            <div class="border border-gray-300 rounded-lg p-4 bg-gray-50 mb-4">
+                                <p class="text-sm font-semibold mb-2" style="color:#004CBE;">Terna #{{ $index + 1 }}</p>
+                                
+                                @php
+                                    // Encontrar al alumno en esta terna
+                                    $alumno = $terna->users->first(function($user) {
+                                        return $user->role->nombre_role === 'alumno';
+                                    });
+                                    
+                                    // Encontrar a los docentes en esta terna
+                                    $docentes = $terna->users->filter(function($user) {
+                                        return $user->role->nombre_role === 'docente';
+                                    });
+                                @endphp
+                                
+                                @if($alumno)
+                                    <p class="text-sm mb-4">Alumno: {{ $alumno->name }}</p>
+                                @else
+                                    <p class="text-sm mb-4">Alumno: No asignado</p>
+                                @endif
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    @foreach($docentes as $docenteIndex => $docenteTerna)
+                                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
+                                            <p class="text-sm font-semibold">Docente #{{ $docenteIndex + 1 }}:</p>
+                                            <p class="text-sm">{{ $docenteTerna->name }}</p>
+                                        </div>
+                                    @endforeach
+                                    
+                                    @if($docentes->count() === 0)
+                                        <div class="bg-white p-3 rounded-lg shadow border border-gray-200">
+                                            <p class="text-sm font-semibold">No hay docentes asignados</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                </div>
+                @else
+                    <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                        <p class="text-sm text-center">Este docente no pertenece a ninguna terna.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

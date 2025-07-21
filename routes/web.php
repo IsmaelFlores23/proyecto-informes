@@ -52,6 +52,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
     Route::get('/docentes/{id}', [DocenteUserController::class, 'show'])->name('docentes.show');
     Route::get('/admins/{id}', [AdminUserController::class,'show'])->name('admins.show');
+    
+    // Ruta para mostrar el PDF del informe de un alumno
+    Route::get('/admin/observarInforme/pdf/{nombreArchivo}', [AlumnoUserController::class, 'verPdfAdmin'])
+        ->name('admin.observarInforme.pdf');
 });
 
 // Rutas para docentes
