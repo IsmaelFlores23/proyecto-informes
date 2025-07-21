@@ -37,7 +37,7 @@
                                 })->first();
                                 
                                 // Obtener los docentes de esta terna
-                                $docentes = $terna->users()->whereHas('role', function($query) {
+                                $docentesTerna = $terna->users()->whereHas('role', function($query) {
                                     $query->where('nombre_role', 'docente');
                                 })->get();
                             @endphp
@@ -54,8 +54,8 @@
                             <!-- Docentes -->
                             @for($i = 0; $i < 4; $i++)
                                 <td class="px-6 py-4">
-                                    @if(isset($docentes[$i]))
-                                        {{ $docentes[$i]->name }}
+                                    @if(isset($docentesTerna[$i]))
+                                        {{ $docentesTerna[$i]->name }}
                                     @else
                                         <span class="text-gray-400">-</span>
                                     @endif
