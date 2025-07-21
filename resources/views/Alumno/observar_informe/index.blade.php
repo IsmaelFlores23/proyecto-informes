@@ -51,10 +51,10 @@
                     </span>
                 </div>
 
-                {{-- Botón para subir versión corregida --}}
+                {{-- Botón para subir subir informe --}}
                 <a href="{{ route('subirInforme.create') }}"
                     class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-full">
-                    Subir versión corregida
+                    Subir Informe
                 </a>
             </div>
         </div>

@@ -20,7 +20,7 @@
 
                     {{-- Observación de Informe --}}
                     <x-nav-link :href="route('observarInforme.index')" :active="request()->routeIs('observarInforme.index')" class="text-white">
-                        {{ __('Informe de Terna') }}
+                        {{ __('Observación de Informe') }}
                     </x-nav-link>
 
                     {{-- Subir Informe --}}
