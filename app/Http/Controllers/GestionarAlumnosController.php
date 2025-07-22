@@ -69,7 +69,7 @@ class GestionarAlumnosController extends Controller
             'id_campus' => $request->id_campus,
         ]);
 
-        return redirect()->route('GestionarAlumnos.index')->with('success', 'Alumno creado exitosamente.');
+        return redirect()->route('AsignarTerna.create')->with('success', 'Alumno creado exitosamente.');
     }
 
     public function edit($id)
