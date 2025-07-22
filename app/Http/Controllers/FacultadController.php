@@ -35,6 +35,7 @@ class FacultadController extends Controller
     {
       $validated = $request->validate([
         'nombre' => ['required', 'string', 'max:100'],
+        'codigo_facultad' => ['required', 'string', 'max:100'],
     ]);
 
     $facultad->update($validated);
@@ -46,6 +47,7 @@ class FacultadController extends Controller
     {
       $validated = $request->validate([
         'nombre'=> ['required', 'string', 'max:100'],
+        'codigo_facultad' => ['required', 'string', 'max:100'],
        ]);
 
        Facultad::create($validated);

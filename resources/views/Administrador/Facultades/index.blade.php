@@ -16,6 +16,7 @@
             <table id="facultades-table" class="min-w-full text-gray-800 bg-gray-200">
                 <thead class="text-xs uppercase text-white" style="background-color: #004CBE;">
                     <tr>
+                        <th class="px-6 py-3">Código Facultad</th>
                         <th class="px-6 py-3">Nombre</th>
                         <th class="px-6 py-3">Acciones</th>
                     </tr>
@@ -23,6 +24,7 @@
                 <tbody>
                     @foreach ($facultades as $facultad)
                         <tr>
+                            <td class="px-6 py-4 font-medium">{{ $facultad->codigo_facultad }}</td>
                             <td class="px-6 py-4 font-medium">{{ $facultad->nombre }}</td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center space-x-2">
@@ -57,6 +59,12 @@
                         @if(isset($editando))
                             @method('PUT')
                         @endif
+                        <div>
+                            <label class="block mb-1 text-sm font-medium text-gray-900">Código Facultad</label>
+                            <input type="text" placeholder="FA001" name="codigo_facultad"
+                                value="{{ old('codigo', $editando->codigo ?? '') }}"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5" required>
+                        </div>
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900">Nombre</label>
                             <input type="text" placeholder="Ingeniería" name="nombre"
