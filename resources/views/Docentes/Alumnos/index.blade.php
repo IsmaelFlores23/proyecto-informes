@@ -1,35 +1,65 @@
 <x-app-layout>
 
+    <div class="max-w-6xl mx-auto mt-10">
 
-    <div class="max-w-2xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-8">
-        <!-- Nombre del estudiante (solo número de cuenta por ahora) -->
-        <div class="text-center font-semibold mb-8">
-            Informenes de Alumnos  <!-- esto captura los datos del usuario autenticado -->
-        </div>
-
-        <!-- Lista de archivos -->
-        <div class="flex flex-col space-y-4">
-
-            <a href="{{ route('docente.observacion.create') }}"
-                class="flex items-center justify-between border border-gray-300 rounded-lg px-4 py-2 shadow-sm hover:bg-gray-50 transition">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M6 2a2 2 0 0 0-2 2v16c0 1.104.896 2 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13zm-1 9v-4h-2v4H8l4 4 4-4h-3z"/>
-                    </svg>
-                    Informe de Martin Contreras
-                    <span class="text-gray-800"></span>
-                </div>
-            </a>
-           
-            <p class="text-center text-gray-500">Este alumno no ha subido ningún informe aún.</p>
-            
-            <a href="{{ route('docente.historial.index') }}">
-                <button type="submit" class="px-4 py-2 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-400 focus:ring-4 focus:ring-yellow-300">
-                    Ver Historial de Revisiones
-                </button>
-            </a>
+        <!-- Tabla -->
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <table id="search-table" class="min-w-full text-gray-800 bg-gray-200">
+                <thead style="background-color: #004CBE;" class="text-xs uppercase text-white">
+                    <tr>
+                        <th class="px-6 py-3">N° Cuenta</th>
+                        <th class="px-6 py-3">Nombre</th>
+                        <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Facultad</th>
+                        <th class="px-6 py-3">Acciones</th> 
+                    </tr>
+                </thead>
                 
-            
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4">202220010123</td>
+                        <td class="px-6 py-4 font-medium">JUAN PÉREZ</td>
+                        <td class="px-6 py-4">juan.perez@ejemplo.com</td>
+                        <td class="px-6 py-4">Ingeniería</td>
+                        <td class="px-6 py-4 flex space-x-4">
+                            <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver perfil">👁️</a>
+                            <a href="#" class="text-blue-700 hover:text-blue-900" title="Trabajar con el alumno">📃</a>
+                            <a href="#" class="text-blue-700 hover:text-blue-900" title="Historial de revisiones">🕑</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">202320050456</td>
+                        <td class="px-6 py-4 font-medium">MARÍA GARCÍA</td>
+                        <td class="px-6 py-4">maria.garcia@ejemplo.com</td>
+                        <td class="px-6 py-4">Ciencias Jurídicas</td>
+                        <td class="px-6 py-4 flex space-x-4">
+                           <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver perfil">👁️</a>
+                            <a href="#" class="text-blue-700 hover:text-blue-900" title="Trabajar con el alumno">📃</a>
+                            <a href="#" class="text-blue-700 hover:text-blue-900" title="Historial de revisiones">🕑</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">202210030789</td>
+                        <td class="px-6 py-4 font-medium">CARLOS MEJÍA</td>
+                        <td class="px-6 py-4">carlos.mejia@ejemplo.com</td>
+                        <td class="px-6 py-4">Administración</td>
+                        <td class="px-6 py-4 flex space-x-4">
+                           <a href="#" class="text-yellow-600 hover:text-yellow-800" title="Ver perfil">👁️</a>
+                            <a href="#" class="text-blue-700 hover:text-blue-900" title="Trabajar con el alumno">📃</a>
+                            <a href="#" class="text-blue-700 hover:text-blue-900" title="Historial de revisiones">🕑</a>
+                        </td>
+                    </tr>
+                    <!-- Puedes seguir agregando más filas manualmente -->
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <!-- Margen al buscador de DataTables -->
+    <style>
+        div.dataTables_filter {
+            margin-bottom: 1rem; 
+        }
+    </style>
+
 </x-app-layout>
