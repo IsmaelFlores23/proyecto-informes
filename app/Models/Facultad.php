@@ -8,7 +8,7 @@ class Facultad extends Model
 {
    protected $table = 'facultad';
    protected $fillable = [
-   //  'codigo_facultad',
+   'codigo_facultad',
     'nombre'
    ];
 }
