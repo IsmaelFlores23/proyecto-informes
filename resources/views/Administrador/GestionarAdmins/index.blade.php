@@ -33,7 +33,7 @@
                     @forelse($admins as $admin)
                         <tr>
                             <td class="px-6 py-4">{{ $admin->numero_cuenta }}</td>
-                            <td class="px-6 py-4 font-medium">{{ $admin->name }}</td>
+                            <td class="px-6 py-4 font-medium">{{ strtoupper($admin->name) }}</td>
                             <td class="px-6 py-4">{{ $admin->email }}</td>
                             {{-- <td class="px-6 py-4">••••••••</td> 
                             <td class="px-6 py-4">{{ $admin->role()->first()->nombre_role ?? 'Sin rol' }}</td> --}}

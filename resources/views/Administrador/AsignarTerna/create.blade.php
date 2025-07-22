@@ -45,7 +45,7 @@
                             <!-- Estudiante -->
                             <td class="px-6 py-4 font-medium">
                                 @if($estudiante)
-                                    {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                    {{ strtoupper($estudiante->name) }} - {{ $estudiante->numero_cuenta }}
                                 @else
                                     <span class="text-gray-400">No asignado</span>
                                 @endif
@@ -55,7 +55,7 @@
                             @for($i = 0; $i < 4; $i++)
                                 <td class="px-6 py-4">
                                     @if(isset($docentesTerna[$i]))
-                                        {{ $docentesTerna[$i]->name }}
+                                        {{ strtoupper($docentesTerna[$i]->name) }}
                                     @else
                                         <span class="text-gray-400">-</span>
                                     @endif
@@ -178,8 +178,8 @@
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}">
-                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
+                                        <option value="{{ $docente->id  }}">
+                                            {{ $docente->name  }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
                                 </select>

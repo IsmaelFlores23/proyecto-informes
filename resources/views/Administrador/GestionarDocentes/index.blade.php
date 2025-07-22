@@ -33,7 +33,7 @@
                     @forelse($docentes as $docente)
                         <tr>
                             <td class="px-6 py-4">{{ $docente->numero_cuenta }}</td>
-                            <td class="px-6 py-4 font-medium">{{ $docente->name }}</td>
+                            <td class="px-6 py-4 font-medium">{{ strtoupper($docente->name) }}</td>
                             <td class="px-6 py-4">{{ $docente->email }}</td>
                             {{-- <td class="px-6 py-4">••••••••</td>  --}}
                             {{-- <td class="px-6 py-4">{{ $docente->role()->first()->nombre_role ?? 'Sin rol' }}</td> --}}
