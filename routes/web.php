@@ -16,7 +16,9 @@ use App\Http\Controllers\FacultadController;
 use App\Http\Controllers\GestionarAlumnosController;
 use App\Http\Controllers\GestionarDocentesController;
 use App\Http\Controllers\GestionarAdminsController;
-
+use App\Http\Controllers\DocenteAlumnosController;
+use App\Http\Controllers\DocenteHistorialController;
+use App\Http\Controllers\DocenteObservacionController;
 
 // Ruta principal redirige a login
 Route::get('/', function () {
@@ -59,8 +61,17 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 });
 
 // Rutas para docentes
+// Rutas para docentes
 Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
-    // Otras rutas específicas para docentes
+    // Rutas para alumnos asignados
+    Route::get('/alumnos', [DocenteAlumnosController::class, 'index'])->name('docente.alumnos.index');
+    
+    // Rutas para historial de revisiones
+    Route::get('/historial', [DocenteHistorialController::class, 'index'])->name('docente.historial.index');
+    
+    // Rutas para observación de informes
+    Route::get('/observacion/create', [DocenteObservacionController::class, 'create'])->name('docente.observacion.create');
+    Route::post('/observacion', [DocenteObservacionController::class, 'store'])->name('docente.observacion.store');
 });
 
 // Rutas para alumnos

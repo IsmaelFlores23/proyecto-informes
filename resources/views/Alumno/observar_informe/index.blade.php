@@ -19,6 +19,18 @@
 
             {{-- Visualizador PDF --}}
             <div class="bg-white shadow rounded-lg p-7 flex flex-col items-center">
+                {{-- Estado etiquetas --}}
+                <div class="mt-6 w-full flex justify-center gap-x-4 flex-wrap">
+                    <span class="bg-red-500 text-white font-semibold px-4 py-2 rounded whitespace-nowrap">
+                        Correcciones pendientes
+                    </span>
+                    <span class="bg-yellow-400 text-white font-semibold px-4 py-2 rounded whitespace-nowrap">
+                        Sin correcciones pendientes
+                    </span>
+                    <span class="bg-green-500 text-white font-semibold px-4 py-2 rounded whitespace-nowrap mt-2">
+                        Informe aprobado
+                    </span>
+                </div>
 
                 <h2 class="text-xl font-semibold mb-4">Visualizador PDF</h2>
 
@@ -36,20 +48,6 @@
                         <img src="{{ asset('storage/images/pdf-icon.png') }}" alt="PDF" class="mx-auto mt-4" style="width: 80px;">
                     </div>
                 @endif
-
-
-              {{-- Estado etiquetas --}}
-                <div class="mt-6 w-full flex justify-center gap-x-4 flex-wrap">
-                    <span class="bg-red-500 text-white font-semibold px-4 py-2 rounded whitespace-nowrap">
-                        Correcciones pendientes
-                    </span>
-                    <span class="bg-yellow-400 text-white font-semibold px-4 py-2 rounded whitespace-nowrap">
-                        Sin correcciones pendientes
-                    </span>
-                    <span class="bg-green-500 text-white font-semibold px-4 py-2 rounded whitespace-nowrap mt-2">
-                        Informe aprobado
-                    </span>
-                </div>
 
                 {{-- Botón para subir subir informe --}}
                 <a href="{{ route('subirInforme.create') }}"

@@ -19,12 +19,12 @@
                     </x-nav-link>
 
                     {{-- Observación de Informe --}}
-                    <x-nav-link :href="route('observarInforme.index')" :active="request()->routeIs('observarInforme.index')" class="text-white">
-                        {{ __('Observación de Informe') }}
+                    <x-nav-link :href="route('docente.alumnos.index')" :active="request()->routeIs('docente.alumnos.index')" class="text-white">
+                        {{ __('Alumnos Asignados') }}
                     </x-nav-link>
 
                     {{-- Información Terna --}}
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('terna.info')" class="text-white">
+                    <x-nav-link :href="route('docente.historial.index')" :active="request()->routeIs('docente.historial.index')" class="text-white">
                         {{ __('Historial de Revisiones') }}
                     </x-nav-link>
                 </div>
