@@ -224,4 +224,41 @@
             margin-bottom: 1rem;
         }
     </style>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selects = [
+            document.getElementById('docente1'),
+            document.getElementById('docente2'),
+            document.getElementById('docente3'),
+            document.getElementById('docente4')
+        ];
+
+        selects.forEach(select => {
+            select.addEventListener('change', () => {
+                actualizarOpciones();
+            });
+        });
+
+        function actualizarOpciones() {
+            // Obtener todos los valores seleccionados
+            let seleccionados = selects
+                .map(s => s.value)
+                .filter(val => val !== "");
+
+            selects.forEach(select => {
+                Array.from(select.options).forEach(option => {
+                    // Mostrar todas las opciones al inicio
+                    option.hidden = false;
+
+                    // Ocultar opciones seleccionadas en otros selects
+                    if (seleccionados.includes(option.value) && option.value !== select.value) {
+                        option.hidden = true;
+                    }
+                });
+            });
+        }
+    });
+</script>
+
 </x-app-layout>
