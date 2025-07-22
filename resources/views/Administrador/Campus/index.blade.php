@@ -29,11 +29,11 @@
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('campus.edit', $campus->id) }}" class="text-blue-600 hover:text-blue-800">✏️</a>
 
-                                        <form id="delete-form-{{ $campus->id }}" action="{{ route('campus.destroy', $campus->id) }}" method="POST" style="display: none;">
+                                        {{-- <form id="delete-form-{{ $campus->id }}" action="{{ route('campus.destroy', $campus->id) }}" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
-                                        <button onclick="confirmDelete({{ $campus->id }}, '{{ $campus->nombre }}')" class="text-red-600 hover:text-red-800">🗑️</button>
+                                        <button onclick="confirmDelete({{ $campus->id }}, '{{ $campus->nombre }}')" class="text-red-600 hover:text-red-800">🗑️</button> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -42,7 +42,7 @@
             </table>
         </div>
     </div>
-
+{{-- 
     <script>
         function confirmDelete(campusId, campusNombre) {
             Swal.fire({
@@ -61,7 +61,7 @@
                 }
             });
         }
-    </script>
+    </script> --}}
 
 
     <!-- MODAL Agregar Campus -->
