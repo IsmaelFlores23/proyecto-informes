@@ -62,7 +62,7 @@
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-900">Código Facultad</label>
                             <input type="text" placeholder="FA001" name="codigo_facultad"
-                                value="{{ old('codigo', $editando->codigo ?? '') }}"
+                                value="{{ old('codigo_facultad', $editando->codigo_facultad ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg w-full p-2.5" required>
                         </div>
                         <div>
