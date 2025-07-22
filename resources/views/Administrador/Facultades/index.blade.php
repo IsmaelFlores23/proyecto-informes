@@ -27,13 +27,6 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center space-x-2">
                                     <a href="{{ route('facultad.edit', $facultad->id) }}" class="text-blue-600 hover:text-blue-800">✏️</a>
-                                    
-                                    <form id="delete-form-{{ $facultad->id }}" action="{{ route('facultad.destroy', $facultad->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    <button onclick="confirmDelete({{ $facultad->id }}, '{{ $facultad->nombre }}')" class="text-red-600 hover:text-red-800">🗑️</button>
-
                                 </div>
                             </td>
                         </tr>
@@ -43,25 +36,6 @@
         </div>
     </div>
 
-    <script>
-    function confirmDelete(facultadId, facultadNombre) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: `¿Deseas eliminar la facultad "${facultadNombre}"? Esta acción no se puede deshacer.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById(`delete-form-${facultadId}`).submit();
-            }
-        });
-    }
-    </script>
 
     <!-- MODAL Agregar/Editar Facultad -->
     <div id="add-facultad-modal" tabindex="-1" aria-hidden="true"
