@@ -86,7 +86,7 @@
 
                 <!-- Modal body -->
                 <div class="p-4">
-                    <form class="space-y-4" action="{{ isset($editando) ? route('GestionarAdmins.update', $editando->id) : route('GestionarAdmins.store') }}" method="POST">
+                    <form id="adminForm" class="space-y-4" action="{{ isset($editando) ? route('GestionarAdmins.update', $editando->id) : route('GestionarAdmins.store') }}" method="POST" onsubmit="return validarFormularioAdmin()">
                         @csrf
                         @if(isset($editando))
                             @method('PUT')
@@ -94,32 +94,37 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">N° Cuenta</label>
-                                <input name="numero_cuenta" placeholder="1807200400380 (sin guiones)" type="text" 
+                                <input id="numero_cuenta" name="numero_cuenta" placeholder="1807200400380 (sin guiones)" type="text" 
                                        value="{{ old('numero_cuenta', $editando->numero_cuenta ?? '') }}"
                                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"  required>
+                                <span id="numero_cuenta_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Nombre</label>
-                                <input name="name" placeholder="Ingrese Nombre Completo" type="text" 
+                                <input id="name" name="name" placeholder="Ingrese Nombre Completo" type="text" 
                                        value="{{ old('name', $editando->name ?? '') }}"
                                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"  required>
+                                <span id="name_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Email</label>
-                                <input name="email" placeholder="ejemplo@unicah.edu" type="email" 
+                                <input id="email" name="email" placeholder="ejemplo@dominio.com" type="email" 
                                        value="{{ old('email', $editando->email ?? '') }}"
                                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"  required>
+                                <span id="email_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Telefono</label>
-                                <input name="telefono" placeholder="####-####" type="text"
+                                <input id="telefono" name="telefono" placeholder="####-####" type="text"
                                     value="{{ old('telefono', $editando->telefono ?? '') }}"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                <span id="telefono_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Contraseña</label>
-                                <input name="password" placeholder="{{ isset($editando) ? 'Dejar en blanco para mantener actual' : 'Mínimo 6 Caracteres' }}" type="password" 
+                                <input id="password" name="password" placeholder="{{ isset($editando) ? 'Dejar en blanco para mantener actual' : 'Mínimo 6 Caracteres' }}" type="password" 
                                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"  {{ isset($editando) ? '' : 'required' }}>
+                                <span id="password_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
                             <!-- Removí el campo role porque se asigna automáticamente como 'admin' -->
                             <div>
@@ -206,3 +211,67 @@
 
 
 </x-app-layout>
+
+<script>
+function validarFormularioAdmin() {
+    // Reiniciar mensajes de error
+    document.querySelectorAll('[id$="_error"]').forEach(el => el.textContent = '');
+    
+    let isValid = true;
+    const numeroCuenta = document.getElementById('numero_cuenta').value.trim();
+    const nombre = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const password = document.getElementById('password').value;
+    const isEditing = {{ isset($editando) ? 'true' : 'false' }};
+    
+    // Validar número de cuenta (solo dígitos numéricos)
+    if (!/^\d+$/.test(numeroCuenta)) {
+        document.getElementById('numero_cuenta_error').textContent = 'El número de cuenta debe contener solo dígitos numéricos';
+        isValid = false;
+    }
+    
+    // Validar nombre (solo letras y espacios)
+    if (!/^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/.test(nombre)) {
+        document.getElementById('name_error').textContent = 'El nombre solo debe contener letras y espacios';
+        isValid = false;
+    }
+    
+    // Validar email (formato correcto, cualquier dominio)
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('email_error').textContent = 'El email debe tener un formato válido';
+        isValid = false;
+    }
+    
+    // Validar teléfono (formato ####-####)
+    if (!/^\d{4}-\d{4}$/.test(telefono)) {
+        document.getElementById('telefono_error').textContent = 'El teléfono debe tener formato ####-####';
+        isValid = false;
+    }
+    
+    // Validar contraseña (mínimo 6 caracteres) solo si es nuevo registro o si se ingresó una contraseña
+    if (!isEditing && password.length < 6) {
+        document.getElementById('password_error').textContent = 'La contraseña debe tener al menos 6 caracteres';
+        isValid = false;
+    } else if (isEditing && password.length > 0 && password.length < 6) {
+        document.getElementById('password_error').textContent = 'La contraseña debe tener al menos 6 caracteres';
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+// Formatear automáticamente el teléfono mientras se escribe
+document.addEventListener('DOMContentLoaded', function() {
+    const telefonoInput = document.getElementById('telefono');
+    if (telefonoInput) {
+        telefonoInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = value.substring(0, 4) + '-' + value.substring(4, 8);
+            }
+            e.target.value = value;
+        });
+    }
+});
+</script>
