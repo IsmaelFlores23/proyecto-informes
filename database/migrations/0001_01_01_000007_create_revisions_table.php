@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('comentario');
             $table->integer('numero_pagina');
             $table->enum('estado_revision', ['Informe Cargado', 'Pendiente de Aprobación', 'Aprobado'])->default('Informe Cargado');
-
+            $table->string('nombre_archivo');
             $table->timestamps();
         });
     }

@@ -36,44 +36,36 @@
           {{ $alumno->name }} - {{ $alumno->numero_cuenta }}
         </h1>
 
-        <div class="flex items-center justify-start px-3 py-2 border-t border-gray-200 space-x-4"> 
-          <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" 
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
-            Tipo de comentario
-            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m1 1 4 4 4-4" />
-            </svg>
-          </button>
-          <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
-            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">Específico</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">General</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <form class="mt-4 space-y-4">
+        <form action="{{ route('docente.observacion.store') }}" method="POST" class="mt-4 space-y-4">
+          @csrf
+          <input type="hidden" name="alumno_id" value="{{ $alumno->id }}">
+          <input type="hidden" name="nombre_archivo" value="{{ $pdfNombre }}">
+          
           <div>
-            <label for="message" class="block mb-2 text-sm font-medium text-gray-900">
+            <label for="numero_pagina" class="block mb-2 text-sm font-medium text-gray-900">
+              Número de página
+            </label>
+            <input type="number" id="numero_pagina" name="numero_pagina" min="1" value="1" 
+                   class="block p-2.5 w-full text-sm border rounded focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label for="comentario" class="block mb-2 text-sm font-medium text-gray-900">
               Ingrese un comentario
             </label>
-            <textarea id="message" rows="3" class="block p-2.5 w-full text-sm border rounded focus:ring-blue-500 focus:border-blue-500"
+            <textarea id="comentario" name="comentario" rows="3" class="block p-2.5 w-full text-sm border rounded focus:ring-blue-500 focus:border-blue-500"
               placeholder="Ingrese un comentario..."></textarea>
           </div>
+          
           <div class="flex justify-end gap-2 border-t pt-2">
-            <button type="submit" class="px-4 py-2 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-400 focus:ring-4 focus:ring-yellow-300">
+            <button type="submit" name="estado_revision" value="Informe Cargado" class="px-4 py-2 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-400 focus:ring-4 focus:ring-yellow-300">
               Comentar
             </button>
-            <button type="submit" class="px-4 py-2 text-xs text-white bg-green-500 rounded hover:bg-green-400 focus:ring-4 focus:ring-green-300">
-              Aprobado
+            <button type="submit" name="estado_revision" value="Pendiente de Aprobación" class="px-4 py-2 text-xs text-white bg-blue-500 rounded hover:bg-blue-400 focus:ring-4 focus:ring-blue-300">
+              Pendiente
             </button>
-            <button type="submit" class="px-4 py-2 text-xs text-white bg-red-600 rounded hover:bg-red-500 focus:ring-4 focus:ring-red-300">
-              Rechazado
+            <button type="submit" name="estado_revision" value="Aprobado" class="px-4 py-2 text-xs text-white bg-green-500 rounded hover:bg-green-400 focus:ring-4 focus:ring-green-300">
+              Aprobado
             </button>
           </div>
         </form>
@@ -82,8 +74,35 @@
       <!-- COMENTARIOS -->
       <div class="p-4 bg-white border border-gray-300 rounded-lg shadow">
         <h5 class="text-xl font-bold text-gray-900 mb-2">Comentarios</h5>
-        <p class="text-gray-500 text-sm">Comentarios hechos por {{ Auth::user()->name }}</p>
-        <!-- aquí puedes listar los comentarios -->
+        <p class="text-gray-500 text-sm mb-4">Comentarios de todos los docentes</p>
+        
+        <!-- Lista de comentarios -->
+        <div class="space-y-3 max-h-96 overflow-y-auto">
+          @if(isset($revisiones) && $revisiones->count() > 0)
+            @foreach($revisiones as $revision)
+              <div class="p-3 border rounded-lg {{ Auth::id() == $revision->id_user ? 'bg-blue-50 border-blue-200' : 'bg-gray-50' }}">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="font-semibold text-sm">{{ $revision->user->name }}</p>
+                    <p class="text-xs text-gray-500">{{ $revision->created_at->format('d/m/Y H:i') }}</p>
+                  </div>
+                  <span class="text-xs px-2 py-1 rounded-full
+                    @if($revision->estado_revision == 'Aprobado') bg-green-100 text-green-800
+                    @elseif($revision->estado_revision == 'Pendiente de Aprobación') bg-blue-100 text-blue-800
+                    @else bg-yellow-100 text-yellow-800 @endif">
+                    {{ $revision->estado_revision }}
+                  </span>
+                </div>
+                <p class="mt-2 text-sm">{{ $revision->comentario }}</p>
+                <p class="text-xs text-gray-500 mt-1">Página: {{ $revision->numero_pagina }}</p>
+              </div>
+            @endforeach
+          @else
+            <div class="text-center py-4 text-gray-500">
+              <p>No hay comentarios disponibles</p>
+            </div>
+          @endif
+        </div>
       </div>
 
     </div>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Informe;
+use App\Models\Revision;
 
 class DocenteObservacionController extends Controller
 {
@@ -16,6 +17,7 @@ class DocenteObservacionController extends Controller
         $alumno = null;
         $ultimoPdf = null;
         $pdfNombre = null;
+        $revisiones = null;
         
         if ($alumno_id) {
             $alumno = User::findOrFail($alumno_id);
@@ -37,17 +39,50 @@ class DocenteObservacionController extends Controller
             
             $ultimoPdf = $archivosAlumno->first();
             $pdfNombre = $ultimoPdf ? basename($ultimoPdf) : null;
+            
+            // Obtener todas las revisiones hechas por docentes
+            // Filtramos por el nombre del archivo PDF que estamos viendo
+            // Esto asegura que solo veamos comentarios relacionados con este informe
+            $revisiones = Revision::with('user')
+                ->whereHas('user', function($query) {
+                    $query->where('id_role', function($subquery) {
+                        $subquery->select('id')
+                               ->from('roles')
+                               ->where('nombre_role', 'docente');
+                    });
+                })
+                ->where('nombre_archivo', $pdfNombre)
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
         
-        return view('Docentes.ObservacionInforme.create', compact('alumno', 'ultimoPdf', 'pdfNombre'));
+        return view('Docentes.ObservacionInforme.create', compact('alumno', 'ultimoPdf', 'pdfNombre', 'revisiones'));
     }
 
     public function store(Request $request)
     {
-        // Aquí implementarás la lógica para guardar la observación
+        // Validar los datos del formulario
+        $request->validate([
+            'alumno_id' => 'required|exists:users,id',
+            'comentario' => 'required|string',
+            'numero_pagina' => 'required|integer|min:1',
+            'estado_revision' => 'required|in:Informe Cargado,Pendiente de Aprobación,Aprobado',
+            'nombre_archivo' => 'required|string',
+        ]);
         
-        return redirect()->route('docente.alumnos.index')
-            ->with('success', 'Observación guardada correctamente');
+        // Crear una nueva revisión
+        $revision = new Revision([
+            'id_user' => Auth::id(), // ID del docente que hace el comentario
+            'comentario' => $request->comentario,
+            'numero_pagina' => $request->numero_pagina,
+            'estado_revision' => $request->estado_revision,
+            'nombre_archivo' => $request->nombre_archivo, // Guardamos el nombre del archivo para relacionarlo
+        ]);
+        
+        $revision->save();
+        
+        return redirect()->route('docente.observacion.create', ['alumno_id' => $request->alumno_id])
+            ->with('success', 'Comentario guardado correctamente');
     }
     
     public function verPdf($nombreArchivo)
