@@ -54,7 +54,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     ->name('verInformes.alumno');
 
     // Rutas para mostrar perfil de usuario
-    Route::get('/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
+    Route::get('/admin/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
     Route::get('/docentes/{id}', [DocenteUserController::class, 'show'])->name('docentes.show');
     Route::get('/admins/{id}', [AdminUserController::class,'show'])->name('admins.show');
     
@@ -64,17 +64,20 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 });
 
 // Rutas para docentes
-// Rutas para docentes
 Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
-    // Rutas para alumnos asignados
+    // Rutas para ver alumnos asignados
     Route::get('/alumnos', [DocenteAlumnosController::class, 'index'])->name('docente.alumnos.index');
+    Route::get('/alumnos/{id}', [DocenteAlumnosController::class, 'show'])->name('docente.alumnos.show');
     
     // Rutas para historial de revisiones
-    Route::get('/historial', [DocenteHistorialController::class, 'index'])->name('docente.historial.index');
+    Route::get('/historial/{alumno_id?}', [DocenteHistorialController::class, 'index'])->name('docente.historial.index');
     
     // Rutas para observación de informes
-    Route::get('/observacion/create', [DocenteObservacionController::class, 'create'])->name('docente.observacion.create');
+    Route::get('/observacion/create/{alumno_id?}', [DocenteObservacionController::class, 'create'])->name('docente.observacion.create');
     Route::post('/observacion', [DocenteObservacionController::class, 'store'])->name('docente.observacion.store');
+    
+    // Ruta para mostrar el PDF del informe
+    Route::get('/observacion/pdf/{nombreArchivo}', [DocenteObservacionController::class, 'verPdf'])->name('docente.observacion.pdf');
 });
 
 // Rutas para alumnos

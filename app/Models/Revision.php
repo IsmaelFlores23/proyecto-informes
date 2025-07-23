@@ -15,8 +15,8 @@ class Revision extends Model
         'id_user',
         'comentario',
         'numero_pagina',
-        'estado_revision'
-
+        'estado_revision',
+        'nombre_archivo'
     ];
 
     public function user()

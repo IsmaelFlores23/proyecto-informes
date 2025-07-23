@@ -22,6 +22,7 @@
                         <th class="px-6 py-3">N° Cuenta</th>
                         <th class="px-6 py-3">Nombre</th>
                         <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Telefono</th>
                         {{-- <th class="px-6 py-3">Contraseña</th> --}}
                         {{-- <th class="px-6 py-3">Rol</th> --}}
                         <th class="px-6 py-3">Facultad</th>
@@ -36,6 +37,7 @@
                             <td class="px-6 py-4">{{ $alumno->numero_cuenta }}</td>
                             <td class="px-6 py-4 font-medium">{{strtoupper($alumno->name) }}</td>
                             <td class="px-6 py-4">{{ $alumno->email }}</td>
+                            <td class="px-6 py-4">{{ $alumno->telefono }}</td>
                             {{-- <td class="px-6 py-4">••••••••</td>  --}}
                             {{-- <td class="px-6 py-4">{{ $alumno->role()->first()->nombre_role ?? 'Sin rol' }}</td> --}}
                             <td class="px-6 py-4">{{ $alumno->facultad()->first()->nombre ?? 'Sin facultad' }}</td>
@@ -107,6 +109,12 @@
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Email</label>
                                 <input name="email" placeholder="ejemplo@unicah.edu" type="email"
                                     value="{{ old('email', $editando->email ?? '') }}" 
+                                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                            </div>
+                            <div>
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Telefono</label>
+                                <input name="telefono" placeholder="####-####" type="text"
+                                    value="{{ old('telefono', $editando->telefono ?? '') }}"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                             </div>
                             <div>

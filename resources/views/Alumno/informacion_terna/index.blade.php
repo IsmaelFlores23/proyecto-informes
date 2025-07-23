@@ -8,7 +8,7 @@
                 <p>Nombre completo: <strong>{{ strtoupper(Auth::user()->name) }}</strong></p>
                 <p>Número de cuenta:<strong> {{ Auth::user()->numero_cuenta }}</strong></p>
                 <p>Correo institucional:<strong> {{ Auth::user()->email }} </strong></p>
-                <p>Teléfono:<strong>+504 ...</strong></p>
+                <p>Teléfono:<strong>{{ Auth::user()->telefono }}</strong></p>
                 <p>Campus asignado:<strong>{{ Auth::user()->campus->nombre}}</strong></p>
             </div>
 
@@ -23,7 +23,7 @@
                                 <th class="px-4 py-2">Correo Institucional</th>
                                 <th class="px-4 py-2">Estado de Revisión</th>
                                 <th class="px-4 py-2">Última actividad</th>
-                                <th class="px-4 py-2">Comentarios</th>
+                                <th class="px-4 py-2">Teléfono</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,8 +31,28 @@
                                 <tr class="border-t">
                                     <td class="px-4 py-2">{{ strtoupper($docente->name) }}</td>
                                     <td class="px-4 py-2">{{ $docente->email }}</td>
-                                    <td class="px-4 py-2">Sin correcciones pendientes</td> <!-- Esto hay que hacerlo dinamico tambien, asi que esto queda faltante -->
-                                    <td class="px-4 py-2">20/07/2025</td> <!-- Hagamos la fecha dinamica, pero esto aun esta por definir -->
+                                    
+
+                                   
+                                       @php
+                                            $estados_revision = [
+                                                'Informe Cargado' => 'bg-yellow-100 text-yellow-800',
+                                                'Pendiente de Aprobación' => 'bg-blue-100 text-blue-800',
+                                                'Aprobado' => 'bg-green-100 text-green-800',
+                                                
+                                            ];
+                                            $estado = $docente->estado_revision;
+                                            $clasesEstado = $estados_revision[$estado] ?? 'bg-gray-100 text-gray-600';
+                                        @endphp
+                                    <td class="px-6 py-4">
+                                        <span class="{{ $clasesEstado }} text-xs font-medium px-2.5 py-0.5 rounded">
+                                            {{ $estado ?? 'Sin estado' }}
+                                        </span>
+                                    </td><!-- Esto hay que hacerlo dinamico tambien, asi que esto queda faltante -->
+                                   
+                                   
+                                   
+                                    <td class="px-4 py-2">{{ $docente->ultima_actividad ? $docente->ultima_actividad->format('d/m/Y H:i:s') : 'Sin actividad' }}</td><!-- formato de fecha y hora dinamico -->
                                     <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
                                 </tr>
                             @empty

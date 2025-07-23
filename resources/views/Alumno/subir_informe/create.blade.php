@@ -6,16 +6,6 @@
     </x-slot>
 
     <div class="py-12">
-        {{-- Diseno responsive 60% para pantallas grandes. Movil 100%, Tablet 80% --}}
-        {{-- <div class="w-full md:w-4/5 lg:w-3/5 xl:w-3/5 mx-auto px-6"> --}}
-        {{-- 
-        w-1/2   = 50%
-        w-3/5   = 60% 
-        w-2/3   = 66.67%
-        w-3/4   = 75%
-        w-4/5   = 80% --}}
-
-
         <div class="max-w-4xl mx-auto px-6">
             <form method="POST" action="{{ route('subirInforme.store') }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
@@ -31,8 +21,9 @@
 
                 <!-- Sección de Descripción -->
                 <div>
-                    <label class="block text-lg font-semibold text-gray-900 mb-4">Descripcion</label>
+                    <label class="block text-lg font-semibold text-gray-900 mb-4">Descripción</label>
                     <textarea name="descripcion"
+                              id="descripcion"
                               rows="5" 
                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                               placeholder="Ingrese una descripción del informe..."></textarea>
@@ -40,23 +31,51 @@
 
                 <!-- Botones de Acción -->
                 <div class="flex space-x-4 pt-4">
-
                     <button type="submit" 
                             class="px-8 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                         SUBIR
                     </button>
 
-
                     <a href="{{ route('observarInforme.index') }}" 
-                        class="px-8 py-2 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
-                            CANCELAR
+                     class="px-8 py-2 bg-yellow-400 text-white font-semibold rounded-full hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors">
+                     Volver al visualizador
                     </a>
-
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Script para SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
+    <script>
+        document.getElementById('informeForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe directamente
+
+            const fileInput = document.getElementById('file_input');
+            const descripcion = document.getElementById('descripcion').value.trim();
+
+            const archivoSeleccionado = fileInput.files.length > 0;
+            const descripcionValida = descripcion.length > 0;
+
+            if (archivoSeleccionado && descripcionValida) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Informe subido correctamente',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    e.target.submit(); // Ahora sí se envía el formulario
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Hay campos obligatorios que están vacíos',
+                    text: 'Completalos para continuar',
+                    confirmButtonColor: '#FFC436'
+                });
+            }
+        });
+    </script>
+
 </x-app-layout>

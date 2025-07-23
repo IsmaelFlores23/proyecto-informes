@@ -47,6 +47,7 @@ class GestionarAlumnosController extends Controller
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
+            'telefono' => ['required', 'string', 'max:13'],
             'password' => ['required', 'string', 'min:6'],
             'id_facultad' => ['required', 'exists:facultad,id'],
             'id_campus' => ['required', 'exists:campus,id'],
@@ -63,6 +64,7 @@ class GestionarAlumnosController extends Controller
             'numero_cuenta' => $request->numero_cuenta,
             'name' => $request->name,
             'email' => $request->email,
+            'telefono' => $request->telefono,
             'password' => Hash::make($request->password),
             'id_role' => $role->id,
             'id_facultad' => $request->id_facultad,
@@ -95,6 +97,7 @@ class GestionarAlumnosController extends Controller
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta,' . $id],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,' . $id],
+            'telefono' => ['required', 'string', 'max:13'],
             'id_facultad' => ['required', 'exists:facultad,id'],
             'id_campus' => ['required', 'exists:campus,id'],
         ]);
@@ -102,6 +105,7 @@ class GestionarAlumnosController extends Controller
         $alumno->numero_cuenta = $request->numero_cuenta;
         $alumno->name = $request->name;
         $alumno->email = $request->email;
+        $alumno->telefono = $request->telefono;
 
         // Actualiza la contraseña solo si se llenó el campo
     if ($request->filled('password')) {
