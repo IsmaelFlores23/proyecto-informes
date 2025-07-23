@@ -13,28 +13,45 @@ class RevisionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index()
     {
         //
-            $numero_cuenta = Auth::user()->numero_cuenta;
-            $carpeta = 'informes'; // según tu storage
+        $numero_cuenta = Auth::user()->numero_cuenta;
+        $carpeta = 'informes'; // según tu storage
 
-            $archivosUsuario = collect(Storage::files($carpeta))
-                ->filter(fn($file) => str_starts_with(basename($file), $numero_cuenta . '_'))
-                ->sortByDesc(function($file) {
-                    $nombre = basename($file, '.pdf');
-                    $partes = explode('_', $nombre);
-                    return isset($partes[1]) ? (int)$partes[1] : 0;
+        $archivosUsuario = collect(Storage::files($carpeta))
+            ->filter(fn($file) => str_starts_with(basename($file), $numero_cuenta . '_'))
+            ->sortByDesc(function($file) {
+                $nombre = basename($file, '.pdf');
+                $partes = explode('_', $nombre);
+                return isset($partes[1]) ? (int)$partes[1] : 0;
+            })
+            ->values();
+
+        $ultimoPdf = $archivosUsuario->first();
+        $pdfNombre = $ultimoPdf ? basename($ultimoPdf) : null;
+        
+        // Obtener todas las revisiones hechas por docentes para este informe
+        $revisiones = null;
+        if ($pdfNombre) {
+            $revisiones = Revision::with('user')
+                ->whereHas('user', function($query) {
+                    $query->where('id_role', function($subquery) {
+                        $subquery->select('id')
+                               ->from('roles')
+                               ->where('nombre_role', 'docente');
+                    });
                 })
-                ->values();
+                ->where('nombre_archivo', $pdfNombre)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
-            $ultimoPdf = $archivosUsuario->first();
-
-            return view('Alumno.observar_informe.index', [
-                'ultimoPdf' => $ultimoPdf ? Storage::url($ultimoPdf) : null,
-                'pdfNombre' => $ultimoPdf ? basename($ultimoPdf) : null,
-            ]);
-        // return view('Alumno.observar_informe.index');
+        return view('Alumno.observar_informe.index', [
+            'ultimoPdf' => $ultimoPdf ? Storage::url($ultimoPdf) : null,
+            'pdfNombre' => $pdfNombre,
+            'revisiones' => $revisiones,
+        ]);
     }
 
 

@@ -5,15 +5,32 @@
             {{-- Observaciones --}}
             <div class="bg-white shadow rounded-lg p-6">
                 <h2 class="text-yellow-500 font-bold text-xl mb-4">Observaciones</h2>
-
-                {{-- Aquí pones tus observaciones dinámicas o estáticas --}}
-                <p><strong>Fecha:</strong> 7 / 3 / 2025</p>
-                <p><strong>Docente:</strong> Ing. Abraham</p>
-                <p><strong>Observación:</strong> Aplicar Normas APA en la sección 2.</p>
-                <p><strong>Archivo adjunto:</strong> observacion1.pdf</p>
-
-                <hr class="my-4">
-
+                @if(isset($revisiones) && $revisiones->count() > 0)
+             <div class="flex flex-wrap gap-4">
+            @foreach($revisiones as $revision)
+            <div class="w-[300px] p-3 border rounded-lg {{ Auth::id() == $revision->id_user ? 'bg-blue-50 border-blue-200' : 'bg-gray-50' }}">
+            <div class="flex justify-between items-start">
+             <div>
+            <p class="font-semibold text-sm">{{ $revision->user->name }}</p>
+            <p class="text-xs text-gray-500">{{ $revision->created_at->format('d/m/Y H:i') }}</p>
+            </div>
+            <span class="text-xs px-2 py-1 rounded-full
+            @if($revision->estado_revision == 'Aprobado') bg-green-100 text-green-800
+            @elseif($revision->estado_revision == 'Pendiente de Aprobación') bg-blue-100 text-blue-800
+            @else bg-yellow-100 text-yellow-800 @endif">
+            {{ $revision->estado_revision }}
+            </span>
+            </div>
+            <p class="mt-2 text-sm">{{ $revision->comentario }}</p>
+            <p class="text-xs text-gray-500 mt-1">Página: {{ $revision->numero_pagina }}</p>
+            </div>
+            @endforeach
+            </div>
+            @else
+            <div class="text-center py-4 text-gray-500">
+            <p>No hay comentarios disponibles</p>
+            </div>
+            @endif
                 {{-- Puedes repetir o hacer un foreach para observaciones reales --}}
             </div>
 
