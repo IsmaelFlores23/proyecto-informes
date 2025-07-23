@@ -36,6 +36,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::resource('AsignarTerna', TernaController::class);
     Route::resource('AdminInformes', AdminInformesController::class);
     Route::resource('GestionarUsuarios', GestionarUsuariosController::class);
+    Route::post('/AsignarTerna', [TernaController::class, 'store'])->name('AsignarTerna.store');
+    Route::put('/AsignarTerna/{id}', [TernaController::class, 'update'])->name('AsignarTerna.update');
+
 
     //Estas dos rutas serian eliminadas luego de implementar rutas /alumnos/{id} y /docentes/{id}
     // Route::resource('UserDocente', DocenteUserController::class);
