@@ -121,7 +121,7 @@ class TernaController extends Controller
             'docente4' => 'nullable|exists:users,id|different:docente1|different:docente2|different:docente3',
         ]);
 
-        $terna = Terna::findOrFail($id);
+        $terna = \App\Models\Terna::findOrFail($id);
 
         // Quitar todos los usuarios asociados
         $terna->users()->detach();
