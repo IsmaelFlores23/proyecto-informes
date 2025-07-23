@@ -110,4 +110,37 @@ class TernaController extends Controller
         return redirect()->route('AsignarTerna.create')
             ->with('success', 'Terna eliminada correctamente.');
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'estudiante' => 'required|exists:users,id',
+            'docente1' => 'required|exists:users,id|different:docente2|different:docente3|different:docente4',
+            'docente2' => 'required|exists:users,id|different:docente1|different:docente3|different:docente4',
+            'docente3' => 'required|exists:users,id|different:docente1|different:docente2|different:docente4',
+            'docente4' => 'nullable|exists:users,id|different:docente1|different:docente2|different:docente3',
+        ]);
+
+        $terna = Terna::findOrFail($id);
+
+        // Quitar todos los usuarios asociados
+        $terna->users()->detach();
+
+        // Asignar estudiante
+        $terna->users()->attach($request->estudiante, ['role_id' => 3]);
+
+        // Asignar docentes
+        $terna->users()->attach($request->docente1, ['role_id' => 2]);
+        $terna->users()->attach($request->docente2, ['role_id' => 2]);
+        $terna->users()->attach($request->docente3, ['role_id' => 2]);
+
+        if ($request->filled('docente4')) {
+            $terna->users()->attach($request->docente4, ['role_id' => 2]);
+        }
+
+        return redirect()->back()->with('success', 'Terna actualizada correctamente.');
+    }
+
+
+
 }

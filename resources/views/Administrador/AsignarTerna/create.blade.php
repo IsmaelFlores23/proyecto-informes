@@ -70,7 +70,20 @@
 
                             <!-- Acciones -->
                             <td class="px-6 py-4 flex space-x-2">
-                                <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
+                               <a href="#"
+                                    class="text-blue-600 hover:text-blue-800 editar-btn"
+                                    data-id="{{ $terna->id }}"
+                                    data-estudiante-id="{{ $estudiante?->id }}"
+                                    @foreach($docentesTerna as $index => $docente)
+                                        data-docente{{ $index + 1 }}-id="{{ $docente->id }}"
+                                    @endforeach
+                                    data-docente4-id="{{ $docentesTerna[3]->id ?? '' }}"
+                                    data-modal-target="add-terna-modal"
+                                    data-modal-toggle="add-terna-modal"
+                                    title="Editar">✏️
+                                </a>
+
+
                                 <form id="delete-form-{{ $terna->id }}" action="{{ route('AsignarTerna.destroy', $terna->id) }}" method="POST" style="display: none;">
                                     @csrf
                                     @method('DELETE')
@@ -111,8 +124,10 @@
 
                 <!-- Modal body -->
                 <div class="p-4">
-                    <form class="space-y-4" action="{{ route('AsignarTerna.store') }}" method="POST">
+                    <form id="terna-form" class="space-y-4" method="POST" action="{{ route('AsignarTerna.store') }}">
                         @csrf
+                        <input type="hidden" name="_method" value="POST" id="form-method">
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Estudiante -->
                             <div>
@@ -258,4 +273,53 @@
             });
         }
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('terna-form');
+        const methodInput = document.getElementById('form-method');
+
+        // Inicializa select2 si no lo hiciste ya
+        $('.select-search').select2({
+            width: '100%',
+            placeholder: "Busca un nombre...",
+            allowClear: true
+        });
+
+        // Llenar datos al hacer clic en Editar
+        document.querySelectorAll('.editar-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const estudianteId = btn.dataset.estudianteId;
+                const docente1 = btn.dataset.docente1Id;
+                const docente2 = btn.dataset.docente2Id;
+                const docente3 = btn.dataset.docente3Id;
+                const docente4 = btn.dataset.docente4Id;
+
+                // Cambiar a modo editar
+                form.action = `/AsignarTerna/${id}`;
+                methodInput.value = 'PUT';
+
+                // Rellenar los campos
+                $('#estudiante').val(estudianteId).trigger('change');
+                $('#docente1').val(docente1).trigger('change');
+                $('#docente2').val(docente2).trigger('change');
+                $('#docente3').val(docente3).trigger('change');
+                $('#docente4').val(docente4).trigger('change');
+            });
+        });
+
+        // Resetear al cerrar el modal (vuelve a modo crear)
+        document.querySelectorAll('[data-modal-hide="add-terna-modal"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                methodInput.value = 'POST';
+                form.action = `{{ route('AsignarTerna.store') }}`;
+                form.reset();
+                $('.select-search').val(null).trigger('change');
+            });
+        });
+    });
+</script>
+
+
 </x-app-layout>
