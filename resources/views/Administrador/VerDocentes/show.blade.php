@@ -8,6 +8,7 @@
                         <p class="text-sm"><strong>Nombre:</strong> {{ $docente->name }}</p>
                         <p class="text-sm"><strong>Numero de cuenta:</strong> {{ $docente->numero_cuenta }}</p>
                         <p class="text-sm"><strong>Facultad:</strong> {{ $docente->facultad()->first()->nombre ?? 'Sin facultad' }}</p>
+                        <p class="text-sm"><strong>Numero de telefono:</strong> {{$docente->telefono}}</p>
                     </div>
                     <div>
                         <p class="text-sm"><strong>Correo electronico:</strong> {{ $docente->email }}</p>
