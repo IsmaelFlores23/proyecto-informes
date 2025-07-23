@@ -6,7 +6,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <p class="text-sm"><strong>Nombre:</strong> {{ $docente->name }}</p>
-                        <p class="text-sm"><strong>Numero de cuenta:</strong> {{ $docente->numero_cuenta }}</p>
+                        <p class="text-sm"><strong>Numero de empleado:</strong> {{ $docente->numero_cuenta }}</p>
                         <p class="text-sm"><strong>Facultad:</strong> {{ $docente->facultad()->first()->nombre ?? 'Sin facultad' }}</p>
                         <p class="text-sm"><strong>Numero de telefono:</strong> {{$docente->telefono}}</p>
                     </div>
