@@ -30,7 +30,9 @@ class RevisionController extends Controller
 
         $ultimoPdf = $archivosUsuario->first();
         $pdfNombre = $ultimoPdf ? basename($ultimoPdf) : null;
-        
+
+        $estadoInforme = null;
+    
         // Obtener todas las revisiones hechas por docentes para este informe
         $revisiones = null;
         if ($pdfNombre) {
@@ -46,11 +48,29 @@ class RevisionController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
+       
+        $totalAprobados = $revisiones->where('estado_revision', 'Aprobado')->count();
+                $totalDocentes = 3; // ajusta si son más o menos
+
+                // Saber si hay al menos un comentario no vacío
+                $tieneComentarios = $revisiones->whereNotNull('comentario')->where('comentario', '!=', '')->count() > 0;
+
+                // Calcular estado final:
+                if ($totalAprobados == $totalDocentes) {
+                    $estadoInforme = 'aprobado';
+                } elseif ($tieneComentarios) {
+                    $estadoInforme = 'pendiente';
+                } else {
+                    $estadoInforme = 'corregido';
+                }
+            
+    
 
         return view('Alumno.observar_informe.index', [
-            'ultimoPdf' => $ultimoPdf ? Storage::url($ultimoPdf) : null,
-            'pdfNombre' => $pdfNombre,
-            'revisiones' => $revisiones,
+        'ultimoPdf' => $ultimoPdf ? Storage::url($ultimoPdf) : null,
+        'pdfNombre' => $pdfNombre,
+        'revisiones' => $revisiones,
+        'estadoInforme' => $estadoInforme,
         ]);
     }
 
