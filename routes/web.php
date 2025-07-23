@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     ->name('verInformes.alumno');
 
     // Rutas para mostrar perfil de usuario
-    Route::get('/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
+    Route::get('/admin/alumnos/{id}', [AlumnoUserController::class, 'show'])->name('alumnos.show');
     Route::get('/docentes/{id}', [DocenteUserController::class, 'show'])->name('docentes.show');
     Route::get('/admins/{id}', [AdminUserController::class,'show'])->name('admins.show');
     
