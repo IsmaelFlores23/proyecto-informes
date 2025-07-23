@@ -8,7 +8,7 @@
                 <p>Nombre completo: <strong>{{ strtoupper(Auth::user()->name) }}</strong></p>
                 <p>Número de cuenta:<strong> {{ Auth::user()->numero_cuenta }}</strong></p>
                 <p>Correo institucional:<strong> {{ Auth::user()->email }} </strong></p>
-                <p>Teléfono:<strong>+504 ...</strong></p>
+                <p>Teléfono:<strong>{{ Auth::user()->telefono }}</strong></p>
                 <p>Campus asignado:<strong>{{ Auth::user()->campus->nombre}}</strong></p>
             </div>
 
