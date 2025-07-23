@@ -72,8 +72,9 @@ Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
     // Rutas para observación de informes
     Route::get('/observacion/create/{alumno_id?}', [DocenteObservacionController::class, 'create'])->name('docente.observacion.create');
     Route::post('/observacion', [DocenteObservacionController::class, 'store'])->name('docente.observacion.store');
-
     
+    // Ruta para mostrar el PDF del informe
+    Route::get('/observacion/pdf/{nombreArchivo}', [DocenteObservacionController::class, 'verPdf'])->name('docente.observacion.pdf');
 });
 
 // Rutas para alumnos
