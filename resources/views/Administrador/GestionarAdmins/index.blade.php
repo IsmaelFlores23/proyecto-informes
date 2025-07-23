@@ -74,10 +74,11 @@
                     <h3 class="text-xl font-semibold text-gray-900">
                         {{ isset($editando) ? 'Editar Administrador' : 'Agregar Administrador' }}
                     </h3>
-                    <button type="button" 
+                    <button type="button"
                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 
                           rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-                        data-modal-hide="add-user-modal">
+                        data-modal-hide="add-user-modal"
+                        onclick="window.location.href='{{ route('GestionarAdmins.index') }}'">
                         ✖️
                         <span class="sr-only">Cerrar modal</span>
                     </button>
@@ -145,7 +146,8 @@
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
                             <div class="flex space-x-3">
                                 <button type="button" data-modal-hide="add-user-modal"
-                                   class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">
+                                   class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900"
+                                   onclick="window.location.href='{{ route('GestionarAdmins.index') }}'">
                                     Cancelar
                                  </button>
                                 <button type="submit"
