@@ -21,6 +21,7 @@
                         <th class="px-6 py-3">N° Cuenta</th>
                         <th class="px-6 py-3">Nombre</th>
                         <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Telefono</th>
                         <th class="px-6 py-3">Contraseña</th>
                         <th class="px-6 py-3">Rol</th>
                         <th class="px-6 py-3">Facultad</th>
@@ -35,6 +36,7 @@
                         <td class="px-6 py-4">{{ $usuario->numero_cuenta }}</td>
                         <td class="px-6 py-4 font-medium">{{ $usuario->name }}</td>
                         <td class="px-6 py-4">{{ $usuario->email }}</td>
+                        <td class="px-6 py-4">{{ $usuario->telefono }}</td>
                         <td class="px-6 py-4">••••••••</td> 
                         <!-- En la tabla -->
                         <td class="px-6 py-4">{{ $usuario->role()->first()->nombre_role ?? 'Sin rol' }}</td>
@@ -88,24 +90,28 @@
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">N° Identidad</label>
-                                <input name="numero_cuenta" placeholder="1807200400380(sin guiones)" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">N° Identidad</label>
+                                <input name="numero_cuenta" placeholder="1807200400380(sin guiones)" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                             </div>
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                                <input name="name" placeholder="Ingrese Nombre Completo" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Nombre</label>
+                                <input name="name" placeholder="Ingrese Nombre Completo" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                             </div>
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input name="email" placeholder="ejemplo@unicah.edu" type="email" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Email</label>
+                                <input name="email" placeholder="ejemplo@unicah.edu" type="email" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                             </div>
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-                                <input name="password" placeholder="Minimo 8 Caracteres" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Telefono</label>
+                                <input name="telefono" placeholder="####-####" type="telefono" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
+                            </div>
+                            <div>
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Contraseña</label>
+                                <input name="password" placeholder="Minimo 8 Caracteres" type="text" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                             </div>
                            <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                                <select name="role" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Rol</label>
+                                <select name="role" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                                     <option value="">Seleccione un rol</option>
                                     <option value="admin">Admin</option>
                                     <option value="docente">Docente</option>
@@ -113,8 +119,8 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
-                                <select name="facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Facultad</label>
+                                <select name="facultad" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                                     <option value="">Seleccione una Facultad</option>
                                     <option value="arquitectura">Arquitectura</option>
                                     <option value="ciencias de la comunicacion">Ciencias de la Comunicación</option>
@@ -139,8 +145,8 @@
 
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
                              <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Campus</label>
+                                <select name="campus" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                                     <option value="">Seleccione un Campus</option>
                                     <option value="sagrado corazon de jesus">Sagrado Corazón de Jesús</option>
                                     <option value="san pedro y san pablo">San pedro y San Pablo</option>
