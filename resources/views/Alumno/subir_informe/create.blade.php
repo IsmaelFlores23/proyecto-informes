@@ -7,7 +7,8 @@
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto px-6">
-            <form id="informeForm" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('subirInforme.store') }}" enctype="multipart/form-data" class="space-y-6">
+                @csrf
                 <!-- Sección de Subir Archivo -->
                 <div>
                     <label class="block text-lg font-semibold text-gray-900 mb-4">Subir</label>
