@@ -71,12 +71,11 @@
                             <!-- Acciones -->
                             <td class="px-6 py-4 flex space-x-2">
                                 <a href="#" class="text-blue-600 hover:text-blue-800" title="Editar">✏️</a>
-                                <form action="{{ route('AsignarTerna.destroy', $terna->id) }}" method="POST" class="inline">
+                                <form id="delete-form-{{ $terna->id }}" action="{{ route('AsignarTerna.destroy', $terna->id) }}" method="POST" style="display: none;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800" title="Eliminar"
-                                            onclick="return confirm('¿Estás seguro de eliminar esta terna?')">🗑️</button>
                                 </form>
+                                <button onclick="confirmDelete({{ $terna->id }})" class="text-red-600 hover:text-red-800" title="Eliminar">🗑️</button>
                             </td>
                         </tr>
                     @empty
@@ -240,5 +239,23 @@
                 placeholder: "Busca un nombre...",
                 allowClear: true
             });
+            
+        function confirmDelete(ternaId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `¿Deseas eliminar esta terna? Esta acción no se puede deshacer.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${ternaId}`).submit();
+                }
+            });
+        }
     </script>
 </x-app-layout>
