@@ -58,9 +58,6 @@
           </div>
           
           <div class="flex justify-end gap-2 border-t pt-2">
-            <button type="submit" name="estado_revision" value="Informe Cargado" class="px-4 py-2 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-400 focus:ring-4 focus:ring-yellow-300">
-              Comentar
-            </button>
             <button type="submit" name="estado_revision" value="Pendiente de Aprobación" class="px-4 py-2 text-xs text-white bg-blue-500 rounded hover:bg-blue-400 focus:ring-4 focus:ring-blue-300">
               Pendiente
             </button>

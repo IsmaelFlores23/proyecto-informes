@@ -37,6 +37,7 @@
                                         <th scope="col" class="px-6 py-3">Docente</th>
                                         <th scope="col" class="px-6 py-3">Comentario</th>
                                         <th scope="col" class="px-6 py-3">Página</th>
+                                        <th scope="col" class="px-6 py-3">Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,6 +47,14 @@
                                             <td class="px-6 py-4 font-medium">{{ $revision->user->name }}</td>
                                             <td class="px-6 py-4">{{ $revision->comentario }}</td>
                                             <td class="px-6 py-4">{{ $revision->numero_pagina }}</td>
+                                            <td class="px-6 py-4">
+                                                <span class="text-xs px-2 py-1 rounded-full
+                                                    @if($revision->estado_revision == 'Aprobado') bg-green-100 text-green-800
+                                                    @elseif($revision->estado_revision == 'Pendiente de Aprobación') bg-blue-100 text-blue-800
+                                                    @else bg-yellow-100 text-yellow-800 @endif">
+                                                    {{ $revision->estado_revision }}
+                                                </span>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

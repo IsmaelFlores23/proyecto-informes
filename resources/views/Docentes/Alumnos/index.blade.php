@@ -23,7 +23,7 @@
                             <td class="px-6 py-4">{{ $alumno->email }}</td>
                             <td class="px-6 py-4">{{ $alumno->facultad ? $alumno->facultad->nombre : 'No asignada' }}</td>
                             <td class="px-6 py-4 flex space-x-4">
-                                <a href="{{ route('alumnos.show', $alumno->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver perfil">👁️</a>
+                                <a href="{{ route('docente.alumnos.show', $alumno->id) }}" class="text-yellow-600 hover:text-yellow-800" title="Ver perfil">👁️</a>
                                 <a href="{{ route('docente.observacion.create', ['alumno_id' => $alumno->id]) }}" class="text-blue-700 hover:text-blue-900" title="Trabajar con el alumno">📃</a>
                                 <a href="{{ route('docente.historial.index', ['alumno_id' => $alumno->id]) }}" class="text-blue-700 hover:text-blue-900" title="Historial de revisiones">🕑</a>
                             </td>

@@ -61,10 +61,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 });
 
 // Rutas para docentes
-// Rutas para docentes
 Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
     // Rutas para ver alumnos asignados
     Route::get('/alumnos', [DocenteAlumnosController::class, 'index'])->name('docente.alumnos.index');
+    Route::get('/alumnos/{id}', [DocenteAlumnosController::class, 'show'])->name('docente.alumnos.show');
     
     // Rutas para historial de revisiones
     Route::get('/historial/{alumno_id?}', [DocenteHistorialController::class, 'index'])->name('docente.historial.index');

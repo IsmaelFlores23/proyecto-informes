@@ -66,7 +66,7 @@ class DocenteObservacionController extends Controller
             'alumno_id' => 'required|exists:users,id',
             'comentario' => 'required|string',
             'numero_pagina' => 'required|integer|min:1',
-            'estado_revision' => 'required|in:Informe Cargado,Pendiente de Aprobación,Aprobado',
+            'estado_revision' => 'required|in:Pendiente de Aprobación,Aprobado',
             'nombre_archivo' => 'required|string',
         ]);
         
