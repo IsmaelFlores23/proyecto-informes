@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto px-6">
-            <form method="POST" action="{{ route('subirInforme.store') }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('subirInforme.store') }}" enctype="multipart/form-data" class="space-y-6" id="informeForm">
                 @csrf
                 <!-- Sección de Subir Archivo -->
                 <div>
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Script para SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 
     <script>
         document.getElementById('informeForm').addEventListener('submit', function (e) {
