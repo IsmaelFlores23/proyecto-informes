@@ -13,12 +13,12 @@
                 <p>Número de cuenta: <strong>{{ $alumno->numero_cuenta }}</strong></p>
                 <p>Correo: {{ $alumno->email }}</p>
             </div>
-            
+
             @if($revisionesPorArchivo->count() > 0)
                 <!-- Historial de revisiones agrupadas por archivo -->
                 @foreach($revisionesPorArchivo as $nombreArchivo => $revisiones)
                     <div class="mb-8 border-b pb-6">
-                        <div class="mb-4">
+                        <div class="mb-4 flex justify-between items-center">
                             <h4 class="text-md font-semibold bg-yellow-100 px-3 py-1 rounded-full inline-block">
                                 Versión: {{ $nombreArchivo }}
                                 @php
@@ -27,8 +27,18 @@
                                 @endphp
                                 (v{{ $version }})
                             </h4>
+
+                            <a href="{{ route('docente.observacion.create', ['alumno_id' => $alumno->id]) }}" 
+                                class="inline-flex items-center px-5 py-3 bg-yellow-400 text-black font-semibold rounded-full shadow
+                                        hover:bg-yellow-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-1
+                                        transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105
+                                        text-sm">
+                                ⬅️ Regresar a Revisión
+                            </a>
+
+
                         </div>
-                        
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -44,7 +54,7 @@
                                     @foreach($revisiones as $revision)
                                         <tr class="bg-white border-b">
                                             <td class="px-6 py-4">{{ $revision->created_at->format('d/m/Y H:i') }}</td>
-                                            <td class="px-6 py-4 font-medium">{{strtoupper($revision->user->name)  }}</td>
+                                            <td class="px-6 py-4 font-medium">{{ strtoupper($revision->user->name) }}</td>
                                             <td class="px-6 py-4">{{ $revision->comentario }}</td>
                                             <td class="px-6 py-4">{{ $revision->numero_pagina }}</td>
                                             <td class="px-6 py-4">
@@ -72,13 +82,5 @@
                 <p>Seleccione un alumno para ver su historial de revisiones.</p>
             </div>
         @endif
-        
-        <!-- Botón para volver -->
-        <div class="mt-6 flex justify-center">
-            <a href="{{ route('docente.alumnos.index') }}" 
-               class="px-6 py-2 bg-yellow-400 text-white font-semibold rounded-full hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors">
-                Volver a la lista de alumnos
-            </a>
-        </div>
     </div>
 </x-app-layout>
