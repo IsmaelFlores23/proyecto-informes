@@ -18,13 +18,6 @@
                 </div>
             </div>
 
-            <!-- Sección: Última conexión -->
-            {{-- <div class="flex justify-center mb-6">
-                <button class="text-black font-medium rounded-lg text-sm px-5 py-2.5 shadow"
-                        style="background-color:#FFC436;">
-                    Ultima conexion: 07/07/2025 11:25 pm
-                </button>
-            </div> --}}
 
             <!-- Sección: Última actividad del docente -->
             <div class="flex justify-center mb-6">

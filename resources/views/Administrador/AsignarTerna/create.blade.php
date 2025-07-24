@@ -130,12 +130,35 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Estudiante -->
+
+                            {{-- Filtrar por Facultad --}}
+                            <div>
+                                <label for="estudiante" class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Facultad</label>
+                                <select id="filtrar_facultad" name="filtrar_facultad" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 h-[42px]">
+                                    <option value="">Todos</option>
+                                    @foreach($facultades as $facultad)
+                                        <option value="{{ $facultad->id }}">{{ $facultad->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Filtrar por Campus --}}
+                            <div>
+                                <label for="estudiante" class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Campus</label>
+                                <select id="filtrar_campus" name="filtrar_campus" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
+                                    <option value="">Todos</option>
+                                    @foreach($campus as $camp)
+                                        <option value="{{ $camp->id }}">{{ $camp->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div>
                                 <label for="estudiante" class="block mb-1 text-sm font-medium text-gray-900">Estudiante</label>
-                                <select id="estudiante" name="estudiante" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
-                                    <option value="" disabled selected>Selecciona un estudiante</option>
+                                <select id="estudiante" name="estudiante" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 h-[42px]" required>
+                                    <option value="">Selecciona un estudiante</option>
                                     @foreach($alumnos->sortByDesc('created_at') as $estudiante)
-                                        <option value="{{ $estudiante->id }}">
+                                        <option value="{{ $estudiante->id }}" data-campus="{{ $estudiante->id_campus }}" data-facultad="{{ $estudiante->id_facultad }}">
                                             {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
                                         </option>
                                     @endforeach
@@ -148,7 +171,7 @@
                                 <select id="docente1" name="docente1" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}">
+                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
                                             {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
@@ -161,7 +184,7 @@
                                 <select id="docente2" name="docente2" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}">
+                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
                                             {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
@@ -174,7 +197,7 @@
                                 <select id="docente3" name="docente3" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                     <option value="" disabled selected>Selecciona un Docente</option>
                                     @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}">
+                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
                                             {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
@@ -187,7 +210,7 @@
                                 <select id="docente4" name="docente4" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                                     <option value="" selected>Selecciona un Docente (Opcional)</option>
                                     @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}">
+                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
                                             {{ $docente->name }} - {{ $docente->numero_cuenta }}
                                         </option>
                                     @endforeach
@@ -214,79 +237,197 @@
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- Estilos personalizados para Select2 -->
+    <style>
+        /* Estilo para los contenedores de Select2 */
+        .select2-container--default .select2-selection--single {
+            height: 42px !important;
+            padding: 6px 4px !important;
+            border-radius: 0.5rem !important;
+            border-color: rgb(209, 213, 219) !important;
+        }
+        
+        /* Estilo para el texto dentro del select */
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 28px !important;
+        }
+        
+        /* Estilo para la flecha desplegable */
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px !important;
+        }
+        
+        /* Estilo para el dropdown */
+        .select2-dropdown {
+            border-radius: 0.5rem !important;
+            border-color: rgb(209, 213, 219) !important;
+        }
+        
+        /* Estilo para las opciones al hacer hover */
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #004CBE !important;
+        }
+    </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Inicializar Select2
-    
+    document.addEventListener('DOMContentLoaded', function () {
+        // Cargar Select2 después de que jQuery esté disponible
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
+        script.onload = function() {
+            // Inicializar Select2 después de que se cargue
+            $('.select-search').select2({
+                width: '100%',
+                placeholder: "Busca un nombre...",
+                allowClear: true,
+                height: '42px',
+                dropdownCssClass: "select2-dropdown-rounded"
+            });
+            
+            // Asegurarse de que el placeholder funcione correctamente para el select de estudiante
+            $('#estudiante').on('select2:unselecting', function() {
+                $(this).data('unselecting', true);
+            }).on('select2:opening', function(e) {
+                if ($(this).data('unselecting')) {
+                    $(this).removeData('unselecting');
+                    e.preventDefault();
+                }
+            });
+            
+            // Aplicar la función de actualizar opciones después de inicializar Select2
+            actualizarOpciones();
+        };
+        document.head.appendChild(script);
+        
+        const form = document.getElementById('terna-form');
+        const methodInput = document.getElementById('form-method');
 
-            const selects = [
+        // Filtrado por Campus y Facultad
+        const filtrarCampus = document.getElementById('filtrar_campus');
+        const filtrarFacultad = document.getElementById('filtrar_facultad');
+        const estudianteSelect = document.getElementById('estudiante');
+        const docenteSelects = [
+            document.getElementById('docente1'),
+            document.getElementById('docente2'),
+            document.getElementById('docente3'),
+            document.getElementById('docente4')
+        ];
+
+        // Guardar las opciones originales para poder restaurarlas
+        const estudiantesOriginales = Array.from(estudianteSelect.options);
+        const docentesOriginales = [];
+        
+        // Guardar las opciones originales de cada selector de docentes
+        docenteSelects.forEach(select => {
+            docentesOriginales.push(Array.from(select.options));
+        });
+
+        // Función para filtrar los selectores
+        function filtrarUsuarios() {
+            const campusSeleccionado = filtrarCampus.value;
+            const facultadSeleccionada = filtrarFacultad.value;
+
+            console.log('Filtrando por Campus:', campusSeleccionado, 'Facultad:', facultadSeleccionada);
+
+            // Restaurar opciones originales antes de filtrar
+            // Para estudiantes
+            while (estudianteSelect.options.length > 0) {
+                estudianteSelect.remove(0);
+            }
+            
+            estudiantesOriginales.forEach(opcion => {
+                const debeIncluir = (campusSeleccionado === '' || opcion.dataset.campus === campusSeleccionado) && 
+                                    (facultadSeleccionada === '' || opcion.dataset.facultad === facultadSeleccionada);
+                
+                if (debeIncluir || opcion.value === '') {
+                    estudianteSelect.add(opcion.cloneNode(true));
+                }
+            });
+
+            // Para docentes
+            docenteSelects.forEach((docenteSelect, index) => {
+                while (docenteSelect.options.length > 0) {
+                    docenteSelect.remove(0);
+                }
+                
+                docentesOriginales[index].forEach(opcion => {
+                    const debeIncluir = (campusSeleccionado === '' || opcion.dataset.campus === campusSeleccionado) && 
+                                        (facultadSeleccionada === '' || opcion.dataset.facultad === facultadSeleccionada);
+                    
+                    if (debeIncluir || opcion.value === '') {
+                        docenteSelect.add(opcion.cloneNode(true));
+                    }
+                });
+            });
+
+            // Reinicializar Select2 después de modificar las opciones
+            $(estudianteSelect).val('').trigger('change');
+            docenteSelects.forEach(select => {
+                $(select).val('').trigger('change');
+            });
+        }
+
+        // Eventos para los filtros - usar 'change' en lugar de 'click' para detectar cambios en los selectores
+        $(filtrarCampus).on('change', filtrarUsuarios);
+        $(filtrarFacultad).on('change', filtrarUsuarios);
+
+        // Función para evitar seleccionar el mismo docente en diferentes selectores
+        function actualizarOpciones() {
+            const docenteSelects = [
                 document.getElementById('docente1'),
                 document.getElementById('docente2'),
                 document.getElementById('docente3'),
                 document.getElementById('docente4')
             ];
-
-            selects.forEach(select => {
-                select.addEventListener('change', () => {
-                    actualizarOpciones();
+            
+            // Obtener los valores seleccionados actualmente
+            let seleccionados = docenteSelects
+                .map(s => s.value)
+                .filter(val => val !== "");
+            
+            console.log('Docentes seleccionados:', seleccionados);
+            
+            // Para cada selector de docente
+            docenteSelects.forEach(select => {
+                // Primero, mostrar todas las opciones
+                Array.from(select.options).forEach(option => {
+                    if (option.value === "") return; // No ocultar la opción de placeholder
+                    
+                    // Ocultar la opción si está seleccionada en otro selector
+                    const estaSeleccionadaEnOtro = seleccionados.includes(option.value) && option.value !== select.value;
+                    
+                    // En Select2 necesitamos manipular tanto el elemento original como el generado por Select2
+                    option.disabled = estaSeleccionadaEnOtro;
                 });
-            });
-
-            function actualizarOpciones() {
-                let seleccionados = selects
-                    .map(s => s.value)
-                    .filter(val => val !== "");
-
-                selects.forEach(select => {
-                    Array.from(select.options).forEach(option => {
-                        option.hidden = false;
-                        if (seleccionados.includes(option.value) && option.value !== select.value) {
-                            option.hidden = true;
-                        }
-                    });
-                });
-            }
-        });
-
-         $('.select-search').select2({
-                width: '100%',
-                placeholder: "Busca un nombre...",
-                allowClear: true
             });
             
-        function confirmDelete(ternaId) {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: `¿Deseas eliminar esta terna? Esta acción no se puede deshacer.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById(`delete-form-${ternaId}`).submit();
-                }
+            // Refrescar todos los Select2 para que reflejen los cambios
+            docenteSelects.forEach(select => {
+                $(select).select2('destroy');
+                $(select).select2({
+                    width: '100%',
+                    placeholder: "Busca un nombre...",
+                    allowClear: true,
+                    height: '42px',
+                    dropdownCssClass: "select2-dropdown-rounded"
+                });
             });
         }
-    </script>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('terna-form');
-        const methodInput = document.getElementById('form-method');
-
-        // Inicializa select2 si no lo hiciste ya
-        $('.select-search').select2({
-            width: '100%',
-            placeholder: "Busca un nombre...",
-            allowClear: true
+        // Agregar eventos de cambio a los selectores de docentes usando el evento de Select2
+        docenteSelects.forEach(select => {
+            $(select).on('select2:select select2:unselect', function() {
+                setTimeout(actualizarOpciones, 0); // Usar setTimeout para asegurar que se ejecute después de que Select2 actualice su estado
+            });
         });
 
-        // Llenar datos al hacer clic en Editar
+        // También ejecutar actualizarOpciones cuando se abra el modal
+        $('[data-modal-target="add-terna-modal"]').on('click', function() {
+            setTimeout(actualizarOpciones, 100); // Dar tiempo para que el modal se abra y Select2 se inicialice
+        });
+
+        // Ejecutar actualizarOpciones después de cargar datos en modo edición
         document.querySelectorAll('.editar-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.dataset.id;
@@ -306,6 +447,9 @@
                 $('#docente2').val(docente2).trigger('change');
                 $('#docente3').val(docente3).trigger('change');
                 $('#docente4').val(docente4).trigger('change');
+                
+                // Ejecutar después de un breve retraso para asegurar que Select2 haya actualizado su estado
+                setTimeout(actualizarOpciones, 100);
             });
         });
 
@@ -316,9 +460,32 @@
                 form.action = `{{ route('AsignarTerna.store') }}`;
                 form.reset();
                 $('.select-search').val(null).trigger('change');
+                
+                // Resetear filtros
+                filtrarCampus.value = '';
+                filtrarFacultad.value = '';
+                filtrarUsuarios();
             });
         });
     });
+        
+    function confirmDelete(ternaId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¿Deseas eliminar esta terna? Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-form-${ternaId}`).submit();
+            }
+        });
+    }
 </script>
 
 

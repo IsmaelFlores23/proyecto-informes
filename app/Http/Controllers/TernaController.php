@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
+use App\Models\Campus;
+use App\Models\Facultad;
 
 class TernaController extends Controller
 {
@@ -37,8 +39,12 @@ class TernaController extends Controller
         // Obtener todas las ternas existentes con sus usuarios
         $ternas = \App\Models\Terna::all();
     
+        // Obtener los campus y las facultades
+        $campus = Campus::all();
+        $facultades = Facultad::all();
+
         // enviar datos a la vista
-        return view ('Administrador.AsignarTerna.create', compact('alumnos', 'docentes', 'ternas'));
+        return view ('Administrador.AsignarTerna.create', compact('alumnos', 'docentes', 'ternas', 'campus', 'facultades'));
     }
 
     /**
@@ -100,6 +106,9 @@ class TernaController extends Controller
     public function destroy($id)
     {
         $terna = \App\Models\Terna::findOrFail($id);
+        
+        // Eliminar primero los informes asociados a esta terna
+        \App\Models\Informe::where('id_terna', $id)->delete();
         
         // Eliminar las relaciones en la tabla pivote
         \App\Models\UserTernaTransitiva::where('id_terna', $id)->delete();
