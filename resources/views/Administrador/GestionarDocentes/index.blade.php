@@ -94,7 +94,7 @@
                         @endif
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900">N° Cuenta</label>
+                                <label class="block mb-1 text-sm font-medium text-gray-900">N° Empleado</label>
                                 <input id="numero_cuenta" name="numero_cuenta" placeholder="1807200400380 (sin guiones)" type="text" 
                                      value="{{ old('numero_cuenta', $editando->numero_cuenta?? '') }}"
                                      class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
