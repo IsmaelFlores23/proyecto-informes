@@ -19,13 +19,25 @@
             </div>
 
             <!-- Sección: Última conexión -->
-            <div class="flex justify-center mb-6">
+            {{-- <div class="flex justify-center mb-6">
                 <button class="text-black font-medium rounded-lg text-sm px-5 py-2.5 shadow"
                         style="background-color:#FFC436;">
                     Ultima conexion: 07/07/2025 11:25 pm
                 </button>
-            </div>
+            </div> --}}
 
+            <!-- Sección: Última actividad del docente -->
+            <div class="flex justify-center mb-6">
+                <div class="text-black font-medium rounded-lg text-sm px-5 py-2.5 shadow cursor-default"
+                     style="background-color:#FFC436;">
+                    Ultima Actividad: 
+                    @if($ultimaRevision)
+                        {{ $ultimaRevision->created_at->format('d/m/Y h:i a') }}
+                    @else
+                        Sin actividad registrada
+                    @endif
+                </div>
+            </div>
             <!-- Sección inferior: Ternas -->
             <div class="border border-gray-300 rounded-lg p-6 bg-white">
                 <p class="text-sm font-medium mb-4" style="color:#004CBE;">Ternas a las que pertenece:</p>

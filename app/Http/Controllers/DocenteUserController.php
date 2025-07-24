@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
+use App\Models\Revision;
 
 class DocenteUserController extends Controller
 {
@@ -46,6 +47,11 @@ class DocenteUserController extends Controller
             $query->with('role');
         }])->get();
         
-        return view('Administrador.VerDocentes.show', compact('docente', 'ternas'));
+        // Obtener la última revisión realizada por el docente
+        $ultimaRevision = Revision::where('id_user', $docente->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        return view('Administrador.VerDocentes.show', compact('docente', 'ternas', 'ultimaRevision'));
     }
 }
