@@ -49,20 +49,25 @@ class RevisionController extends Controller
                 ->get();
         }
        
-        $totalAprobados = $revisiones->where('estado_revision', 'Aprobado')->count();
-                $totalDocentes = 3; // ajusta si son más o menos
+        $totalAprobados = 0;
+        $tieneComentarios = false;
+        
+        if ($revisiones) {
+            $totalAprobados = $revisiones->where('estado_revision', 'Aprobado')->count();
+            $totalDocentes = 3; // ajusta si son más o menos
 
-                // Saber si hay al menos un comentario no vacío
-                $tieneComentarios = $revisiones->whereNotNull('comentario')->where('comentario', '!=', '')->count() > 0;
+            // Saber si hay al menos un comentario no vacío
+            $tieneComentarios = $revisiones->whereNotNull('comentario')->where('comentario', '!=', '')->count() > 0;
 
-                // Calcular estado final:
-                if ($totalAprobados == $totalDocentes) {
-                    $estadoInforme = 'aprobado';
-                } elseif ($tieneComentarios) {
-                    $estadoInforme = 'pendiente';
-                } else {
-                    $estadoInforme = 'corregido';
-                }
+            // Calcular estado final:
+            if ($totalAprobados == $totalDocentes) {
+                $estadoInforme = 'aprobado';
+            } elseif ($tieneComentarios) {
+                $estadoInforme = 'pendiente';
+            } else {
+                $estadoInforme = 'corregido';
+            }
+        }
             
     
 
