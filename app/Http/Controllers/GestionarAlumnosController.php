@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Campus;
 use App\Models\Facultad;
+use App\Mail\CredencialesMail;
 
 class GestionarAlumnosController extends Controller
 {
@@ -60,7 +62,10 @@ class GestionarAlumnosController extends Controller
             return redirect()->back()->with('error', 'El rol de alumno no existe en el sistema.');
         }
 
-        User::create([
+        //Guardar Contrasena en texto plano para enviar por correo
+        $passwordPlano = $request->password;
+
+        $user = User::create([
             'numero_cuenta' => $request->numero_cuenta,
             'name' => $request->name,
             'email' => $request->email,
@@ -70,6 +75,10 @@ class GestionarAlumnosController extends Controller
             'id_facultad' => $request->id_facultad,
             'id_campus' => $request->id_campus,
         ]);
+
+        //Enviar correo
+        //Enviar correo de forma asíncrona
+        Mail::to($user->email)->queue(new CredencialesMail($user->name, $user->numero_cuenta, $passwordPlano, $user->email));
 
         return redirect()->route('AsignarTerna.create')->with('success', 'Alumno creado exitosamente.');
     }

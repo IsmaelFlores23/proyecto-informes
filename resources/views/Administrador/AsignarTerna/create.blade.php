@@ -234,71 +234,38 @@
         </div>
     </div>
 
-    <!-- Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
-    <!-- Estilos personalizados para Select2 -->
+    <!-- Reemplazar con esto -->
+    <!-- jQuery (necesario para otras funcionalidades) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Estilos personalizados para selects nativos -->
     <style>
-        /* Estilo para los contenedores de Select2 */
-        .select2-container--default .select2-selection--single {
-            height: 42px !important;
-            padding: 6px 4px !important;
-            border-radius: 0.5rem !important;
-            border-color: rgb(209, 213, 219) !important;
+        /* Estilo para los selects nativos */
+        .select-custom {
+            height: 42px;
+            padding: 6px 12px;
+            border-radius: 0.5rem;
+            border-color: rgb(209, 213, 219);
+            width: 100%;
+            background-color: rgb(249, 250, 251);
+            font-size: 0.875rem;
         }
         
-        /* Estilo para el texto dentro del select */
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 28px !important;
-        }
-        
-        /* Estilo para la flecha desplegable */
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 40px !important;
-        }
-        
-        /* Estilo para el dropdown */
-        .select2-dropdown {
-            border-radius: 0.5rem !important;
-            border-color: rgb(209, 213, 219) !important;
-        }
-        
-        /* Estilo para las opciones al hacer hover */
-        .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: #004CBE !important;
+        /* Estilo para las opciones deshabilitadas */
+        .select-custom option:disabled {
+            color: #999;
+            background-color: #f0f0f0;
         }
     </style>
-
+    
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Cargar Select2 después de que jQuery esté disponible
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
-        script.onload = function() {
-            // Inicializar Select2 después de que se cargue
-            $('.select-search').select2({
-                width: '100%',
-                placeholder: "Busca un nombre...",
-                allowClear: true,
-                height: '42px',
-                dropdownCssClass: "select2-dropdown-rounded"
-            });
-            
-            // Asegurarse de que el placeholder funcione correctamente para el select de estudiante
-            $('#estudiante').on('select2:unselecting', function() {
-                $(this).data('unselecting', true);
-            }).on('select2:opening', function(e) {
-                if ($(this).data('unselecting')) {
-                    $(this).removeData('unselecting');
-                    e.preventDefault();
-                }
-            });
-            
-            // Aplicar la función de actualizar opciones después de inicializar Select2
-            actualizarOpciones();
-        };
-        document.head.appendChild(script);
+        // Reemplazar la clase select-search por select-custom en todos los selects
+        document.querySelectorAll('.select-search').forEach(select => {
+            select.classList.remove('select-search');
+            select.classList.add('select-custom');
+        });
         
         const form = document.getElementById('terna-form');
         const methodInput = document.getElementById('form-method');
@@ -327,6 +294,10 @@
         function filtrarUsuarios() {
             const campusSeleccionado = filtrarCampus.value;
             const facultadSeleccionada = filtrarFacultad.value;
+            
+            // Guardar el valor seleccionado actualmente
+            const estudianteSeleccionado = estudianteSelect.value;
+            const docentesSeleccionados = docenteSelects.map(select => select.value);
 
             console.log('Filtrando por Campus:', campusSeleccionado, 'Facultad:', facultadSeleccionada);
 
@@ -361,26 +332,31 @@
                 });
             });
 
-            // Reinicializar Select2 después de modificar las opciones
-            $(estudianteSelect).val('').trigger('change');
-            docenteSelects.forEach(select => {
-                $(select).val('').trigger('change');
+            // Restaurar los valores seleccionados si todavía existen en las opciones filtradas
+            if (estudianteSeleccionado) {
+                estudianteSelect.value = estudianteSeleccionado;
+            } else {
+                estudianteSelect.value = '';
+            }
+            
+            docenteSelects.forEach((select, index) => {
+                if (docentesSeleccionados[index]) {
+                    select.value = docentesSeleccionados[index];
+                } else {
+                    select.value = '';
+                }
             });
+            
+            // Actualizar las opciones de docentes para reflejar las selecciones actuales
+            actualizarOpciones();
         }
 
-        // Eventos para los filtros - usar 'change' en lugar de 'click' para detectar cambios en los selectores
-        $(filtrarCampus).on('change', filtrarUsuarios);
-        $(filtrarFacultad).on('change', filtrarUsuarios);
+        // Eventos para los filtros
+        filtrarCampus.addEventListener('change', filtrarUsuarios);
+        filtrarFacultad.addEventListener('change', filtrarUsuarios);
 
         // Función para evitar seleccionar el mismo docente en diferentes selectores
         function actualizarOpciones() {
-            const docenteSelects = [
-                document.getElementById('docente1'),
-                document.getElementById('docente2'),
-                document.getElementById('docente3'),
-                document.getElementById('docente4')
-            ];
-            
             // Obtener los valores seleccionados actualmente
             let seleccionados = docenteSelects
                 .map(s => s.value)
@@ -390,41 +366,27 @@
             
             // Para cada selector de docente
             docenteSelects.forEach(select => {
-                // Primero, mostrar todas las opciones
+                // Recorrer todas las opciones y deshabilitar las que ya están seleccionadas en otros selectores
                 Array.from(select.options).forEach(option => {
-                    if (option.value === "") return; // No ocultar la opción de placeholder
+                    if (option.value === "") return; // No deshabilitar la opción de placeholder
                     
-                    // Ocultar la opción si está seleccionada en otro selector
+                    // Deshabilitar la opción si está seleccionada en otro selector
                     const estaSeleccionadaEnOtro = seleccionados.includes(option.value) && option.value !== select.value;
-                    
-                    // En Select2 necesitamos manipular tanto el elemento original como el generado por Select2
                     option.disabled = estaSeleccionadaEnOtro;
-                });
-            });
-            
-            // Refrescar todos los Select2 para que reflejen los cambios
-            docenteSelects.forEach(select => {
-                $(select).select2('destroy');
-                $(select).select2({
-                    width: '100%',
-                    placeholder: "Busca un nombre...",
-                    allowClear: true,
-                    height: '42px',
-                    dropdownCssClass: "select2-dropdown-rounded"
                 });
             });
         }
 
-        // Agregar eventos de cambio a los selectores de docentes usando el evento de Select2
+        // Agregar eventos de cambio a los selectores de docentes
         docenteSelects.forEach(select => {
-            $(select).on('select2:select select2:unselect', function() {
-                setTimeout(actualizarOpciones, 0); // Usar setTimeout para asegurar que se ejecute después de que Select2 actualice su estado
-            });
+            select.addEventListener('change', actualizarOpciones);
         });
 
         // También ejecutar actualizarOpciones cuando se abra el modal
-        $('[data-modal-target="add-terna-modal"]').on('click', function() {
-            setTimeout(actualizarOpciones, 100); // Dar tiempo para que el modal se abra y Select2 se inicialice
+        document.querySelectorAll('[data-modal-target="add-terna-modal"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setTimeout(actualizarOpciones, 100); // Dar tiempo para que el modal se abra
+            });
         });
 
         // Ejecutar actualizarOpciones después de cargar datos en modo edición
@@ -448,13 +410,13 @@
                 document.querySelector('#terna-form button[type="submit"]').textContent = 'Actualizar';
 
                 // Rellenar los campos
-                $('#estudiante').val(estudianteId).trigger('change');
-                $('#docente1').val(docente1).trigger('change');
-                $('#docente2').val(docente2).trigger('change');
-                $('#docente3').val(docente3).trigger('change');
-                $('#docente4').val(docente4).trigger('change');
+                estudianteSelect.value = estudianteId;
+                docenteSelects[0].value = docente1 || '';
+                docenteSelects[1].value = docente2 || '';
+                docenteSelects[2].value = docente3 || '';
+                docenteSelects[3].value = docente4 || '';
                 
-                // Ejecutar después de un breve retraso para asegurar que Select2 haya actualizado su estado
+                // Ejecutar después de un breve retraso
                 setTimeout(actualizarOpciones, 100);
             });
         });
@@ -465,11 +427,12 @@
                 methodInput.value = 'POST';
                 form.action = `{{ route('AsignarTerna.store') }}`;
                 form.reset();
-                $('.select-search').val(null).trigger('change');
                 
                 // Resetear filtros
                 filtrarCampus.value = '';
                 filtrarFacultad.value = '';
+                
+                // Volver a aplicar filtros y actualizar opciones
                 filtrarUsuarios();
             });
         });
