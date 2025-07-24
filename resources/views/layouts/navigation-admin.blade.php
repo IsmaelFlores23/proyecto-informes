@@ -30,7 +30,7 @@
                             </svg>
                         </button>
 
-                        <div id="dropdownGestionarUsuarios" class="hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
+                        <div id="dropdownGestionarUsuarios" class="hidden absolute z-50 mt-2 w-48 bg-white rounded-md shadow-lg">
                             <ul class="py-1 text-gray-700" aria-labelledby="dropdownGestionarUsuariosButton">
                                 <li>
                                     <a href="{{ route('GestionarAlumnos.index') }}" class="block px-4 py-2 hover:bg-gray-100">
@@ -65,7 +65,7 @@
                         </button>
 
                         <!-- Dropdown menu -->
-                        <div id="dropdownAdministrar" class="hidden absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
+                        <div id="dropdownAdministrar" class="hidden absolute z-50 mt-2 w-48 bg-white rounded-md shadow-lg">
                             <ul class="py-1 text-gray-700" aria-labelledby="dropdownAdministrarButton">
                                 <li>
                                     <a href="{{ route('campus.index') }}" class="block px-4 py-2 hover:bg-gray-100">
