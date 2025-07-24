@@ -5,7 +5,7 @@
             <div class="border border-gray-300 rounded-lg p-6 mb-6 bg-white">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <p class="text-sm"><strong>Nombre:</strong> {{$alumno->name}}</p>
+                        <p class="text-sm"><strong>Nombre: </strong>{{strtoupper($alumno->name) }}</p>
                         <p class="text-sm"><strong>Numero de cuenta:</strong> {{$alumno->numero_cuenta}}</p>
                         <p class="text-sm"><strong>Facultad:</strong> {{$alumno->facultad()->first()->nombre ?? 'Sin facultad'}}</p>
                     </div>
@@ -80,7 +80,7 @@
                             @forelse($docentes as $index => $docente)
                                 <div class="bg-white p-3 rounded-lg shadow border border-gray-200 {{ $docente->id == Auth::id() ? 'border-blue-500' : '' }}">
                                     <p class="text-sm font-semibold">Docente #{{ $index + 1 }}:</p>
-                                    <p class="text-sm">{{ $docente->name }}</p>
+                                    <p class="text-sm">{{ strtoupper($docente->name) }}</p>
                                     @if($docente->id == Auth::id())
                                         <p class="text-xs text-blue-600 mt-1">(Tú)</p>
                                     @endif

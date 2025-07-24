@@ -19,7 +19,7 @@
                     @forelse ($alumnos as $alumno)
                         <tr>
                             <td class="px-6 py-4">{{ $alumno->numero_cuenta }}</td>
-                            <td class="px-6 py-4 font-medium">{{ $alumno->name }}</td>
+                            <td class="px-6 py-4 font-medium">{{strtoupper($alumno->name) }}</td>
                             <td class="px-6 py-4">{{ $alumno->email }}</td>
                             <td class="px-6 py-4">{{ $alumno->facultad ? $alumno->facultad->nombre : 'No asignada' }}</td>
                             <td class="px-6 py-4 flex space-x-4">

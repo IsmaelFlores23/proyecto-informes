@@ -4,7 +4,7 @@
 
             {{-- Observaciones --}}
             <div class="bg-white shadow rounded-lg p-6">
-                <h2 class="text-yellow-500 font-bold text-xl mb-4">Observaciones</h2>
+                <h2 class="text-yellow-500 font-bold text-xl mb-4">Correciones</h2>
                 @if(isset($revisiones) && $revisiones->count() > 0)
              <div class="flex flex-wrap gap-4">
             @foreach($revisiones as $revision)
@@ -28,7 +28,7 @@
             </div>
             @else
             <div class="text-center py-4 text-gray-500">
-            <p>No hay comentarios disponibles</p>
+            <p>No hay correciones disponibles</p>
             </div>
             @endif
                 {{-- Puedes repetir o hacer un foreach para observaciones reales --}}

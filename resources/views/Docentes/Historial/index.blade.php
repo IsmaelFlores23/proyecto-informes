@@ -9,7 +9,7 @@
         @if(isset($alumno))
             <!-- Información del alumno -->
             <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h3 class="text-lg font-semibold mb-2">Alumno: {{ $alumno->name }}</h3>
+                <h3 class="text-lg font-semibold mb-2">Alumno: {{ strtoupper($alumno->name) }}</h3>
                 <p>Número de cuenta: <strong>{{ $alumno->numero_cuenta }}</strong></p>
                 <p>Correo: {{ $alumno->email }}</p>
             </div>
@@ -44,7 +44,7 @@
                                     @foreach($revisiones as $revision)
                                         <tr class="bg-white border-b">
                                             <td class="px-6 py-4">{{ $revision->created_at->format('d/m/Y H:i') }}</td>
-                                            <td class="px-6 py-4 font-medium">{{ $revision->user->name }}</td>
+                                            <td class="px-6 py-4 font-medium">{{strtoupper($revision->user->name)  }}</td>
                                             <td class="px-6 py-4">{{ $revision->comentario }}</td>
                                             <td class="px-6 py-4">{{ $revision->numero_pagina }}</td>
                                             <td class="px-6 py-4">
