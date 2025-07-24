@@ -65,7 +65,19 @@ class AlumnoUserController extends Controller
         // Obtener el último informe subido (el más reciente)
         $ultimoInforme = $archivos->first();
         
-        return view('Administrador.VerAlumnos.show', compact('alumno', 'terna', 'docentes', 'ultimoInforme'));
+        // Obtener la fecha del último informe desde la base de datos
+        $fechaUltimoInforme = null;
+        if ($terna && $ultimoInforme) {
+            $informe = \App\Models\Informe::where('id_terna', $terna->id)
+                ->where('nombre_archivo', basename($ultimoInforme))
+                ->first();
+            
+            if ($informe) {
+                $fechaUltimoInforme = $informe->created_at;
+            }
+        }
+        
+        return view('Administrador.VerAlumnos.show', compact('alumno', 'terna', 'docentes', 'ultimoInforme', 'fechaUltimoInforme'));
     }
 
     /**

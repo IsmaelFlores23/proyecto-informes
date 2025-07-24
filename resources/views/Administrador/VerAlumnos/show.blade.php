@@ -19,11 +19,16 @@
                 </div>
             </div>
 
-            <!-- Sección: Última conexión -->
+            <!-- Sección: Última actividad -->
             <div class="flex justify-center mb-6">
                 <button class="text-black font-medium rounded-lg text-sm px-5 py-2.5 shadow"
                         style="background-color:#FFC436;">
-                    Ultima conexion: 07/07/2025 11:25 pm
+                    Ultima actividad: 
+                    @if(isset($fechaUltimoInforme))
+                        {{ $fechaUltimoInforme->format('d/m/Y h:i a') }}
+                    @else
+                        Sin actividad registrada
+                    @endif
                 </button>
             </div>
 
