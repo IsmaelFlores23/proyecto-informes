@@ -440,6 +440,12 @@
                 // Cambiar a modo editar
                 form.action = `/AsignarTerna/${id}`;
                 methodInput.value = 'PUT';
+                
+                // Cambiar el título del modal a "Editar Terna"
+                document.querySelector('#add-terna-modal h3').textContent = 'Editar Terna';
+                
+                // Cambiar el texto del botón a "Actualizar"
+                document.querySelector('#terna-form button[type="submit"]').textContent = 'Actualizar';
 
                 // Rellenar los campos
                 $('#estudiante').val(estudianteId).trigger('change');

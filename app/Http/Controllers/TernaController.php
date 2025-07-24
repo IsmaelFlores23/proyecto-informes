@@ -124,30 +124,49 @@ class TernaController extends Controller
     {
         $request->validate([
             'estudiante' => 'required|exists:users,id',
-            'docente1' => 'required|exists:users,id|different:docente2|different:docente3|different:docente4',
-            'docente2' => 'required|exists:users,id|different:docente1|different:docente3|different:docente4',
-            'docente3' => 'required|exists:users,id|different:docente1|different:docente2|different:docente4',
-            'docente4' => 'nullable|exists:users,id|different:docente1|different:docente2|different:docente3',
+            'docente1' => 'required|exists:users,id',
+            'docente2' => 'required|exists:users,id',
+            'docente3' => 'required|exists:users,id',
+            'docente4' => 'nullable|exists:users,id',
         ]);
-
+    
         $terna = \App\Models\Terna::findOrFail($id);
-
-        // Quitar todos los usuarios asociados
-        $terna->users()->detach();
-
-        // Asignar estudiante
-        $terna->users()->attach($request->estudiante, ['role_id' => 3]);
-
-        // Asignar docentes
-        $terna->users()->attach($request->docente1, ['role_id' => 2]);
-        $terna->users()->attach($request->docente2, ['role_id' => 2]);
-        $terna->users()->attach($request->docente3, ['role_id' => 2]);
-
-        if ($request->filled('docente4')) {
-            $terna->users()->attach($request->docente4, ['role_id' => 2]);
+        
+        // Eliminar las relaciones existentes
+        \App\Models\UserTernaTransitiva::where('id_terna', $id)->delete();
+        
+        // Asignar el estudiante a la terna
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->estudiante,
+            'id_terna' => $terna->id
+        ]);
+        
+        // Asignar los docentes a la terna
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->docente1,
+            'id_terna' => $terna->id
+        ]);
+        
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->docente2,
+            'id_terna' => $terna->id
+        ]);
+        
+        \App\Models\UserTernaTransitiva::create([
+            'id_user' => $request->docente3,
+            'id_terna' => $terna->id
+        ]);
+        
+        // Asignar el docente opcional si se proporcionó
+        if ($request->docente4) {
+            \App\Models\UserTernaTransitiva::create([
+                'id_user' => $request->docente4,
+                'id_terna' => $terna->id
+            ]);
         }
-
-        return redirect()->back()->with('success', 'Terna actualizada correctamente.');
+        
+        return redirect()->route('AsignarTerna.create')
+            ->with('success', 'Terna actualizada correctamente.');
     }
 
 
