@@ -34,7 +34,7 @@ class GestionarAdminsController extends Controller
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'telefono' => ['required', 'string', 'max:13'],
+            'telefono' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:6'],
             'id_facultad' => ['required', 'exists:facultad,id'],
             'id_campus' => ['required', 'exists:campus,id'],
@@ -51,6 +51,7 @@ class GestionarAdminsController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'telefono' => $request->telefono,
+            'pais_telefono' => $request->pais_telefono,
             'password' => Hash::make($request->password),
             'id_role' => $role->id,
             'id_facultad' => $request->id_facultad,
@@ -82,7 +83,7 @@ class GestionarAdminsController extends Controller
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta,' . $id],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,' . $id],
-            'telefono' => ['required', 'string', 'max:13'],
+            'telefono' => ['required', 'string', 'max:20'],
             'id_facultad' => ['required', 'exists:facultad,id'],
             'id_campus' => ['required', 'exists:campus,id'],
         ]);
@@ -91,6 +92,7 @@ class GestionarAdminsController extends Controller
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->telefono = $request->telefono;
+        $admin->pais_telefono = $request->pais_telefono;
 
         if ($request->filled('password')) {
             $admin->password = Hash::make($request->password);

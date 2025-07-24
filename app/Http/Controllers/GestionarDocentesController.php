@@ -48,7 +48,7 @@ class GestionarDocentesController extends Controller
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'telefono' => ['required', 'string', 'max:13'],
+            'telefono' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:6'],
             'id_facultad' => ['required', 'exists:facultad,id'],
             'id_campus' => ['required', 'exists:campus,id'],
@@ -66,6 +66,7 @@ class GestionarDocentesController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'telefono' => $request->telefono,
+            'pais_telefono' => $request->pais_telefono,
             'password' => Hash::make($request->password),
             'id_role' => $role->id,
             'id_facultad' => $request->id_facultad,
@@ -96,7 +97,7 @@ public function edit($id)
             'numero_cuenta' => ['required', 'string', 'max:13', 'unique:users,numero_cuenta,' . $id],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,' . $id],
-            'telefono' => ['required', 'string', 'max:13'],
+            'telefono' => ['required', 'string', 'max:20'],
             'id_facultad' => ['required', 'exists:facultad,id'],
             'id_campus' => ['required', 'exists:campus,id'],
         ]);
@@ -105,6 +106,7 @@ public function edit($id)
         $docente->name = $request->name;
         $docente->email = $request->email;
         $docente->telefono = $request->telefono;
+        $docente->pais_telefono = $request->pais_telefono;
 
         if ($request->filled('password')) {
             $docente->password = Hash::make($request->password);

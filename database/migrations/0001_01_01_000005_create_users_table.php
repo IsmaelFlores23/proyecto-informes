@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('numero_cuenta');
 
-            $table->string('telefono')->unique()->nullable();;;
+            $table->string('telefono', 20)->nullable(); 
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -51,6 +51,11 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('pais_telefono')->nullable(); // por ejemplo: "HN", "US", "GT"
+        });
+
     }
 
     /**

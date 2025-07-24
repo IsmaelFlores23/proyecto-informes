@@ -114,12 +114,17 @@
                                 <span id="email_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
                             <div>
-                                <label class="block mb-1 text-sm font-medium text-gray-900">Telefono</label>
-                                <input id="telefono" name="telefono" placeholder="####-####" type="text"
+                                <label class="block mb-1 text-sm font-medium text-gray-900">Teléfono</label>
+                                <input id="telefono" name="telefono" type="tel"
                                     value="{{ old('telefono', $editando->telefono ?? '') }}"
                                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
                                 <span id="telefono_error" class="text-red-500 text-xs mt-1"></span>
                             </div>
+
+                            <!-- Input oculto para guardar la bandera del país -->
+                            <input type="hidden" id="pais_telefono" name="pais_telefono" 
+                                value="{{ old('pais_telefono', $editando->pais_telefono ?? '') }}">
+                                
                             <div>
                                 <label class="block mb-1 text-sm font-medium text-gray-900">Contraseña</label>
                                 <input id="password" name="password" placeholder="{{ isset($editando) ? 'Dejar en blanco para mantener actual' : 'Mínimo 6 Caracteres' }}" type="password" 
@@ -243,12 +248,12 @@ function validarFormularioAdmin() {
         isValid = false;
     }
     
-    // Validar teléfono (formato ####-####)
-    if (!/^\d{4}-\d{4}$/.test(telefono)) {
-        document.getElementById('telefono_error').textContent = 'El teléfono debe tener formato ####-####';
-        isValid = false;
+    // Validar teléfono 
+    if (!/^\d{6,15}$/.test(telefono.replace(/\D/g, ''))) {
+    document.getElementById('telefono_error').textContent = 'Ingrese un número válido sin el código de país';
+    isValid = false;
     }
-    
+
     // Validar contraseña (mínimo 6 caracteres) solo si es nuevo registro o si se ingresó una contraseña
     if (!isEditing && password.length < 6) {
         document.getElementById('password_error').textContent = 'La contraseña debe tener al menos 6 caracteres';
@@ -260,18 +265,47 @@ function validarFormularioAdmin() {
     
     return isValid;
 }
-
-// Formatear automáticamente el teléfono mientras se escribe
-document.addEventListener('DOMContentLoaded', function() {
-    const telefonoInput = document.getElementById('telefono');
-    if (telefonoInput) {
-        telefonoInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 4) {
-                value = value.substring(0, 4) + '-' + value.substring(4, 8);
-            }
-            e.target.value = value;
-        });
-    }
-});
 </script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+
+<!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.querySelector("#telefono");
+        const countryInput = document.querySelector("#pais_telefono");
+
+        // Establece país por defecto desde input oculto
+        let paisGuardado = countryInput?.value?.toLowerCase() || "hn";
+
+        const iti = window.intlTelInput(input, {
+            initialCountry: paisGuardado,
+            preferredCountries: ["hn", "us", "mx", "gt"],
+            separateDialCode: true,
+            nationalMode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+        });
+
+        // Si estás en edición y hay valor, vuelve a establecer el país explícitamente
+        if (countryInput && countryInput.value) {
+            iti.setCountry(countryInput.value.toLowerCase());
+        }
+
+        // Al enviar el formulario, actualiza el input oculto con la bandera
+        const form = document.querySelector("#adminForm");
+        if (form) {
+            form.addEventListener("submit", function () {
+                input.value = iti.getNumber(intlTelInputUtils.numberFormat.INTERNATIONAL);
+                const selectedCountryData = iti.getSelectedCountryData();
+                if (countryInput) {
+                    countryInput.value = selectedCountryData.iso2.toUpperCase();
+                }
+            });
+        }
+    });
+</script>
+
+
