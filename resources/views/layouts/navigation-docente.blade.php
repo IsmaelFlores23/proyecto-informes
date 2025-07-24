@@ -18,15 +18,15 @@
                         {{ __('Inicio') }}
                     </x-nav-link>
 
-                    {{-- Observación de Informe --}}
+                    {{-- Alumnos Asignados como Terna --}}
                     <x-nav-link :href="route('docente.alumnos.index')" :active="request()->routeIs('docente.alumnos.index')" class="text-white">
                         {{ __('Alumnos Asignados') }}
                     </x-nav-link>
 
-                    {{-- Información Terna --}}
-                    <x-nav-link :href="route('docente.historial.index')" :active="request()->routeIs('docente.historial.index')" class="text-white">
-                        {{ __('Historial de Revisiones') }}
-                    </x-nav-link>
+                    {{-- Historial de Revisiones y Correcciones --}}
+                    <!-- <x-nav-link :href="route('docente.historial.index')" :active="request()->routeIs('docente.historial.index')" class="text-white"> -->
+                        <!-- {{ __('Historial de Revisiones') }} -->
+                    <!-- </x-nav-link> -->
                 </div>
             </div>
             
@@ -83,12 +83,12 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Inicio') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('observarInforme.index')" :active="request()->routeIs('observarInforme.index')">
-                {{ __('Observación de Informe') }}
+            <x-responsive-nav-link :href="route('docente.alumnos.index')" :active="request()->routeIs('docente.alumnos.index')">
+                {{ __('Alumnos Asignados') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('terna.info')">
-                {{ __('Información Terna') }}
-            </x-responsive-nav-link>
+            <!-- <x-responsive-nav-link :href="route('docente.historial.index')" :active="request()->routeIs('docente.historial.index')"> -->
+                <!-- {{ __('Historial de Revisiones') }} -->
+            <!-- </x-responsive-nav-link> -->
         </div>
 
         <!-- Responsive Settings Options -->

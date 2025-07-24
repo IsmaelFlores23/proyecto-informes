@@ -33,7 +33,7 @@
       <!-- FORMULARIO -->
       <div class="p-4 bg-white border border-gray-300 rounded-lg shadow">
         <h1 class="text-xl font-bold mb-4">
-          {{ $alumno->name }} - {{ $alumno->numero_cuenta }}
+          {{ strtoupper($alumno->name) }} - {{ $alumno->numero_cuenta }}
         </h1>
 
         <form action="{{ route('docente.observacion.store') }}" method="POST" class="mt-4 space-y-4">
@@ -51,10 +51,10 @@
           
           <div>
             <label for="comentario" class="block mb-2 text-sm font-medium text-gray-900">
-              Ingrese un comentario
+              Ingrese Correción
             </label>
             <textarea id="comentario" name="comentario" rows="3" class="block p-2.5 w-full text-sm border rounded focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Ingrese un comentario..."></textarea>
+              placeholder="Ingrese Correción..."></textarea>
           </div>
           
           <div class="flex justify-end gap-2 border-t pt-2">
@@ -70,8 +70,8 @@
 
       <!-- COMENTARIOS -->
       <div class="p-4 bg-white border border-gray-300 rounded-lg shadow">
-        <h5 class="text-xl font-bold text-gray-900 mb-2">Comentarios</h5>
-        <p class="text-gray-500 text-sm mb-4">Comentarios de todos los docentes</p>
+        <h5 class="text-xl font-bold text-gray-900 mb-2">Correciones</h5>
+        <p class="text-gray-500 text-sm mb-4">Correciones de todos los docentes</p>
         
         <!-- Lista de comentarios -->
         <div class="space-y-3 max-h-96 overflow-y-auto">
@@ -96,7 +96,7 @@
             @endforeach
           @else
             <div class="text-center py-4 text-gray-500">
-              <p>No hay comentarios disponibles</p>
+              <p>No hay correciones disponibles</p>
             </div>
           @endif
         </div>
