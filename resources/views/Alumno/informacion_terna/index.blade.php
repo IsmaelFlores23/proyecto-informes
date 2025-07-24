@@ -53,7 +53,7 @@
                                    
                                    
                                     <td class="px-4 py-2">{{ $docente->ultima_actividad ? $docente->ultima_actividad->format('d/m/Y H:i:s') : 'Sin actividad' }}</td><!-- formato de fecha y hora dinamico -->
-                                    <td class="px-4 py-2 text-blue-600 underline cursor-pointer">Ver</td>
+                                    <td class="px-4 py-2 text-blue-600 underline cursor-pointer">{{ $docente->telefono }}</td>
                                 </tr>
                             @empty
                                 <tr class="border-t">
