@@ -21,7 +21,7 @@
 
             <!-- Sección: Última actividad -->
             <div class="flex justify-center mb-6">
-                <button class="text-black font-medium rounded-lg text-sm px-5 py-2.5 shadow"
+                <div class="text-black font-medium rounded-lg text-sm px-5 py-2.5 shadow"
                         style="background-color:#FFC436;">
                     Ultima actividad: 
                     @if(isset($fechaUltimoInforme))
@@ -29,7 +29,7 @@
                     @else
                         Sin actividad registrada
                     @endif
-                </button>
+                </div>
             </div>
 
             <!-- Sección: Terna -->
