@@ -53,7 +53,7 @@
                                    
                                    
                                     <td class="px-4 py-2">{{ $docente->ultima_actividad ? $docente->ultima_actividad->format('d/m/Y H:i:s') : 'Sin actividad' }}</td><!-- formato de fecha y hora dinamico -->
-                                    <td class="px-4 py-2 text-blue-600 underline cursor-pointer">{{ $docente->telefono }}</td>
+                                    <td class="px-4 py-2 text-black-600 cursor-pointer">{{ $docente->telefono }}</td>
                                 </tr>
                             @empty
                                 <tr class="border-t">
@@ -65,17 +65,18 @@
                 </div>
             </div>
 
+            
             <!-- Historial -->
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                <h4 class="text-lg font-semibold text-black-700 mb-2">Historial de versiones y revisiones:</h4>
-                <p class="text-blue-600 underline cursor-pointer">📄 Ver historial de revisiones</p>
+                <h4 class="text-lg font-semibold text-black-700 mb-2">Historial de Correcciones:</h4>
+                <p class="text-blue-600 underline cursor-pointer">📄 Ver historial de correcciones</p>
             </div>
 
             <!-- Comunicación -->
-            <div class="bg-white shadow-sm sm:rounded-lg p-6">
+            <!-- <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <h4 class="text-lg font-semibold text-black-700 mb-2">Comunicación con la terna</h4>
                 <p class="text-blue-600 underline cursor-pointer">✉️ Enviar mensaje a la terna</p>
-            </div>
+            </div> -->
 
         </div>
     </div>
