@@ -111,4 +111,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Terna::class, 'user_terna_transitiva', 'id_user', 'id_terna');
     }
+
+    public function ultimaRevision()
+{
+    return $this->hasOne(\App\Models\Revision::class, 'id_user')->latestOfMany();
+}
 }
