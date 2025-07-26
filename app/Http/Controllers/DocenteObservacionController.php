@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Informe;
 use App\Models\Revision;
+use App\Mail\CorreccionMail;
 
 class DocenteObservacionController extends Controller
 {
@@ -90,8 +92,15 @@ class DocenteObservacionController extends Controller
         
         $revision->save();
         
+        // Obtener información del alumno y docente
+        $alumno = User::findOrFail($request->alumno_id);
+        $docente = Auth::user();
+        
+        // Enviar correo de notificación al alumno
+        Mail::to($alumno->email)->queue(new CorreccionMail($alumno, $docente, $revision, $request->nombre_archivo));
+        
         return redirect()->route('docente.observacion.create', ['alumno_id' => $request->alumno_id])
-            ->with('success', 'Comentario guardado correctamente');
+            ->with('success', 'Comentario guardado correctamente y notificación enviada al alumno');
     }
     
     public function verPdf($nombreArchivo)
