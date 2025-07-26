@@ -74,23 +74,15 @@
                                         </div>
                                     @endforeach
                                 </div>
-                            @endif
+                            </div>
+                        @endif
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            @forelse($docentes as $index => $docente)
-                                <div class="bg-white p-3 rounded-lg shadow border border-gray-200 {{ $docente->id == Auth::id() ? 'border-blue-500' : '' }}">
-                                    <p class="text-sm font-semibold">Docente #{{ $index + 1 }}:</p>
-                                    <p class="text-sm">{{ strtoupper($docente->name) }}</p>
-                                    @if($docente->id == Auth::id())
-                                        <p class="text-xs text-blue-600 mt-1">(Tú)</p>
-                                    @endif
-                                </div>
-                            @empty
-                                <div class="col-span-4 text-center">
-                                    <p class="text-sm text-gray-500">No hay docentes asignados a esta terna</p>
-                                </div>
-                            @endforelse
-                        </div>
+                        <!-- Eliminamos la sección duplicada de docentes ya que ahora están dentro de las tarjetas de estado -->
+                        @if(count($docentes) == 0)
+                            <div class="text-center py-4">
+                                <p class="text-sm text-gray-500">No hay docentes asignados a esta terna</p>
+                            </div>
+                        @endif
                     @else
                         <div class="text-center py-4">
                             <p class="text-sm text-gray-500">Este alumno no tiene una terna asignada</p>

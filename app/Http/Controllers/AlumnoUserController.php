@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Revision;
 
 class AlumnoUserController extends Controller
 {
@@ -64,6 +65,7 @@ class AlumnoUserController extends Controller
         
         // Obtener el último informe subido (el más reciente)
         $ultimoInforme = $archivos->first();
+        $nombreArchivo = $ultimoInforme ? basename($ultimoInforme) : null;
         
         // Obtener la fecha del último informe desde la base de datos
         $fechaUltimoInforme = null;
@@ -77,7 +79,42 @@ class AlumnoUserController extends Controller
             }
         }
         
-        return view('Administrador.VerAlumnos.show', compact('alumno', 'terna', 'docentes', 'ultimoInforme', 'fechaUltimoInforme'));
+        // Obtener el estado de aprobación de cada docente para el último informe
+        $estadosAprobacion = [];
+        $todosAprobaron = false;
+        
+        if ($nombreArchivo && !empty($docentes)) {
+            foreach ($docentes as $docente) {
+                // Buscar la última revisión de este docente para este archivo
+                $ultimaRevision = Revision::where('id_user', $docente->id)
+                    ->where('nombre_archivo', $nombreArchivo)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                
+                $estadosAprobacion[$docente->id] = [
+                    'docente' => $docente,
+                    'estado' => $ultimaRevision ? $ultimaRevision->estado_revision : 'Sin revisión',
+                    'fecha' => $ultimaRevision ? $ultimaRevision->created_at : null
+                ];
+            }
+            
+            // Verificar si todos los docentes han aprobado el informe
+            if (!empty($estadosAprobacion)) {
+                $todosAprobaron = collect($estadosAprobacion)->every(function ($item) {
+                    return $item['estado'] === 'Aprobado';
+                });
+            }
+        }
+        
+        return view('Administrador.VerAlumnos.show', compact(
+            'alumno', 
+            'terna', 
+            'docentes', 
+            'ultimoInforme', 
+            'fechaUltimoInforme',
+            'estadosAprobacion',
+            'todosAprobaron'
+        ));
     }
 
     /**
