@@ -46,11 +46,11 @@
                                         // Si el docente tiene una última revisión, usa su estado_revision
                                         $estado = $docente->ultimaRevision ? $docente->ultimaRevision->estado_revision : null;
 
-                                        $clasesEstado = $estados_revision[$estado] ?? 'bg-gray-100 text-gray-600';
+                                        $clasesEstado = $estados_revision[$estado] ?? 'bg-red-100 text-red-600';
                                     @endphp
 
                                     <span class="{{ $clasesEstado }} text-xs font-medium px-2.5 py-0.5 rounded">
-                                        {{ $estado ?? 'Sin estado' }}
+                                        {{ $estado ?? 'No han revisado ' }}
                                     </span>
 
                                     </td><!-- Esto hay que hacerlo dinamico tambien, asi que esto queda faltante -->
