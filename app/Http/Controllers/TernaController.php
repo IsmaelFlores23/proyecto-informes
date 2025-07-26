@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -26,11 +27,14 @@ class TernaController extends Controller
      */
     public function create()
     {
+         $usuariosEnTernas = DB::table('user_terna_transitiva')->pluck('id_user')->toArray();
+
         //obtener usuarios con role 'alumno'
-        $alumnos = User::whereHas('role', function($query) {
+         $alumnos = User::whereHas('role', function ($query) {
             $query->where('nombre_role', 'alumno');
-        })->get();
-    
+        })
+        ->whereNotIn('id', $usuariosEnTernas)
+        ->get();
         // Obtener solo usuarios con role 'docente'
         $docentes = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'docente');
