@@ -38,6 +38,10 @@ class InformeController extends Controller
         $request->validate([
             'ruta_informe' => 'required|file|mimes:pdf|max:50048', // Solo PDFs de hasta 50MB
             'descripcion' => 'required|string|max:1000',
+        ], [
+            'ruta_informe.mimes' => 'El archivo debe ser un PDF.',
+            'ruta_informe.max' => 'El archivo no debe exceder los 50MB.',
+            'descripcion.required' => 'La descripción es obligatoria.',
         ]);
 
         // Obtener numero de cuenta del usuario autenticado
@@ -106,7 +110,7 @@ class InformeController extends Controller
         }
         
         // Redirigir al formulario con un mensaje de éxito
-        return redirect()->route('subirInforme.create')
+        return redirect()->route('observarInforme.index')
             ->with('success', 'Informe subido correctamente (Versión ' . $version . ').');
     }
 

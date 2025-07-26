@@ -11,12 +11,20 @@
                 @csrf
                 <!-- Sección de Subir Archivo -->
                 <div>
-                    <label class="block text-lg font-semibold text-gray-900 mb-4">Subir</label>
+                    <div class="flex items-center mb-4">
+                        <label class="block text-lg font-semibold text-gray-900">Subir</label>
+                        <div class="ml-3 bg-red-200 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                            Solo se aceptan archivos PDF
+                        </div>
+                    </div>
+                    
                     <input type="file"
                            name="ruta_informe" 
                            id="file_input" 
-                           accept=".pdf,.doc,.docx" 
+                           accept=".pdf" 
                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                    
+                    <p class="mt-2 text-sm text-gray-500">El archivo debe estar en formato PDF y no exceder los 50MB.</p>
                 </div>
 
                 <!-- Sección de Descripción -->
@@ -51,21 +59,30 @@
     <script>
         document.getElementById('informeForm').addEventListener('submit', function (e) {
             e.preventDefault(); // Evita que el formulario se envíe directamente
-
+    
             const fileInput = document.getElementById('file_input');
             const descripcion = document.getElementById('descripcion').value.trim();
-
+    
             const archivoSeleccionado = fileInput.files.length > 0;
             const descripcionValida = descripcion.length > 0;
-
-            if (archivoSeleccionado && descripcionValida) {
+            
+            // Validar que el archivo sea PDF
+            let archivoPdf = true;
+            if (archivoSeleccionado) {
+                const archivo = fileInput.files[0];
+                const extension = archivo.name.split('.').pop().toLowerCase();
+                archivoPdf = extension === 'pdf';
+            }
+    
+            if (archivoSeleccionado && descripcionValida && archivoPdf) {
+                // Enviar el formulario directamente sin mostrar la alerta de éxito
+                e.target.submit();
+            } else if (!archivoPdf) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Informe subido correctamente',
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    e.target.submit(); // Ahora sí se envía el formulario
+                    icon: 'error',
+                    title: 'Formato de archivo no válido',
+                    text: 'Solo se permiten archivos en formato PDF',
+                    confirmButtonColor: '#FFC436'
                 });
             } else {
                 Swal.fire({
