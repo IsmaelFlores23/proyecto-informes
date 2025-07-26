@@ -45,4 +45,37 @@ class DocenteHistorialController extends Controller
             'revisionesPorArchivo' => $revisionesPorArchivo
         ]);
     }
+
+
+    // Nueva función para mostrar el formulario de creación de observaciones
+    public function createObservacion(Request $request, $alumno_id)
+    {
+        // Validar que el alumno_id existe
+        $alumno = User::findOrFail($alumno_id);
+        $numero_cuenta = $alumno->numero_cuenta;
+        
+        // Obtener los archivos del alumno desde el storage
+        $carpeta = 'informes';
+        $archivos = collect(Storage::files($carpeta))
+            ->filter(fn($archivo) => str_starts_with(basename($archivo), $numero_cuenta . '_'))
+            ->map(fn($archivo) => basename($archivo))
+            ->toArray();
+        
+        // Buscar las revisiones del alumno ordenadas por fecha
+        $revisiones = Revision::with('user')
+            ->where(function($query) use ($numero_cuenta) {
+                $query->whereRaw("nombre_archivo LIKE '{$numero_cuenta}_%'");
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Agrupar por archivo para mostrar las versiones
+        $revisionesPorArchivo = $revisiones->groupBy('nombre_archivo');
+        
+        // Redirigir a la vista de creación con los datos necesarios
+        return view('Docentes.ObservacionInforme.create', [
+            'alumno' => $alumno,
+            'revisionesPorArchivo' => $revisionesPorArchivo
+        ]);
+    }
 }

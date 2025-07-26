@@ -74,12 +74,12 @@
                 @endforeach
             @else
                 <div class="text-center py-8 text-gray-500">
-                    <p>No hay revisiones registradas para este alumno.</p>
+                    <p>No hay correcciones registradas para este alumno.</p>
                 </div>
             @endif
         @else
             <div class="text-center py-8 text-gray-500">
-                <p>Seleccione un alumno para ver su historial de revisiones.</p>
+                <p>Seleccione un alumno para ver su historial de correcciones.</p>
             </div>
         @endif
     </div>
