@@ -104,358 +104,285 @@
     </div>
 
     <!-- Modal Agregar Terna -->
-    <div id="add-terna-modal" tabindex="-1" aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-lg max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 border-b rounded-t border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-900">
-                        Agregar Terna
-                    </h3>
-                    <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900
-                           rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-                        data-modal-hide="add-terna-modal">
-                        ✖️
-                        <span class="sr-only">Cerrar modal</span>
-                    </button>
-                </div>
+    <!-- Modal Agregar Terna -->
+        <div id="add-terna-modal" tabindex="-1" aria-hidden="true"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-lg max-h-full">
+                <div class="relative bg-white rounded-lg shadow">
 
-                <!-- Modal body -->
-                <div class="p-4">
-                    <form id="terna-form" class="space-y-4" method="POST" action="{{ route('AsignarTerna.store') }}">
-                        @csrf
-                        <input type="hidden" name="_method" value="POST" id="form-method">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 border-b rounded-t border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-900">Agregar Terna</h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                            data-modal-hide="add-terna-modal">
+                            ✖️
+                            <span class="sr-only">Cerrar modal</span>
+                        </button>
+                    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Estudiante -->
+                    <!-- Modal body -->
+                    <div class="p-4">
+                        <form id="terna-form" class="space-y-4" method="POST" action="{{ route('AsignarTerna.store') }}">
+                            @csrf
+                            <input type="hidden" name="_method" value="POST" id="form-method">
 
-                            {{-- Filtrar por Facultad --}}
-                            <div>
-                                <label for="estudiante" class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Facultad</label>
-                                <select id="filtrar_facultad" name="filtrar_facultad" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 h-[42px]">
-                                    <option value="">Todos</option>
-                                    @foreach($facultades as $facultad)
-                                        <option value="{{ $facultad->id }}">{{ $facultad->nombre}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Filtrar por Facultad -->
+                                <div>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Facultad</label>
+                                    <select id="filtrar_facultad" name="filtrar_facultad" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 h-[42px]">
+                                        <option value="">Todos</option>
+                                        @foreach($facultades as $facultad)
+                                            <option value="{{ $facultad->id }}">{{ $facultad->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Filtrar por Campus -->
+                                <div>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Campus</label>
+                                    <select id="filtrar_campus" name="filtrar_campus" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
+                                        <option value="">Todos</option>
+                                        @foreach($campus as $camp)
+                                            <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Estudiante -->
+                                <div id="estudiante-wrapper">
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Estudiante</label>
+                                    <select id="estudiante" name="estudiante" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 h-[42px]" required>
+                                        <option value="">Selecciona un estudiante</option>
+                                        @foreach($alumnos->sortByDesc('created_at') as $estudiante)
+                                            <option value="{{ $estudiante->id }}" data-campus="{{ $estudiante->id_campus }}" data-facultad="{{ $estudiante->id_facultad }}">
+                                                {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Docente #1 -->
+                                <div>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Docente #1</label>
+                                    <select id="docente1" name="docente1" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                        <option value="" disabled selected>Selecciona un Docente</option>
+                                        @foreach($docentes as $docente)
+                                            <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
+                                                {{ $docente->name }} - {{ $docente->numero_cuenta }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Docente #2 -->
+                                <div>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Docente #2</label>
+                                    <select id="docente2" name="docente2" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                        <option value="" disabled selected>Selecciona un Docente</option>
+                                        @foreach($docentes as $docente)
+                                            <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
+                                                {{ $docente->name }} - {{ $docente->numero_cuenta }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Docente #3 -->
+                                <div>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Docente #3</label>
+                                    <select id="docente3" name="docente3" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
+                                        <option value="" disabled selected>Selecciona un Docente</option>
+                                        @foreach($docentes as $docente)
+                                            <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
+                                                {{ $docente->name }} - {{ $docente->numero_cuenta }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Docente #4 -->
+                                <div>
+                                    <label class="block mb-1 text-sm font-medium text-gray-900">Docente #4 (Opcional)</label>
+                                    <select id="docente4" name="docente4" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
+                                        <option value="" selected>Selecciona un Docente (Opcional)</option>
+                                        @foreach($docentes as $docente)
+                                            <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
+                                                {{ $docente->name }} - {{ $docente->numero_cuenta }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            {{-- Filtrar por Campus --}}
-                            <div>
-                                <label for="estudiante" class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Campus</label>
-                                <select id="filtrar_campus" name="filtrar_campus" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
-                                    <option value="">Todos</option>
-                                    @foreach($campus as $camp)
-                                        <option value="{{ $camp->id }}">{{ $camp->nombre}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-6">
+                                <button type="button" data-modal-hide="add-terna-modal"
+                                    class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="px-4 py-2 rounded text-gray-900 shadow-md" style="background-color: #FFC436;">
+                                    Guardar
+                                </button>
                             </div>
-
-                            <div>
-                                <label for="estudiante" class="block mb-1 text-sm font-medium text-gray-900">Estudiante</label>
-                                <select id="estudiante" name="estudiante" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 h-[42px]" required>
-                                    <option value="">Selecciona un estudiante</option>
-                                    @foreach($alumnos->sortByDesc('created_at') as $estudiante)
-                                        <option value="{{ $estudiante->id }}" data-campus="{{ $estudiante->id_campus }}" data-facultad="{{ $estudiante->id_facultad }}">
-                                            {{ $estudiante->name }} - {{ $estudiante->numero_cuenta }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Docente #1 -->
-                            <div>
-                                <label for="docente1" class="block mb-1 text-sm font-medium text-gray-900">Docente #1</label>
-                                <select id="docente1" name="docente1" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
-                                    <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
-                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Docente #2 -->
-                            <div>
-                                <label for="docente2" class="block mb-1 text-sm font-medium text-gray-900">Docente #2</label>
-                                <select id="docente2" name="docente2" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
-                                    <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
-                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Docente #3 -->
-                            <div>
-                                <label for="docente3" class="block mb-1 text-sm font-medium text-gray-900">Docente #3</label>
-                                <select id="docente3" name="docente3" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required>
-                                    <option value="" disabled selected>Selecciona un Docente</option>
-                                    @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
-                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Docente #4 (opcional) -->
-                            <div>
-                                <label for="docente4" class="block mb-1 text-sm font-medium text-gray-900">Docente #4 (Opcional)</label>
-                                <select id="docente4" name="docente4" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
-                                    <option value="" selected>Selecciona un Docente (Opcional)</option>
-                                    @foreach($docentes as $docente)
-                                        <option value="{{ $docente->id }}" data-campus="{{ $docente->id_campus }}" data-facultad="{{ $docente->id_facultad }}">
-                                            {{ $docente->name }} - {{ $docente->numero_cuenta }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-6">
-                            <button type="button" data-modal-hide="add-terna-modal"
-                                class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-900">
-                                Cancelar
-                            </button>
-                            <button type="submit" class="px-4 py-2 rounded text-gray-900 shadow-md"
-                                style="background-color: #FFC436;">
-                                Guardar
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    
-    <!-- Reemplazar con esto -->
-    <!-- jQuery (necesario para otras funcionalidades) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- Estilos personalizados para selects nativos -->
-    <style>
-        /* Estilo para los selects nativos */
-        .select-custom {
-            height: 42px;
-            padding: 6px 12px;
-            border-radius: 0.5rem;
-            border-color: rgb(209, 213, 219);
-            width: 100%;
-            background-color: rgb(249, 250, 251);
-            font-size: 0.875rem;
-        }
-        
-        /* Estilo para las opciones deshabilitadas */
-        .select-custom option:disabled {
-            color: #999;
-            background-color: #f0f0f0;
-        }
-    </style>
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Reemplazar la clase select-search por select-custom en todos los selects
-        document.querySelectorAll('.select-search').forEach(select => {
-            select.classList.remove('select-search');
-            select.classList.add('select-custom');
-        });
-        
-        const form = document.getElementById('terna-form');
-        const methodInput = document.getElementById('form-method');
-
-        // Filtrado por Campus y Facultad
-        const filtrarCampus = document.getElementById('filtrar_campus');
-        const filtrarFacultad = document.getElementById('filtrar_facultad');
-        const estudianteSelect = document.getElementById('estudiante');
-        const docenteSelects = [
-            document.getElementById('docente1'),
-            document.getElementById('docente2'),
-            document.getElementById('docente3'),
-            document.getElementById('docente4')
-        ];
-
-        // Guardar las opciones originales para poder restaurarlas
-        const estudiantesOriginales = Array.from(estudianteSelect.options);
-        const docentesOriginales = [];
-        
-        // Guardar las opciones originales de cada selector de docentes
-        docenteSelects.forEach(select => {
-            docentesOriginales.push(Array.from(select.options));
-        });
-
-        // Función para filtrar los selectores
-        function filtrarUsuarios() {
-            const campusSeleccionado = filtrarCampus.value;
-            const facultadSeleccionada = filtrarFacultad.value;
-            
-            // Guardar el valor seleccionado actualmente
-            const estudianteSeleccionado = estudianteSelect.value;
-            const docentesSeleccionados = docenteSelects.map(select => select.value);
-
-            console.log('Filtrando por Campus:', campusSeleccionado, 'Facultad:', facultadSeleccionada);
-
-            // Restaurar opciones originales antes de filtrar
-            // Para estudiantes
-            while (estudianteSelect.options.length > 0) {
-                estudianteSelect.remove(0);
+        <!-- JS & Estilos -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            .select-custom {
+                height: 42px;
+                padding: 6px 12px;
+                border-radius: 0.5rem;
+                border-color: rgb(209, 213, 219);
+                width: 100%;
+                background-color: rgb(249, 250, 251);
+                font-size: 0.875rem;
             }
-            
-            estudiantesOriginales.forEach(opcion => {
-                const debeIncluir = (campusSeleccionado === '' || opcion.dataset.campus === campusSeleccionado) && 
-                                    (facultadSeleccionada === '' || opcion.dataset.facultad === facultadSeleccionada);
-                
-                if (debeIncluir || opcion.value === '') {
-                    estudianteSelect.add(opcion.cloneNode(true));
+            .select-custom option:disabled {
+                color: #999;
+                background-color: #f0f0f0;
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.select-search').forEach(select => {
+                    select.classList.remove('select-search');
+                    select.classList.add('select-custom');
+                });
+
+                const form = document.getElementById('terna-form');
+                const methodInput = document.getElementById('form-method');
+
+                const filtrarCampus = document.getElementById('filtrar_campus');
+                const filtrarFacultad = document.getElementById('filtrar_facultad');
+                const estudianteSelect = document.getElementById('estudiante');
+                const docenteSelects = [
+                    document.getElementById('docente1'),
+                    document.getElementById('docente2'),
+                    document.getElementById('docente3'),
+                    document.getElementById('docente4')
+                ];
+
+                const estudiantesOriginales = Array.from(estudianteSelect.options);
+                const docentesOriginales = docenteSelects.map(select => Array.from(select.options));
+
+                function filtrarUsuarios() {
+                    const campusSeleccionado = filtrarCampus.value;
+                    const facultadSeleccionada = filtrarFacultad.value;
+                    const estudianteSeleccionado = estudianteSelect.value;
+                    const docentesSeleccionados = docenteSelects.map(select => select.value);
+
+                    estudianteSelect.innerHTML = '';
+                    estudiantesOriginales.forEach(op => {
+                        if (
+                            (!campusSeleccionado || op.dataset.campus === campusSeleccionado) &&
+                            (!facultadSeleccionada || op.dataset.facultad === facultadSeleccionada) || op.value === ''
+                        ) {
+                            estudianteSelect.appendChild(op.cloneNode(true));
+                        }
+                    });
+
+                    docenteSelects.forEach((select, idx) => {
+                        select.innerHTML = '';
+                        docentesOriginales[idx].forEach(op => {
+                            if (
+                                (!campusSeleccionado || op.dataset.campus === campusSeleccionado) &&
+                                (!facultadSeleccionada || op.dataset.facultad === facultadSeleccionada) || op.value === ''
+                            ) {
+                                select.appendChild(op.cloneNode(true));
+                            }
+                        });
+                    });
+
+                    estudianteSelect.value = estudianteSeleccionado;
+                    docenteSelects.forEach((select, i) => select.value = docentesSeleccionados[i]);
+                    actualizarOpciones();
                 }
+
+                filtrarCampus.addEventListener('change', filtrarUsuarios);
+                filtrarFacultad.addEventListener('change', filtrarUsuarios);
+
+                function actualizarOpciones() {
+                    let seleccionados = docenteSelects.map(s => s.value).filter(val => val !== "");
+                    docenteSelects.forEach(select => {
+                        Array.from(select.options).forEach(option => {
+                            if (option.value !== "") {
+                                option.disabled = seleccionados.includes(option.value) && option.value !== select.value;
+                            }
+                        });
+                    });
+                }
+
+                docenteSelects.forEach(select => {
+                    select.addEventListener('change', actualizarOpciones);
+                });
+
+                document.querySelectorAll('[data-modal-target="add-terna-modal"]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        setTimeout(actualizarOpciones, 100);
+                    });
+                });
+
+                document.querySelectorAll('.editar-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const estudianteId = btn.dataset.estudianteId;
+                        const docente1 = btn.dataset.docente1Id;
+                        const docente2 = btn.dataset.docente2Id;
+                        const docente3 = btn.dataset.docente3Id;
+                        const docente4 = btn.dataset.docente4Id;
+
+                        form.action = `/AsignarTerna/${id}`;
+                        methodInput.value = 'PUT';
+                        document.querySelector('#add-terna-modal h3').textContent = 'Editar Terna';
+                        form.querySelector('button[type="submit"]').textContent = 'Actualizar';
+
+                        estudianteSelect.value = estudianteId;
+                        estudianteSelect.disabled = true;
+                        docenteSelects[0].value = docente1 || '';
+                        docenteSelects[1].value = docente2 || '';
+                        docenteSelects[2].value = docente3 || '';
+                        docenteSelects[3].value = docente4 || '';
+                        setTimeout(actualizarOpciones, 100);
+                    });
+                });
+
+                document.querySelectorAll('[data-modal-hide="add-terna-modal"]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        methodInput.value = 'POST';
+                        form.action = `{{ route('AsignarTerna.store') }}`;
+                        form.reset();
+                        estudianteSelect.disabled = false;
+                        filtrarCampus.value = '';
+                        filtrarFacultad.value = '';
+                        filtrarUsuarios();
+                    });
+                });
             });
 
-            // Para docentes
-            docenteSelects.forEach((docenteSelect, index) => {
-                while (docenteSelect.options.length > 0) {
-                    docenteSelect.remove(0);
-                }
-                
-                docentesOriginales[index].forEach(opcion => {
-                    const debeIncluir = (campusSeleccionado === '' || opcion.dataset.campus === campusSeleccionado) && 
-                                        (facultadSeleccionada === '' || opcion.dataset.facultad === facultadSeleccionada);
-                    
-                    if (debeIncluir || opcion.value === '') {
-                        docenteSelect.add(opcion.cloneNode(true));
+            function confirmDelete(ternaId) {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `¿Deseas eliminar esta terna? Esta acción no se puede deshacer.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`delete-form-${ternaId}`).submit();
                     }
                 });
-            });
-
-            // Restaurar los valores seleccionados si todavía existen en las opciones filtradas
-            if (estudianteSeleccionado) {
-                estudianteSelect.value = estudianteSeleccionado;
-            } else {
-                estudianteSelect.value = '';
             }
-            
-            docenteSelects.forEach((select, index) => {
-                if (docentesSeleccionados[index]) {
-                    select.value = docentesSeleccionados[index];
-                } else {
-                    select.value = '';
-                }
-            });
-            
-            // Actualizar las opciones de docentes para reflejar las selecciones actuales
-            actualizarOpciones();
-        }
-
-        // Eventos para los filtros
-        filtrarCampus.addEventListener('change', filtrarUsuarios);
-        filtrarFacultad.addEventListener('change', filtrarUsuarios);
-
-        // Función para evitar seleccionar el mismo docente en diferentes selectores
-        function actualizarOpciones() {
-            // Obtener los valores seleccionados actualmente
-            let seleccionados = docenteSelects
-                .map(s => s.value)
-                .filter(val => val !== "");
-            
-            console.log('Docentes seleccionados:', seleccionados);
-            
-            // Para cada selector de docente
-            docenteSelects.forEach(select => {
-                // Recorrer todas las opciones y deshabilitar las que ya están seleccionadas en otros selectores
-                Array.from(select.options).forEach(option => {
-                    if (option.value === "") return; // No deshabilitar la opción de placeholder
-                    
-                    // Deshabilitar la opción si está seleccionada en otro selector
-                    const estaSeleccionadaEnOtro = seleccionados.includes(option.value) && option.value !== select.value;
-                    option.disabled = estaSeleccionadaEnOtro;
-                });
-            });
-        }
-
-        // Agregar eventos de cambio a los selectores de docentes
-        docenteSelects.forEach(select => {
-            select.addEventListener('change', actualizarOpciones);
-        });
-
-        // También ejecutar actualizarOpciones cuando se abra el modal
-        document.querySelectorAll('[data-modal-target="add-terna-modal"]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                setTimeout(actualizarOpciones, 100); // Dar tiempo para que el modal se abra
-            });
-        });
-
-        // Ejecutar actualizarOpciones después de cargar datos en modo edición
-        document.querySelectorAll('.editar-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.dataset.id;
-                const estudianteId = btn.dataset.estudianteId;
-                const docente1 = btn.dataset.docente1Id;
-                const docente2 = btn.dataset.docente2Id;
-                const docente3 = btn.dataset.docente3Id;
-                const docente4 = btn.dataset.docente4Id;
-
-                // Cambiar a modo editar
-                form.action = `/AsignarTerna/${id}`;
-                methodInput.value = 'PUT';
-                
-                // Cambiar el título del modal a "Editar Terna"
-                document.querySelector('#add-terna-modal h3').textContent = 'Editar Terna';
-                
-                // Cambiar el texto del botón a "Actualizar"
-                document.querySelector('#terna-form button[type="submit"]').textContent = 'Actualizar';
-
-                // Rellenar los campos
-                estudianteSelect.value = estudianteId;
-                docenteSelects[0].value = docente1 || '';
-                docenteSelects[1].value = docente2 || '';
-                docenteSelects[2].value = docente3 || '';
-                docenteSelects[3].value = docente4 || '';
-                
-                // Ejecutar después de un breve retraso
-                setTimeout(actualizarOpciones, 100);
-            });
-        });
-
-        // Resetear al cerrar el modal (vuelve a modo crear)
-        document.querySelectorAll('[data-modal-hide="add-terna-modal"]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                methodInput.value = 'POST';
-                form.action = `{{ route('AsignarTerna.store') }}`;
-                form.reset();
-                
-                // Resetear filtros
-                filtrarCampus.value = '';
-                filtrarFacultad.value = '';
-                
-                // Volver a aplicar filtros y actualizar opciones
-                filtrarUsuarios();
-            });
-        });
-    });
-        
-    function confirmDelete(ternaId) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: `¿Deseas eliminar esta terna? Esta acción no se puede deshacer.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById(`delete-form-${ternaId}`).submit();
-            }
-        });
-    }
-</script>
-
+        </script>
+    </div>
 
 </x-app-layout>
