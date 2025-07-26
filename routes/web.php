@@ -72,6 +72,9 @@ Route::middleware(['auth', 'verified', 'role:docente'])->group(function () {
     // Rutas para historial de revisiones
     Route::get('/historial/{alumno_id?}', [DocenteHistorialController::class, 'index'])->name('docente.historial.index');
     
+    // Nueva ruta para crear la tabla en "Trabajar con Alumnos".
+    Route::get('/historial/{alumno_id}/crear-observacion', [DocenteHistorialController::class, 'createObservacion'])->name('docente.historial.crear-observacion');
+    
     // Rutas para observación de informes
     Route::get('/observacion/create/{alumno_id?}', [DocenteObservacionController::class, 'create'])->name('docente.observacion.create');
     Route::post('/observacion', [DocenteObservacionController::class, 'store'])->name('docente.observacion.store');

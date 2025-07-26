@@ -13,21 +13,17 @@ class DocenteObservacionController extends Controller
 {
     public function create(Request $request, $alumno_id = null)
     {
-        // Si $alumno_id está presente, cargar información del alumno
         $alumno = null;
-        $ultimoPdf = null;
         $pdfNombre = null;
         $revisiones = null;
+        $revisionesPorVersion = null;
         
         if ($alumno_id) {
             $alumno = User::findOrFail($alumno_id);
-            
-            // Obtener el número de cuenta del alumno
             $numero_cuenta = $alumno->numero_cuenta;
             
-            // Buscar el informe más reciente del alumno
+            // Obtener el último archivo del alumno
             $carpeta = 'informes';
-            
             $archivosAlumno = collect(Storage::files($carpeta))
                 ->filter(fn($file) => str_starts_with(basename($file), $numero_cuenta . '_'))
                 ->sortByDesc(function($file) {
@@ -37,26 +33,39 @@ class DocenteObservacionController extends Controller
                 })
                 ->values();
             
-            $ultimoPdf = $archivosAlumno->first();
-            $pdfNombre = $ultimoPdf ? basename($ultimoPdf) : null;
+            $pdfNombre = $archivosAlumno->first() ? basename($archivosAlumno->first()) : null;
             
-            // Obtener todas las revisiones hechas por docentes
-            // Filtramos por el nombre del archivo PDF que estamos viendo
-            // Esto asegura que solo veamos comentarios relacionados con este informe
-            $revisiones = Revision::with('user')
-                ->whereHas('user', function($query) {
-                    $query->where('id_role', function($subquery) {
-                        $subquery->select('id')
-                               ->from('roles')
-                               ->where('nombre_role', 'docente');
-                    });
-                })
-                ->where('nombre_archivo', $pdfNombre)
+            // Obtener TODAS las revisiones del alumno
+            $todasRevisiones = Revision::with('user')
+                ->where('nombre_archivo', 'like', $numero_cuenta . '_%')
                 ->orderBy('created_at', 'desc')
                 ->get();
+            
+            // 1. Revisiones para el archivo actual (para la sección de comentarios)
+            $revisiones = $todasRevisiones->where('nombre_archivo', $pdfNombre);
+            
+            // 2. Agrupación por versión para el historial
+            $revisionesPorVersion = $todasRevisiones->groupBy('nombre_archivo')->map(function($revisionesGrupo) {
+                return [
+                    'nombre_archivo' => $revisionesGrupo->first()->nombre_archivo,
+                    'revisiones' => $revisionesGrupo,
+                    'version' => $this->extraerVersion($revisionesGrupo->first()->nombre_archivo)
+                ];
+            })->sortByDesc('version');
         }
         
-        return view('Docentes.ObservacionInforme.create', compact('alumno', 'ultimoPdf', 'pdfNombre', 'revisiones'));
+        return view('Docentes.ObservacionInforme.create', compact(
+            'alumno',
+            'pdfNombre',
+            'revisiones',          // Para la sección de comentarios actuales
+            'revisionesPorVersion'  // Para el historial por versión
+        ));
+    }
+
+    private function extraerVersion($nombreArchivo)
+    {
+        $partes = explode('_', $nombreArchivo);
+        return isset($partes[1]) ? (int)str_replace('.pdf', '', $partes[1]) : 0;
     }
 
     public function store(Request $request)
