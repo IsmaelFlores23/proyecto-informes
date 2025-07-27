@@ -36,7 +36,7 @@
                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                               placeholder="Ingrese una descripción del informe..."></textarea>
                 </div>
-
+                <input type="hidden" id="version_informe" value="1">
                 <!-- Botones de Acción -->
                 <div class="flex space-x-4 pt-4">
                     <button type="submit" 
@@ -55,44 +55,70 @@
 
     <!-- Script para SweetAlert2 -->
     {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>             
+                    
+
 
     <script>
         document.getElementById('informeForm').addEventListener('submit', function (e) {
-            e.preventDefault(); // Evita que el formulario se envíe directamente
-    
-            const fileInput = document.getElementById('file_input');
-            const descripcion = document.getElementById('descripcion').value.trim();
-    
-            const archivoSeleccionado = fileInput.files.length > 0;
-            const descripcionValida = descripcion.length > 0;
-            
-            // Validar que el archivo sea PDF
-            let archivoPdf = true;
-            if (archivoSeleccionado) {
-                const archivo = fileInput.files[0];
-                const extension = archivo.name.split('.').pop().toLowerCase();
-                archivoPdf = extension === 'pdf';
-            }
-    
-            if (archivoSeleccionado && descripcionValida && archivoPdf) {
-                // Enviar el formulario directamente sin mostrar la alerta de éxito
-                e.target.submit();
-            } else if (!archivoPdf) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Formato de archivo no válido',
-                    text: 'Solo se permiten archivos en formato PDF',
-                    confirmButtonColor: '#FFC436'
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Hay campos obligatorios que están vacíos',
-                    text: 'Completalos para continuar',
-                    confirmButtonColor: '#FFC436'
-                });
-            }
+        e.preventDefault(); // Evita el envío directo del formulario
+
+        const fileInput = document.getElementById('file_input');
+        const descripcion = document.getElementById('descripcion').value.trim();
+        
+        const version = document.getElementById('version_informe').value;
+        // Validar que se haya seleccionado un archivo y que la descripción no esté vacía
+
+        const archivoSeleccionado = fileInput.files.length > 0;
+        const descripcionValida = descripcion.length > 0;
+        
+        let archivoPdf = true;
+        if (archivoSeleccionado) {
+            const archivo = fileInput.files[0];
+            const extension = archivo.name.split('.').pop().toLowerCase();
+            archivoPdf = extension === 'pdf';
+        }
+
+        if (archivoSeleccionado && descripcionValida && archivoPdf) {
+        // Solo mostrar SweetAlert si es la segunda versión
+        if (version > 1) {
+            Swal.fire({
+                title: '¿Estás seguro de subir el informe?',
+                text: 'Asegúrate de que realizaste todas las correcciones hechas por la terna antes de subir este informe.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, subir informe',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.target.submit(); // Enviar formulario si el usuario confirma
+                }
+            });
+        } else {
+            // Si no es la versión 2, enviar directamente
+            e.target.submit();
+        }
+
+        } else if (!archivoPdf) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formato de archivo no válido',
+                text: 'Solo se permiten archivos en formato PDF',
+                confirmButtonColor: '#FFC436'
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Hay campos obligatorios que están vacíos',
+                text: 'Completalos para continuar',
+                confirmButtonColor: '#FFC436'
+            });
+        }
         });
     </script>
+
 
 </x-app-layout>
