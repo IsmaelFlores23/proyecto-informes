@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Informe;
 use App\Models\Revision;
+use App\Models\Terna;
 use App\Mail\CorreccionMail;
+use App\Mail\InformeAprobadoMail;
 
 class DocenteObservacionController extends Controller
 {
@@ -96,11 +98,65 @@ class DocenteObservacionController extends Controller
         $alumno = User::findOrFail($request->alumno_id);
         $docente = Auth::user();
         
-        // Enviar correo de notificación al alumno
+        // Enviar correo de notificación al alumno sobre la corrección
         Mail::to($alumno->email)->queue(new CorreccionMail($alumno, $docente, $revision, $request->nombre_archivo));
+        
+        // Verificar si todos los docentes han aprobado el informe
+        if ($request->estado_revision === 'Aprobado') {
+            $this->verificarAprobacionCompleta($alumno, $request->nombre_archivo);
+        }
         
         return redirect()->route('docente.observacion.create', ['alumno_id' => $request->alumno_id])
             ->with('success', 'Comentario guardado correctamente y notificación enviada al alumno');
+    }
+    
+    /**
+     * Verifica si todos los docentes han aprobado el informe y envía notificación al alumno
+     */
+    private function verificarAprobacionCompleta(User $alumno, string $nombreArchivo)
+    {
+        // Obtener la terna del alumno
+        $terna = $alumno->ternas()->first();
+        
+        if (!$terna) {
+            return; // El alumno no tiene terna asignada
+        }
+        
+        // Obtener todos los docentes de la terna
+        $docentes = User::whereHas('role', function ($query) {
+            $query->where('nombre_role', 'docente');
+        })->whereHas('ternas', function ($query) use ($terna) {
+            $query->where('terna.id', $terna->id);
+        })->get();
+        
+        // Verificar si todos los docentes han aprobado el informe
+        $todosAprobaron = true;
+        
+        foreach ($docentes as $docente) {
+            // Buscar la última revisión de este docente para este archivo
+            $ultimaRevision = Revision::where('id_user', $docente->id)
+                ->where('nombre_archivo', $nombreArchivo)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            // Si algún docente no ha aprobado o no ha revisado, no se cumple la condición
+            if (!$ultimaRevision || $ultimaRevision->estado_revision !== 'Aprobado') {
+                $todosAprobaron = false;
+                break;
+            }
+        }
+        
+        // Si todos los docentes han aprobado, enviar correo al alumno
+        if ($todosAprobaron) {
+            // Buscar o crear el registro del informe
+            $informe = Informe::firstOrCreate(
+                ['nombre_archivo' => $nombreArchivo],
+                ['id_terna' => $terna->id, 'descripcion' => 'Informe aprobado por todos los docentes']
+            );
+            
+            // Enviar correo de notificación al alumno
+            Mail::to($alumno->email)->queue(new InformeAprobadoMail($alumno, $informe, $docentes));
+        }
     }
     
     public function verPdf($nombreArchivo)
