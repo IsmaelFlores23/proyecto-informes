@@ -24,6 +24,13 @@
 
         </div>
 
+
+
+
+        <script>
+       
+    </script>
+
         <!-- Contenedor PDF -->
         <div class="flex-1 bg-gray-100 flex items-center justify-center border rounded overflow-hidden">
           @if (isset($pdfNombre) && $pdfNombre)
@@ -185,53 +192,86 @@
   <!-- Incluir SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const form = document.getElementById('revisionForm');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('revisionForm');
 
-      document.getElementById('btnPendiente').addEventListener('click', function () {
+    // Botón PENDIENTE (queda igual que antes)
+    document.getElementById('btnPendiente').addEventListener('click', function () {
+      // Validar que el campo comentario no esté vacío
+      const comentario = document.getElementById('comentario').value.trim();
+       if (comentario === '') {
         Swal.fire({
-          title: '¿Estás seguro?',
-          text: "¿Quieres Enviar Esta Correcion?",
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Sí, Enviar Correcion',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }).then((result) => {
-          if (result.isConfirmed) {
-            let inputEstado = document.createElement('input');
-            inputEstado.type = 'hidden';
-            inputEstado.name = 'estado_revision';
-            inputEstado.value = 'Pendiente de Aprobación';
-            form.appendChild(inputEstado);
-            form.submit();
-          }
+          title: 'Comentario Obligatorio',
+          text: 'Debes agregar un comentario  al informe.',
+          icon: 'warning',
+          confirmButtonText: 'Entendido'
         });
-      });
+        return; // Detiene la ejecución aquí
+      }
 
-      document.getElementById('btnAprobado').addEventListener('click', function () {
-        Swal.fire({
-          title: '¿Estás seguro?',
-          text: "¿Quieres Calificarlo Como Aprobado?",
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Sí, Calificar Como Aprobado',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }).then((result) => {
-          if (result.isConfirmed) {
-            let inputEstado = document.createElement('input');
-            inputEstado.type = 'hidden';
-            inputEstado.name = 'estado_revision';
-            inputEstado.value = 'Aprobado';
-            form.appendChild(inputEstado);
-            form.submit();
-          }
-        });
+
+
+
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Quieres Enviar Esta Correción?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, Enviar Correción',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let inputEstado = document.createElement('input');
+          inputEstado.type = 'hidden';
+          inputEstado.name = 'estado_revision';
+          inputEstado.value = 'Pendiente de Aprobación';
+          form.appendChild(inputEstado);
+          form.submit();
+        }
       });
     });
-  </script>
+
+    // Botón APROBADO (un solo listener con la validación)
+    document.getElementById('btnAprobado').addEventListener('click', function () {
+      const comentario = document.getElementById('comentario').value.trim();
+
+      // Validar primero
+      if (comentario === '') {
+        Swal.fire({
+          title: 'Comentario Obligatorio',
+          text: 'Debes agregar un comentario antes de aprobar el informe.',
+          icon: 'warning',
+          confirmButtonText: 'Entendido'
+        });
+        return; // Detiene la ejecución aquí
+      }
+
+      // Si hay comentario, entonces sí muestra el Swal de confirmación
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Quieres Calificarlo Como Aprobado?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, Calificar Como Aprobado',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let inputEstado = document.createElement('input');
+          inputEstado.type = 'hidden';
+          inputEstado.name = 'estado_revision';
+          inputEstado.value = 'Aprobado';
+          form.appendChild(inputEstado);
+          form.submit();
+        }
+      });
+    });
+  });
+</script>
+
+
 
     <!-- Contador de caracteres en los comentarios hechos por los docentes -->
   <script>
