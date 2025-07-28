@@ -29,21 +29,38 @@ class TernaController extends Controller
      */
     public function create()
     {
-         $usuariosEnTernas = DB::table('user_terna_transitiva')->pluck('id_user')->toArray();
+        // Obtenemos el campus del administrador autenticado
+        $adminCampus = Auth::user()->id_campus;
+        
+        $usuariosEnTernas = DB::table('user_terna_transitiva')->pluck('id_user')->toArray();
 
-        //obtener usuarios con role 'alumno'
-         $alumnos = User::whereHas('role', function ($query) {
+        // Obtener usuarios con role 'alumno' del mismo campus que el administrador
+        $alumnos = User::whereHas('role', function ($query) {
             $query->where('nombre_role', 'alumno');
         })
         ->whereNotIn('id', $usuariosEnTernas)
+        ->where('id_campus', $adminCampus)
         ->get();
-        // Obtener solo usuarios con role 'docente'
+        
+        // Obtener solo usuarios con role 'docente' del mismo campus que el administrador
         $docentes = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'docente');
-        })->get();
+        })
+        ->where('id_campus', $adminCampus)
+        ->get();
     
         // Obtener todas las ternas existentes con sus usuarios
-        $ternas = \App\Models\Terna::all();
+        // Primero obtenemos los IDs de los usuarios en ternas que pertenecen al campus del admin
+        $usuariosCampus = User::where('id_campus', $adminCampus)->pluck('id')->toArray();
+        
+        // Luego obtenemos las ternas que tienen al menos un usuario del campus del admin
+        $ternasIds = DB::table('user_terna_transitiva')
+            ->whereIn('id_user', $usuariosCampus)
+            ->pluck('id_terna')
+            ->unique()
+            ->toArray();
+            
+        $ternas = \App\Models\Terna::whereIn('id', $ternasIds)->get();
     
         // Obtener los campus y las facultades
         $campus = Campus::all();

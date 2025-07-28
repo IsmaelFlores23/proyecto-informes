@@ -20,9 +20,12 @@ class GestionarAdminsController extends Controller
 {
     public function index()
     {
+        // Obtenemos el campus del administrador autenticado
+        $adminCampus = Auth::user()->id_campus;
+        
         $admins = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'admin'); // O el nombre correcto de tu rol
-        })->get();
+        })->where('id_campus', $adminCampus)->get();
 
         $facultades = Facultad::all();
         $campus = Campus::all();
@@ -72,10 +75,19 @@ class GestionarAdminsController extends Controller
 
     public function edit($id)
     {
+        $adminCampus = Auth::user()->id_campus;
+        
         $editando = User::findOrFail($id);
+        
+        // Verificar que el admin pertenezca al mismo campus que el administrador autenticado
+        if ($editando->id_campus != $adminCampus) {
+            return redirect()->route('GestionarAdmins.index')
+                ->with('error', 'No tienes permiso para editar administradores de otro campus.');
+        }
+        
         $admins = User::whereHas('role', function ($query){
             $query->where('nombre_role', 'admin');
-        })->get();
+        })->where('id_campus', $adminCampus)->get();
 
         $facultades = Facultad::all();
         $campus = Campus::all();
@@ -123,9 +135,16 @@ class GestionarAdminsController extends Controller
 
     public function destroy($id)
     {
+        $adminCampus = Auth::user()->id_campus;
         $gestionarAdmin = User::findOrFail($id);
+        
+        // Verificar que el admin pertenezca al mismo campus que el administrador autenticado
+        if ($gestionarAdmin->id_campus != $adminCampus) {
+            return redirect()->route('GestionarAdmins.index')
+                ->with('error', 'No tienes permiso para eliminar administradores de otro campus.');
+        }
+        
         $gestionarAdmin->delete();
         return redirect()->route('GestionarAdmins.index')->with('success', 'Administrador eliminado correctamente');
     }
-
 }

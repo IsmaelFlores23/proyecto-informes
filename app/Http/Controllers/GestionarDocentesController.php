@@ -20,10 +20,13 @@ class GestionarDocentesController extends Controller
 {
      public function index()
     {
-        // Cambiamos la consulta para usar la relación con roles
+        // Obtenemos el campus del administrador autenticado
+        $adminCampus = Auth::user()->id_campus;
+        
+        // Filtramos docentes por el campus del administrador
         $docentes = User::whereHas('role', function($query) {
             $query->where('nombre_role', 'docente');
-        })->get();
+        })->where('id_campus', $adminCampus)->get();
         
         // Cargamos los campus y facultades para los selectores
         $campus = Campus::all();
@@ -87,10 +90,19 @@ class GestionarDocentesController extends Controller
 
 public function edit($id)
     {
+        $adminCampus = Auth::user()->id_campus;
+        
         $editando = User::findOrFail($id);
+        
+        // Verificar que el docente pertenezca al mismo campus que el administrador
+        if ($editando->id_campus != $adminCampus) {
+            return redirect()->route('GestionarDocentes.index')
+                ->with('error', 'No tienes permiso para editar docentes de otro campus.');
+        }
+        
         $docentes = User::whereHas('role', function ($query) {
             $query->where('nombre_role', 'docente');
-        })->get();
+        })->where('id_campus', $adminCampus)->get();
 
         $facultades = Facultad::all();
         $campus = Campus::all();
@@ -138,10 +150,16 @@ public function edit($id)
      */
     public function destroy($id)
     {
+        $adminCampus = Auth::user()->id_campus;
         $gestionarDocente = User::findOrFail($id);
+        
+        // Verificar que el docente pertenezca al mismo campus que el administrador
+        if ($gestionarDocente->id_campus != $adminCampus) {
+            return redirect()->route('GestionarDocentes.index')
+                ->with('error', 'No tienes permiso para eliminar docentes de otro campus.');
+        }
+        
         $gestionarDocente->delete();
         return redirect()->route('GestionarDocentes.index')->with('success', 'Docente eliminado correctamente');
     }
-
-
 }

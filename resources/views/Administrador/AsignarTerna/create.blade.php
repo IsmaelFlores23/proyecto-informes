@@ -272,7 +272,6 @@
                 const docentesOriginales = docenteSelects.map(select => Array.from(select.options));
 
                 function filtrarUsuarios() {
-                    const campusSeleccionado = filtrarCampus.value;
                     const facultadSeleccionada = filtrarFacultad.value;
                     const estudianteSeleccionado = estudianteSelect.value;
                     const docentesSeleccionados = docenteSelects.map(select => select.value);
@@ -280,7 +279,6 @@
                     estudianteSelect.innerHTML = '';
                     estudiantesOriginales.forEach(op => {
                         if (
-                            (!campusSeleccionado || op.dataset.campus === campusSeleccionado) &&
                             (!facultadSeleccionada || op.dataset.facultad === facultadSeleccionada) || op.value === ''
                         ) {
                             estudianteSelect.appendChild(op.cloneNode(true));
@@ -291,7 +289,6 @@
                         select.innerHTML = '';
                         docentesOriginales[idx].forEach(op => {
                             if (
-                                (!campusSeleccionado || op.dataset.campus === campusSeleccionado) &&
                                 (!facultadSeleccionada || op.dataset.facultad === facultadSeleccionada) || op.value === ''
                             ) {
                                 select.appendChild(op.cloneNode(true));
@@ -304,7 +301,8 @@
                     actualizarOpciones();
                 }
 
-                filtrarCampus.addEventListener('change', filtrarUsuarios);
+                // Eliminar el event listener para filtrarCampus
+                // filtrarCampus.addEventListener('change', filtrarUsuarios);
                 filtrarFacultad.addEventListener('change', filtrarUsuarios);
 
                 function actualizarOpciones() {
