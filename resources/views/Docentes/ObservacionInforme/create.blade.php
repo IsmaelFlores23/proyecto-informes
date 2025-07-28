@@ -196,6 +196,8 @@
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('revisionForm');
 
+    
+
     // Botón PENDIENTE (queda igual que antes)
     document.getElementById('btnPendiente').addEventListener('click', function () {
       // Validar que el campo comentario no esté vacío
