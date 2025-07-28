@@ -58,7 +58,7 @@
                                    
                                    
                                   
-                                    <td class="px-4 py-2 text-blue-600 underline cursor-pointer">{{ $docente->telefono }}</td>
+                                    <td class="px-4 py-2 text-black-600">{{ $docente->telefono }}</td>
                                 </tr>
                             @empty
                                 <tr class="border-t">
