@@ -106,6 +106,86 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
+<footer class="relative z-30 bg-[#004CBE] border-t border-slate-700 text-white">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Primera sección: Información del proyecto y Tecnologías -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            
+            <!-- Información del proyecto -->
+            <div class="text-center lg:text-left">
+                <h3 class="text-lg font-bold mb-3 text-white">
+                    Sistema de Gestión de Informes
+                </h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Plataforma desarrollada para la gestión eficiente de informes de práctica profesional,
+                    facilitando el proceso de revisión y seguimiento académico.
+                </p>
+            </div>
+
+            <!-- Información técnica -->
+            <div class="text-center lg:text-right">
+                <h3 class="text-lg font-bold mb-3 text-white">Tecnologías</h3>
+                <div class="flex flex-wrap justify-center lg:justify-end gap-2 mb-4">
+                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-medium">Laravel</span>
+                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">PHP</span>
+                    <span class="bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-medium">Tailwind CSS</span>
+                    <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-medium">JavaScript</span>
+                    <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">MySQL</span>
+                </div>
+                
+                <!-- Versión y fecha -->
+                <div class="space-y-1">
+                    <p class="text-xs text-gray-400">Versión 1.0.0</p>
+                    <p class="text-xs text-gray-400">Desarrollado en <?php echo date('Y'); ?></p>
+                </div>
+            </div>
+        </div>
+
+            <div class="text-center">
+                <a
+                    href="{{ route('desarrolladores') }}"
+                    class="inline-block text-center w-full max-w-md mx-auto bg-slate-700 hover:bg-slate-600 active:bg-slate-800 rounded-xl px-8 py-5 transition duration-300 border border-slate-600 hover:border-slate-500 hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+                    <p class="font-semibold text-white text-lg">Ver Equipo de Desarrollo</p>
+                    <p class="text-sm text-gray-300 mt-1">Conoce a nuestro equipo</p>
+                    </a>
+                </div>
+            </div>
+
+        <!-- Línea divisoria final -->
+        <div class="border-t border-slate-700 pt-4">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
+                <!-- Copyright -->
+                <div class="text-center md:text-left">
+                    <p class="text-gray-400 text-xs">
+                        © <?php echo date('Y'); ?> Sistema de Gestión de Informes. Todos los derechos reservados.
+                    </p>
+                </div>
+
+                <!-- Enlaces adicionales -->
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300 text-xs">
+                        Política de Privacidad
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300 text-xs">
+                        Términos de Uso
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300 text-xs">
+                        Soporte
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje de agradecimiento -->
+        <div class="text-center mt-4 pt-4 border-t border-slate-700">
+            <p class="text-gray-300 italic text-sm">
+                "Desarrollado con 💛 para facilitar el proceso académico"
+            </p>
+        </div>
+    </div>
+</footer>
+
     <!-- Script para sincronizar fondo con imagen activa -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
