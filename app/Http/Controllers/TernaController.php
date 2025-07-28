@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use App\Models\User;
 use App\Models\Campus;
 use App\Models\Facultad;
+use App\Mail\TernaAsignadaMail;
 
 class TernaController extends Controller
 {
@@ -100,8 +102,39 @@ class TernaController extends Controller
             ]);
         }
         
+        // Obtener los usuarios para enviar correos
+        $estudiante = User::find($request->estudiante);
+        $docentes = User::whereIn('id', [
+            $request->docente1,
+            $request->docente2,
+            $request->docente3,
+            $request->docente4
+        ])->when($request->docente4 === null, function($query) {
+            $query->whereNotNull('id');
+        })->get();
+        
+        // Preparar datos para los correos
+        $miembrosEstudiante = [
+            'docentes' => $docentes
+        ];
+        
+        $miembrosDocente = [
+            'estudiante' => $estudiante,
+            'docentes' => $docentes
+        ];
+        
+        // Enviar correo al estudiante
+        Mail::to($estudiante->email)
+            ->queue(new TernaAsignadaMail($estudiante, $terna, true, $miembrosEstudiante));
+        
+        // Enviar correos a los docentes
+        foreach ($docentes as $docente) {
+            Mail::to($docente->email)
+                ->queue(new TernaAsignadaMail($docente, $terna, false, $miembrosDocente));
+        }
+        
         return redirect()->route('AsignarTerna.create')
-            ->with('success', 'Terna asignada correctamente.');
+            ->with('success', 'Terna asignada correctamente y notificaciones enviadas.');
     }
 
     /**
