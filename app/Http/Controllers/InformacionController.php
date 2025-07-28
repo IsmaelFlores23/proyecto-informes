@@ -6,31 +6,59 @@ use App\Models\Informacion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Revision;
+use Illuminate\Support\Facades\Storage;
 
 class InformacionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-  public function index()
+ public function index()
 {
     $alumno = Auth::user();
+    $numeroCuenta = $alumno->numero_cuenta;
 
+    // Obtener la terna del alumno (solo la primera que encuentre)
     $terna = $alumno->ternas()->first();
 
-    if ($terna) {
-        $docentes = $terna->users()
-            ->whereHas('role', function($query) {
-                $query->where('nombre_role', 'docente');
-            })
-            ->with('ultimaRevision')  // Cargar la última revisión de cada docente
-            ->get();
-    } else {
+    if (!$terna) {
+        // Si no tiene terna asignada, pasar array vacío para no romper la vista
         $docentes = collect();
+        $ultimoInforme = null;
+    } else {
+        // Obtener los docentes de la terna
+        $docentes = $terna->users()->whereHas('role', function($query) {
+            $query->where('nombre_role', 'docente');
+        })->get();
+
+        // Obtener los archivos de informes del alumno en almacenamiento
+        $carpeta = 'informes';
+        $archivos = collect(Storage::files($carpeta))
+            ->filter(fn($archivo) => str_starts_with(basename($archivo), $numeroCuenta . '_'))
+            ->sortByDesc(function($archivo) {
+                // Ordenar para obtener el archivo más reciente
+                $nombre = basename($archivo, '.pdf');
+                $partes = explode('_', $nombre);
+                return isset($partes[1]) ? (int)$partes[1] : 0;
+            })->values();
+
+        $ultimoInforme = $archivos->first();
+
+        // Para cada docente, obtener su última revisión para este archivo
+        foreach ($docentes as $docente) {
+            $ultimaRevision = Revision::where('id_user', $docente->id)
+                ->where('nombre_archivo', basename($ultimoInforme))
+                ->orderBy('created_at', 'desc')
+                ->first();
+            // Adjuntar la revisión al docente para la vista
+            $docente->ultimaRevision = $ultimaRevision;
+        }
     }
 
-    return view('Alumno.informacion_terna.index', compact('docentes'));
+    return view('Alumno.informacion_terna.index', compact('docentes', 'ultimoInforme'));
 }
+
 
 
     /**
