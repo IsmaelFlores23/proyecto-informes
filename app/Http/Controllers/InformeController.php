@@ -109,6 +109,25 @@ class InformeController extends Controller
             ]);
         }
         
+        // Obtener el alumno actual
+        $alumno = Auth::user();
+        
+        // Obtener los docentes asignados a la terna del alumno
+        $docentes = $terna->users()->whereHas('role', function($query) {
+            $query->where('nombre_role', 'docente');
+        })->get();
+        
+        // Enviar correo a cada docente asignado
+        foreach ($docentes as $docente) {
+            \Illuminate\Support\Facades\Mail::to($docente->email)
+                ->queue(new \App\Mail\InformeSubidoMail(
+                    $alumno, 
+                    $docente, 
+                    $nombreArchivo, 
+                    $request->input('descripcion')
+                ));
+        }
+        
         // Redirigir al formulario con un mensaje de éxito
         return redirect()->route('observarInforme.index')
             ->with('success', 'Informe subido correctamente (Versión ' . $version . ').');
