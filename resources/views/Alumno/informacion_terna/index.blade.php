@@ -9,7 +9,7 @@
                 <p>Número de cuenta:<strong> {{ Auth::user()->numero_cuenta }}</strong></p>
                 <p>Correo institucional:<strong> {{ Auth::user()->email }} </strong></p>
                 <p>Teléfono:<strong>{{ Auth::user()->telefono }}</strong></p>
-                <p>Campus asignado:<strong>{{ Auth::user()->campus->nombre}}</strong></p>
+                <p>Campus asignado:<strong> {{ Auth::user()->campus->nombre}}</strong></p>
             </div>
 
             <!-- Terna evaluadora -->
@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <!-- Historial -->
+            {{-- <!-- Historial -->
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <h4 class="text-lg font-semibold text-black-700 mb-2">Historial de versiones y revisiones:</h4>
                 <p class="text-blue-600 underline cursor-pointer">📄 Ver historial de revisiones</p>
@@ -80,7 +80,7 @@
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <h4 class="text-lg font-semibold text-black-700 mb-2">Comunicación con la terna</h4>
                 <p class="text-blue-600 underline cursor-pointer">✉️ Enviar mensaje a la terna</p>
-            </div>
+            </div> --}}
 
         </div>
     </div>

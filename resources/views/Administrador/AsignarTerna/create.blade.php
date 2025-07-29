@@ -140,7 +140,7 @@
                                 </div>
 
                                 <!-- Filtrar por Campus -->
-                                <div>
+                                {{-- <div>
                                     <label class="block mb-1 text-sm font-medium text-gray-900">Filtrar por Campus</label>
                                     <select id="filtrar_campus" name="filtrar_campus" class="select-search bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
                                         <option value="">Todos</option>
@@ -148,7 +148,7 @@
                                             <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 <!-- Estudiante -->
                                 <div id="estudiante-wrapper">
