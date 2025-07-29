@@ -28,6 +28,74 @@
                 </p>
             </div>
 
+            @php
+            $developers = [
+                [
+                    'name' => 'Alejandra Dominguez',
+                    'role' => 'Backend',
+                    'description' => 'Desarrolladora backend con sólidos conocimientos en Laravel y bases de datos. Se enfoca en crear sistemas robustos, seguros y bien estructurados.',
+                    'skills' => ['Figma','Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/alejandra.jpg')
+                ],
+                [
+                    'name' => 'Fabian Almendarez',
+                    'role' => 'Backend',
+                    'description' => 'Especialista en desarrollo backend, con experiencia en diseño de bases de datos y lógica de servidor, siempre orientado a la eficiencia.',
+                    'skills' => ['Figma','Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/fabian.jpg')
+                ],
+                [
+                    'name' => 'Perla Cacho',
+                    'role' => 'Frontend',
+                    'description' => 'Desarrolladora frontend enfocada en la experiencia de usuario y diseño de interfaces atractivas con tecnologías modernas.',
+                    'skills' => ['Figma', 'Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/perla.jpg')
+                ],
+                [
+                    'name' => 'Javier Hernandez',
+                    'role' => 'Documentacion',
+                    'description' => 'Encargado de la documentación técnica y funcional del sistema. Se asegura de mantener registros claros y detallados para facilitar el mantenimiento y comprensión del proyecto.',
+                    'skills' => ['Figma', 'Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/javier.jpg')
+                ],
+                [
+                    'name' => 'Juan Delarca',
+                    'role' => 'Documentacion',
+                    'description' => 'Responsable de estructurar la documentación del proyecto, con enfoque en claridad, organización y soporte al equipo técnico.',
+                    'skills' => ['Figma', 'Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/juan.jpg')
+                ],
+                [
+                    'name' => 'Nelson Martinez',
+                    'role' => 'Frontend',
+                    'description' => 'Creativo frontend con habilidad en diseño responsivo, accesibilidad web y maquetación precisa usando Blade y Tailwind.',
+                    'skills' => ['Figma', 'Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/nelson.jpg')
+                ],
+                [
+                    'name' => 'Marthin Contreras',
+                    'role' => 'Backend',
+                    'description' => 'Apasionado por el backend, con habilidades en arquitectura de aplicaciones y optimización de procesos del lado del servidor.',
+                    'skills' => ['Figma', 'Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/marthin.jpg')
+                ],
+                [
+                    'name' => 'Ismael Flores',
+                    'role' => 'Frontend',
+                    'description' => 'Especialista en desarrollo frontend, se destaca por transformar ideas visuales en interfaces funcionales y amigables.',
+                    'skills' => ['Figma', 'Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/ismael.jpg')
+                ],
+                [
+                    'name' => 'Oscar Flores',
+                    'role' => 'Backend',
+                    'description' => 'Desarrollador backend con enfoque en buenas prácticas de codificación, seguridad y rendimiento del sistema.',
+                    'skills' => ['Figma','Laravel', 'Blade', 'PHP', 'MySQL'],
+                    'avatar' => asset('images/desarrolladores/oscar.webp')
+                ],
+            ];
+            @endphp
+
             <!-- Developers Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($developers as $developer)
