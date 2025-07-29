@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Revision;
 
 use App\Models\User;
 
@@ -25,8 +26,62 @@ class InformeController extends Controller
      */
     public function create()
     {
-        //
-        return view ('Alumno.subir_informe.create');
+        // Verificar si el alumno ya tiene un informe aprobado
+        $alumno = Auth::user();
+        $numero_cuenta = $alumno->numero_cuenta;
+        $carpeta = 'informes';
+        
+        // Obtener el último informe del alumno
+        $archivosUsuario = collect(Storage::files($carpeta))
+            ->filter(fn($file) => str_starts_with(basename($file), $numero_cuenta . '_'))
+            ->sortByDesc(function($file) {
+                $nombre = basename($file, '.pdf');
+                $partes = explode('_', $nombre);
+                return isset($partes[1]) ? (int)$partes[1] : 0;
+            })
+            ->values();
+
+        $ultimoPdf = $archivosUsuario->first();
+        $pdfNombre = $ultimoPdf ? basename($ultimoPdf) : null;
+        
+        // Si hay un informe, verificar si está aprobado por todos los docentes
+        if ($pdfNombre) {
+            // Obtener la terna del alumno
+            $terna = $alumno->ternas()->first();
+            
+            if ($terna) {
+                // Obtener los docentes de la terna
+                $docentes = $terna->users()->whereHas('role', function($query) {
+                    $query->where('nombre_role', 'docente');
+                })->get();
+                
+                // Verificar si todos los docentes han aprobado
+                $todosAprobaron = true;
+                
+                foreach ($docentes as $docente) {
+                    // Buscar la última revisión de este docente para este archivo
+                    $ultimaRevision = Revision::where('id_user', $docente->id)
+                        ->where('nombre_archivo', $pdfNombre)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+                    
+                    // Si algún docente no ha aprobado o no ha revisado, no se cumple la condición
+                    if (!$ultimaRevision || $ultimaRevision->estado_revision !== 'Aprobado') {
+                        $todosAprobaron = false;
+                        break;
+                    }
+                }
+                
+                // Si todos aprobaron, redirigir al alumno
+                if ($todosAprobaron) {
+                    return redirect()->route('observarInforme.index')
+                        ->with('info', 'Tu informe ya ha sido aprobado por todos los docentes. No es necesario subir más informes.');
+                }
+            }
+        }
+        
+        // Si no tiene informe aprobado, mostrar la vista de subir informe
+        return view('Alumno.subir_informe.create');
     }
 
     /**

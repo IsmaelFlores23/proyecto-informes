@@ -71,10 +71,19 @@
                 @endif
 
                 {{-- Botón para subir subir informe --}}
-                <a href="{{ route('subirInforme.create') }}"
-                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-full">
-                    Subir Informe
-                </a>
+                @if(!$informeAprobado)
+                    <a href="{{ route('subirInforme.create') }}"
+                        class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-full">
+                        Subir Informe
+                    </a>
+                @else
+                    <div class="mt-6 text-center">
+                        <span class="bg-green-100 text-green-800 font-medium px-6 py-2 rounded-full inline-block">
+                            Informe aprobado por todos los docentes
+                        </span>
+                        <p class="text-sm text-gray-600 mt-2">Ya no es necesario subir más informes</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

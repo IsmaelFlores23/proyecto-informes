@@ -32,6 +32,7 @@ class RevisionController extends Controller
         $pdfNombre = $ultimoPdf ? basename($ultimoPdf) : null;
 
         $estadoInforme = null;
+        $informeAprobado = false; // Nueva variable para controlar si el informe está aprobado
     
         // Obtener todas las revisiones hechas por docentes para este informe
         $revisiones = null;
@@ -62,6 +63,7 @@ class RevisionController extends Controller
             // Calcular estado final:
             if ($totalAprobados == $totalDocentes) {
                 $estadoInforme = 'aprobado';
+                $informeAprobado = true; // Marcar como aprobado si los 3 docentes lo aprobaron
             } elseif ($tieneComentarios) {
                 $estadoInforme = 'pendiente';
             } else {
@@ -70,12 +72,12 @@ class RevisionController extends Controller
         }
             
     
-
         return view('Alumno.observar_informe.index', [
         'ultimoPdf' => $ultimoPdf ? Storage::url($ultimoPdf) : null,
         'pdfNombre' => $pdfNombre,
         'revisiones' => $revisiones,
         'estadoInforme' => $estadoInforme,
+        'informeAprobado' => $informeAprobado, // Pasar la variable a la vista
         ]);
     }
 
