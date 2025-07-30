@@ -4,7 +4,7 @@
 
             {{-- Observaciones --}}
             <div class="bg-white shadow rounded-lg p-6">
-                <h2 class="text-yellow-500 font-bold text-xl mb-4">Correciones</h2>
+                <h2 class="text-yellow-500 font-bold text-xl mb-4">Correcciones</h2>
                 @if(isset($revisiones) && $revisiones->count() > 0)
              <div class="flex flex-wrap gap-4">
             @foreach($revisiones as $revision)
@@ -39,13 +39,13 @@
                 {{-- Estado etiquetas --}}
                 <div class="mt-6 w-full flex justify-center gap-x-4 flex-wrap mb-5">
                     @if($estadoInforme == 'pendiente')
-                    <span class="bg-red-500 text-white font-semibold px-4 py-2 rounded whitespace-nowrap">
-                        Correcciones pendientes
-                    </span>
+                    <div class="ml-3 bg-red-200 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                            Correcciones pendientes
+                        </div>
                      @elseif($estadoInforme == 'corregido')
-                    <span class="bg-yellow-400 text-white font-semibold px-4 py-2 rounded whitespace-nowrap">
-                        Sin correcciones pendientes
-                    </span>
+                    <div class="ml-3 bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                            Sin correcciones pendientes
+                        </div>
                     @elseif($estadoInforme == 'aprobado')
                     <span class="bg-green-500 text-white font-semibold px-4 py-2 rounded whitespace-nowrap mt-2">
                         Informe aprobado

@@ -73,10 +73,10 @@
                      class="block p-2.5 w-full text-sm border rounded focus:ring-blue-500 focus:border-blue-500">
             </div>
             
-            <!-- Correciones docentes con un contador de caracteres -->
+            <!-- Correcciones docentes con un contador de caracteres -->
             <div>
               <label for="comentario" class="block mb-2 text-sm font-medium text-gray-900">
-                Ingrese Correción
+                Ingrese Corrección
               </label>
               <div class="relative">
                   <textarea id="comentario" name="comentario" rows="3"
@@ -95,7 +95,7 @@
             <div class="border-t pt-4">
               <button type="button" id="btnPendiente"
                       class="w-full px-4 py-3 text-base font-semibold text-white bg-blue-600 rounded-xl shadow-md hover:bg-blue-500 transition duration-200 hover:scale-105 flex items-center justify-center gap-2">
-                🔄 Enviar Correcion
+                🔄 Enviar Corrección
               </button>
             </div>
 
@@ -104,8 +104,8 @@
 
         <!-- COMENTARIOS -->
         <div class="p-4 bg-white border border-gray-300 rounded-lg shadow">
-          <h5 class="text-xl font-bold text-gray-900 mb-2">Correciones</h5>
-          <p class="text-gray-500 text-sm mb-4">Correciones de todos los docentes</p>
+          <h5 class="text-xl font-bold text-gray-900 mb-2">Correcciones</h5>
+          <p class="text-gray-500 text-sm mb-4">Correcciones de todos los docentes</p>
 
             <!-- Lista de comentarios -->
             <div class="space-y-3 max-h-96 overflow-y-auto">
@@ -130,7 +130,7 @@
                 @endforeach
                 @else
                   <div class="text-center py-4 text-gray-500">
-                    <p>No hay correciones disponibles</p>
+                    <p>No hay correcciones disponibles</p>
                   </div>
                 @endif
             </div>
@@ -217,10 +217,10 @@
 
       Swal.fire({
         title: '¿Estás seguro?',
-        text: "¿Quieres Enviar Esta Correción?",
+        text: "¿Quieres Enviar Esta Corrección?",
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Sí, Enviar Correción',
+        confirmButtonText: 'Sí, Enviar Corrección',
         cancelButtonText: 'Cancelar',
         reverseButtons: true
       }).then((result) => {
