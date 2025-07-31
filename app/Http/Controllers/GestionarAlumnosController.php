@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\User;
 use App\Models\Role;
@@ -150,16 +151,45 @@ class GestionarAlumnosController extends Controller
 
     public function destroy($id)
     {
-        $adminCampus = Auth::user()->id_campus;
-        $Gestionaralumno = User::findOrFail($id);
+        $user = User::findOrFail($id);
         
-        // Verificar que el alumno pertenezca al mismo campus que el administrador
-        if ($Gestionaralumno->id_campus != $adminCampus) {
-            return redirect()->route('GestionarAlumnos.index')
-                ->with('error', 'No tienes permiso para eliminar alumnos de otro campus.');
+        // Si es un alumno, verificar si está en alguna terna
+        if ($user->isAlumno()) {
+            // Obtener todas las ternas a las que pertenece el alumno
+            $ternasIds = DB::table('user_terna_transitiva')
+                ->where('id_user', $id)
+                ->pluck('id_terna')
+                ->toArray();
+                
+            // Para cada terna, verificar si hay otros alumnos
+            foreach ($ternasIds as $ternaId) {
+                $terna = \App\Models\Terna::find($ternaId);
+                
+                // Contar cuántos alumnos hay en esta terna
+                $alumnosCount = $terna->users()
+                    ->whereHas('role', function($query) {
+                        $query->where('nombre_role', 'alumno');
+                    })
+                    ->count();
+                    
+                // Si solo hay un alumno (el que estamos eliminando), eliminar la terna completa
+                if ($alumnosCount <= 1) {
+                    // Eliminar primero los informes asociados a esta terna
+                    \App\Models\Informe::where('id_terna', $ternaId)->delete();
+                    
+                    // Eliminar las relaciones en la tabla pivote
+                    \App\Models\UserTernaTransitiva::where('id_terna', $ternaId)->delete();
+                    
+                    // Eliminar la terna
+                    $terna->delete();
+                }
+            }
         }
         
-        $Gestionaralumno->delete();
-        return redirect()->route('GestionarAlumnos.index')->with('success', 'Alumno eliminado correctamente');
+        // Finalmente eliminar el usuario
+        $user->delete();
+        
+        return redirect()->route('GestionarAlumnos.index')
+            ->with('success', 'Usuario eliminado correctamente');
     }
 }

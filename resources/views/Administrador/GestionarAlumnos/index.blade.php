@@ -186,7 +186,7 @@
     function confirmDelete(alumnoId, alumnoNombre) {
         Swal.fire({
             title: '¿Estás seguro?',
-            text: `¿Deseas eliminar el alumno "${alumnoNombre}"? Esta acción no se puede deshacer.`,
+            text: `¿Deseas eliminar el alumno "${alumnoNombre}"? Esta acción eliminará también su terna y todos los informes asociados. Esta acción no se puede deshacer.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
