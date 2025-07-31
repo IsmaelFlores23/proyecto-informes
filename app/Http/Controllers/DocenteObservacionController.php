@@ -106,6 +106,19 @@ class DocenteObservacionController extends Controller
             $this->verificarAprobacionCompleta($alumno, $request->nombre_archivo);
         }
         
+        // Verificar si es una petición AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            // Cargar la relación user para poder acceder a ella en el frontend
+            $revision->load('user');
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Comentario guardado correctamente y notificación enviada al alumno',
+                'revision' => $revision
+            ]);
+        }
+        
+        // Respuesta normal para peticiones no-AJAX (por si acaso)
         return redirect()->route('docente.observacion.create', ['alumno_id' => $request->alumno_id])
             ->with('success', 'Comentario guardado correctamente y notificación enviada al alumno');
     }

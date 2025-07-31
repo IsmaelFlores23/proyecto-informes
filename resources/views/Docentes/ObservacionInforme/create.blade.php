@@ -64,6 +64,7 @@
             @csrf
             <input type="hidden" name="alumno_id" value="{{ $alumno->id }}">
             <input type="hidden" name="nombre_archivo" value="{{ $pdfNombre }}">
+            <input type="hidden" name="estado_revision" id="estado_revision" value="">
 
             <div>
               <label for="numero_pagina" class="block mb-2 text-sm font-medium text-gray-900">
@@ -86,9 +87,6 @@
                     <div id="alerta-largo" class="text-red-500 hidden">¡Límite alcanzado!</div>
                   </div>
               </div>
-
-
-
             </div>
 
             <!-- Botón Pendiente -->
@@ -196,24 +194,133 @@
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('revisionForm');
 
+    // Función para enviar el formulario de forma asíncrona
+    function enviarFormularioAsync(estadoRevision) {
+      // Obtener los datos del formulario
+      const formData = new FormData(form);
+      formData.set('estado_revision', estadoRevision);
+      
+      // Mostrar indicador de carga
+      Swal.fire({
+        title: 'Enviando...',
+        text: 'Por favor espera mientras se procesa la corrección',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+      
+      // Realizar la petición AJAX
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Cerrar el indicador de carga
+        Swal.close();
+        
+        if (data.success) {
+          // Mostrar mensaje de éxito
+          Swal.fire({
+            title: 'Éxito',
+            text: data.message,
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+          
+          // Limpiar el formulario
+          document.getElementById('comentario').value = '';
+          actualizarContador();
+          
+          // Actualizar la lista de correcciones sin recargar la página
+          actualizarListaCorrecciones(data.revision);
+        } else {
+          // Mostrar mensaje de error
+          Swal.fire({
+            title: 'Error',
+            text: data.message || 'Ha ocurrido un error al procesar la corrección',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Ha ocurrido un error en la comunicación con el servidor',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
+      });
+    }
     
+    // Función para actualizar la lista de correcciones
+    function actualizarListaCorrecciones(nuevaRevision) {
+      const contenedorCorrecciones = document.querySelector('.space-y-3.max-h-96.overflow-y-auto');
+      
+      if (!contenedorCorrecciones) return;
+      
+      // Crear el elemento HTML para la nueva corrección
+      const divRevision = document.createElement('div');
+      divRevision.className = `p-3 border rounded-lg ${nuevaRevision.id_user == {{ Auth::id() }} ? 'bg-blue-50 border-blue-200' : 'bg-gray-50'}`;
+      
+      // Formatear la fecha
+      const fecha = new Date(nuevaRevision.created_at);
+      const fechaFormateada = `${fecha.getDate().toString().padStart(2, '0')}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getFullYear()} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+      
+      // Determinar el color del estado
+      let estadoClass = '';
+      if (nuevaRevision.estado_revision === 'Aprobado') {
+        estadoClass = 'bg-green-100 text-green-800';
+      } else if (nuevaRevision.estado_revision === 'Pendiente de Aprobación') {
+        estadoClass = 'bg-blue-100 text-blue-800';
+      } else {
+        estadoClass = 'bg-yellow-100 text-yellow-800';
+      }
+      
+      // Construir el HTML de la nueva revisión
+      divRevision.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-semibold text-sm">{{ Auth::user()->name }}</p>
+            <p class="text-xs text-gray-500">${fechaFormateada}</p>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full ${estadoClass}">
+            ${nuevaRevision.estado_revision}
+          </span>
+        </div>
+        <p class="mt-2 text-sm">${nuevaRevision.comentario}</p>
+        <p class="text-xs text-gray-500 mt-1">Página: ${nuevaRevision.numero_pagina}</p>
+      `;
+      
+      // Insertar al principio de la lista
+      if (contenedorCorrecciones.firstChild) {
+        contenedorCorrecciones.insertBefore(divRevision, contenedorCorrecciones.firstChild);
+      } else {
+        // Si no hay correcciones, eliminar el mensaje de "No hay correcciones"
+        contenedorCorrecciones.innerHTML = '';
+        contenedorCorrecciones.appendChild(divRevision);
+      }
+    }
 
-    // Botón PENDIENTE (queda igual que antes)
+    // Botón PENDIENTE (modificado para ser asíncrono)
     document.getElementById('btnPendiente').addEventListener('click', function () {
       // Validar que el campo comentario no esté vacío
       const comentario = document.getElementById('comentario').value.trim();
        if (comentario === '') {
         Swal.fire({
           title: 'Comentario Obligatorio',
-          text: 'Debes agregar un comentario  al informe.',
+          text: 'Debes agregar un comentario al informe.',
           icon: 'warning',
           confirmButtonText: 'Entendido'
         });
         return; // Detiene la ejecución aquí
       }
-
-
-
 
       Swal.fire({
         title: '¿Estás seguro?',
@@ -225,17 +332,12 @@
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          let inputEstado = document.createElement('input');
-          inputEstado.type = 'hidden';
-          inputEstado.name = 'estado_revision';
-          inputEstado.value = 'Pendiente de Aprobación';
-          form.appendChild(inputEstado);
-          form.submit();
+          enviarFormularioAsync('Pendiente de Aprobación');
         }
       });
     });
 
-    // Botón APROBADO (un solo listener con la validación)
+    // Botón APROBADO (modificado para ser asíncrono)
     document.getElementById('btnAprobado').addEventListener('click', function () {
       const comentario = document.getElementById('comentario').value.trim();
 
@@ -261,12 +363,7 @@
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          let inputEstado = document.createElement('input');
-          inputEstado.type = 'hidden';
-          inputEstado.name = 'estado_revision';
-          inputEstado.value = 'Aprobado';
-          form.appendChild(inputEstado);
-          form.submit();
+          enviarFormularioAsync('Aprobado');
         }
       });
     });
