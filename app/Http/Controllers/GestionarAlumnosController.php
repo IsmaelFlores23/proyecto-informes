@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Campus;
@@ -174,7 +175,17 @@ class GestionarAlumnosController extends Controller
                     
                 // Si solo hay un alumno (el que estamos eliminando), eliminar la terna completa
                 if ($alumnosCount <= 1) {
-                    // Eliminar primero los informes asociados a esta terna
+                    // Obtener los informes asociados a esta terna para eliminar los archivos físicos
+                    $informes = \App\Models\Informe::where('id_terna', $ternaId)->get();
+                    
+                    foreach ($informes as $informe) {
+                        // Eliminar el archivo físico del servidor
+                        \Illuminate\Support\Facades\Storage::delete('informes/' . $informe->nombre_archivo);
+                        // También verificar en la carpeta private/informes por si acaso
+                        \Illuminate\Support\Facades\Storage::delete('private/informes/' . $informe->nombre_archivo);
+                    }
+                    
+                    // Eliminar los registros de informes de la base de datos
                     \App\Models\Informe::where('id_terna', $ternaId)->delete();
                     
                     // Eliminar las relaciones en la tabla pivote
