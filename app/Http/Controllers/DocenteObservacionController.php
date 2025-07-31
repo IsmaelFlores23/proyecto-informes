@@ -21,6 +21,7 @@ class DocenteObservacionController extends Controller
         $pdfNombre = null;
         $revisiones = null;
         $revisionesPorVersion = null;
+        $docenteYaAprobo = false;
         
         if ($alumno_id) {
             $alumno = User::findOrFail($alumno_id);
@@ -38,6 +39,14 @@ class DocenteObservacionController extends Controller
                 ->values();
             
             $pdfNombre = $archivosAlumno->first() ? basename($archivosAlumno->first()) : null;
+            
+            // Verificar si el docente ya ha aprobado este informe
+            if ($pdfNombre) {
+                $docenteYaAprobo = Revision::where('id_user', Auth::id())
+                    ->where('nombre_archivo', $pdfNombre)
+                    ->where('estado_revision', 'Aprobado')
+                    ->exists();
+            }
             
             // Obtener TODAS las revisiones del alumno
             $todasRevisiones = Revision::with('user')
@@ -62,7 +71,8 @@ class DocenteObservacionController extends Controller
             'alumno',
             'pdfNombre',
             'revisiones',          // Para la sección de comentarios actuales
-            'revisionesPorVersion'  // Para el historial por versión
+            'revisionesPorVersion',  // Para el historial por versión
+            'docenteYaAprobo'      // Para deshabilitar los botones si ya aprobó
         ));
     }
 
@@ -116,6 +126,12 @@ class DocenteObservacionController extends Controller
                 'message' => 'Comentario guardado correctamente y notificación enviada al alumno',
                 'revision' => $revision
             ]);
+        }
+        
+        // Para solicitudes tradicionales (no AJAX), redirigir con mensaje de éxito
+        if ($request->estado_revision === 'Aprobado') {
+            return redirect()->route('docente.observacion.create', ['alumno_id' => $request->alumno_id])
+                ->with('success', 'Informe aprobado correctamente y notificación enviada al alumno');
         }
         
         // Respuesta normal para peticiones no-AJAX (por si acaso)

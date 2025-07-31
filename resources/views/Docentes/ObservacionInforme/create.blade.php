@@ -17,7 +17,8 @@
           <!-- Botón Aprobado debajo -->
             <div>
               <button type="button" id="btnAprobado"
-                      class="px-4 py-2 rounded-md font-semibold text-white bg-green-600 shadow-md transition-all duration-300 transform hover:scale-105 hover:bg-green-500">
+                      class="px-4 py-2 rounded-md font-semibold text-white {{ isset($docenteYaAprobo) && $docenteYaAprobo ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-500' }} shadow-md transition-all duration-300 transform hover:scale-105"
+                      {{ isset($docenteYaAprobo) && $docenteYaAprobo ? 'disabled' : '' }}>
                 ✅ Aprobar Informe 
               </button>
             </div>
@@ -56,9 +57,28 @@
 
         <!-- FORMULARIO -->
         <div class="p-4 bg-white border border-gray-300 rounded-lg shadow">
+          <!-- Después del título del formulario -->
           <h1 class="text-xl font-bold mb-4">
             {{ strtoupper($alumno->name) }} - {{ $alumno->numero_cuenta }}
           </h1>
+
+          @if(session('success'))
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+              <span class="font-medium">¡Éxito!</span> {{ session('success') }}
+            </div>
+          @endif
+
+          @if(session('error'))
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+              <span class="font-medium">¡Error!</span> {{ session('error') }}
+            </div>
+          @endif
+
+          @if(isset($docenteYaAprobo) && $docenteYaAprobo)
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+              <span class="font-medium">¡Informe ya aprobado!</span> Ya has aprobado este informe. No puedes enviar más revisiones o aprobaciones.
+            </div>
+          @endif
 
           <form id="revisionForm" action="{{ route('docente.observacion.store') }}" method="POST" class="mt-4 space-y-4">
             @csrf
@@ -92,7 +112,8 @@
             <!-- Botón Pendiente -->
             <div class="border-t pt-4">
               <button type="button" id="btnPendiente"
-                      class="w-full px-4 py-3 text-base font-semibold text-white bg-blue-600 rounded-xl shadow-md hover:bg-blue-500 transition duration-200 hover:scale-105 flex items-center justify-center gap-2">
+                      class="w-full px-4 py-3 text-base font-semibold text-white {{ isset($docenteYaAprobo) && $docenteYaAprobo ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500' }} rounded-xl shadow-md transition duration-200 hover:scale-105 flex items-center justify-center gap-2"
+                      {{ isset($docenteYaAprobo) && $docenteYaAprobo ? 'disabled' : '' }}>
                 🔄 Enviar Corrección
               </button>
             </div>
@@ -194,7 +215,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('revisionForm');
 
-    // Función para enviar el formulario de forma asíncrona
+    // Función para enviar el formulario de forma asíncrona (para correcciones)
     function enviarFormularioAsync(estadoRevision) {
       // Obtener los datos del formulario
       const formData = new FormData(form);
@@ -258,6 +279,26 @@
         });
       });
     }
+
+    // Nueva función para enviar el formulario de forma tradicional (para aprobaciones)
+    function enviarFormularioTradicional(estadoRevision) {
+      // Configurar el estado de revisión en el formulario
+      document.getElementById('estado_revision').value = estadoRevision;
+      
+      // Mostrar indicador de carga
+      Swal.fire({
+        title: 'Enviando...',
+        text: 'Por favor espera mientras se procesa la aprobación',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+          // Enviar el formulario después de mostrar el indicador de carga
+          setTimeout(() => {
+            form.submit(); // Envío tradicional que recargará la página
+          }, 500);
+        }
+      });
+    }
     
     // Función para actualizar la lista de correcciones
     function actualizarListaCorrecciones(nuevaRevision) {
@@ -308,7 +349,7 @@
       }
     }
 
-    // Botón PENDIENTE (modificado para ser asíncrono)
+    // Botón PENDIENTE (sin cambios, sigue usando AJAX)
     document.getElementById('btnPendiente').addEventListener('click', function () {
       // Validar que el campo comentario no esté vacío
       const comentario = document.getElementById('comentario').value.trim();
@@ -337,7 +378,7 @@
       });
     });
 
-    // Botón APROBADO (modificado para ser asíncrono)
+    // Botón APROBADO (modificado para usar el envío tradicional)
     document.getElementById('btnAprobado').addEventListener('click', function () {
       const comentario = document.getElementById('comentario').value.trim();
 
@@ -363,7 +404,8 @@
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          enviarFormularioAsync('Aprobado');
+          // Usar el método tradicional en lugar del asíncrono
+          enviarFormularioTradicional('Aprobado');
         }
       });
     });
